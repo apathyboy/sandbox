@@ -87,7 +87,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(OutDir)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(OutDir)&quot; /I /Y"
+				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y"
 			/>
 		</Configuration>
 		<Configuration
@@ -164,7 +164,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(OutDir)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(OutDir)&quot; /I /Y"
+				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y"
 			/>
 		</Configuration>
 	</Configurations>
