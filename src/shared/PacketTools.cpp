@@ -26,6 +26,13 @@
 #include "PacketTools.h"
 #define MAX_PACKET_SIZE 1000
 
+#include <malloc.h>
+#include <zlib.h>
+
+#ifdef WIN32		
+#include <tchar.h>
+#endif
+		
 #include <fstream>
 #include <string>
 
@@ -239,7 +246,7 @@ void Encrypt(char *pData, unsigned short nLength,unsigned int nCrcSeed)
     }
     short block_count = (nLength / 4);
     short byte_count = (nLength % 4);
-    unsigned int itemp;
+ 
     for(short count = 0;count<block_count;count++)
     {
         *Data ^= nCrcSeed;
@@ -276,7 +283,7 @@ char *Decompress(char *pData, unsigned short &nLength)
     packet.next_out = (Bytef*)output;
     packet.avail_out = CompBuf;
     inflate(&packet,Z_FINISH);
-    newLength = packet.total_out;
+    newLength = static_cast<unsigned short>(packet.total_out);
     inflateEnd(&packet);
     char *Decomp_pData  = new char [newLength + offset + 3];
     char *begDecomp_pData = Decomp_pData;
@@ -322,7 +329,7 @@ char *Compress(char *pData, unsigned short &nLength)
  packet.next_out = (Bytef* )output;
  packet.avail_out = nLength + 20;
  deflate(&packet,Z_FINISH);
- unsigned short newLength = packet.total_out;
+ unsigned short newLength = static_cast<unsigned short>(packet.total_out);
  deflateEnd(&packet);
  char *comp_pData  = new char [newLength+ offset + 3];
  char *begcomp_pData;

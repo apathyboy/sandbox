@@ -223,7 +223,7 @@ void HandleEmote(GalaxySession *session, char *data, unsigned short length)
     memset(emoteString, 0, size+1);
     bool spFound = 0;
     int b=0;
-    for (int i=0;i<size;i++) {
+    for (unsigned int i=0;i<size;i++) {
 	    if (spFound) {
 		    if (*data == 32) {
 			    emoteString[b] = 0;

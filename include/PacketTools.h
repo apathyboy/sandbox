@@ -25,13 +25,6 @@
 #ifndef PACKET_TOOLS_H
 #define PACKET_TOOLS_H
 
-#include <malloc.h>
-#include <zlib/zlib.h>
-
-#ifdef WIN32		
-#include <tchar.h>
-#endif
-		
 char* loadPacket(char* const name, unsigned short* length);
 int axtoi(char *hexStg);
 
