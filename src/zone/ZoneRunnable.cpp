@@ -24,7 +24,6 @@
 void ZoneRunnable::run(uint16_t port) {
 	ZoneServer zoned(port);
 
-	zoned.InitServer();
 	zoned.Run();
 
 	Logger().log(ERR) << "Exiting the zoned thread";

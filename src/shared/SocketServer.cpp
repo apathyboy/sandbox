@@ -119,20 +119,14 @@ SocketServer::SocketServer(uint16_t port)
 SocketServer::~SocketServer()
 {}
 
-/** Initialize Server function
- *	Stores the configuration file and prepares the socket for use.
- */
-void SocketServer::InitServer()
-{
-  pimpl_->listen();    
-}
-
 /** Run Server function
  *	Begins listening on the port specified in the configuration until
  *	the server status is no longer set to running.
  */
 void SocketServer::Run()
 {	
+    pimpl_->listen();
+
     for(;;)
     {
         OnUpdate();

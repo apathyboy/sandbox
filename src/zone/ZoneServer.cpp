@@ -32,13 +32,6 @@ ZoneServer::ZoneServer(uint16_t port)
 ZoneServer::~ZoneServer()
 {}
 
-void ZoneServer::InitServer()
-{
-	// Store the config file and load some of the data that
-	// will be needed.
-	SocketServer::InitServer();
-}
-
 void ZoneServer::Run()
 {	
 	Logger().log(INFO) << "Zone server listening on port [" << port() << "]";

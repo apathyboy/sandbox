@@ -31,13 +31,6 @@ LoginServer::LoginServer(uint16_t port)
 LoginServer::~LoginServer()
 {}
 
-void LoginServer::InitServer()
-{
-	// Store the config file and load some of the data that
-	// will be needed.
-	SocketServer::InitServer();
-}
-
 void LoginServer::Run()
 {	
 	Logger().log(INFO) << "Login server listening on port [" << port() << "]";

@@ -25,7 +25,6 @@
 void LoginRunnable::run(uint16_t port) {
 	LoginServer logind(port);
 		
-    logind.InitServer();
 	logind.Run();
 
 	Logger().log(ERR) << "Exiting the logind thread";

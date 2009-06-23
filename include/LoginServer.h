@@ -32,11 +32,6 @@ public:
     explicit LoginServer(uint16_t port);
     virtual ~LoginServer();
 
-	/** Initialize Server function
-	 *	Stores the configuration file and prepares the socket for use.
-	 */
-	virtual void InitServer();
-
 	/**	Run the server
 	 *	This begins the login server loop. The sole purpose of the login
 	 *	server is to listen for and accept data as well as sending it

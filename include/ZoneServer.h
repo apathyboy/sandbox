@@ -34,11 +34,6 @@ public:
     explicit ZoneServer(uint16_t port);
     virtual ~ZoneServer();
 
-	/** Initialize Server function
-	 *	Stores the configuration file and prepares the socket for use.
-	 */
-	virtual void InitServer();
-
 	/**	Run the server
 	 *	This begins the zone server loop. The sole purpose of the zone
 	 *	server is to listen for and accept data as well as sending it

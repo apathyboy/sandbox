@@ -60,11 +60,6 @@ public:
     explicit SocketServer(uint16_t port);
     virtual ~SocketServer();
 
-	/** Initialize Server function
-	 *	Stores the configuration file and prepares the socket for use.
-	 */
-	virtual void InitServer();
-
 	/** Run Server function
 	 *	Begins listening on the port specified in the configuration until
 	 *	the server status is no longer set to running.
