@@ -1,0 +1,5 @@
+login_port = 44453
+zone_port = 44463
+ping_port = 44462
+
+shuttle_wait_time = 1
