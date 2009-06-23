@@ -30,8 +30,6 @@
 
 namespace po = boost::program_options;
 
-bool running;
-
 /* Program Constants */
 const char* config_filename = "openswg.cfg";
 
@@ -54,9 +52,6 @@ int main(int argc, char *argv[])
 	// Begin the main execution phase. This begins by starting the server
 	// threads and then running until the exit command is received.
 	try {		
-		// Set the running state.
-		running = true;
-
 		// Create the login and zone threads.
         LoginRunnable login_dameon;
         boost::thread login_thread(std::tr1::bind(&LoginRunnable::run, &login_dameon, sandbox_options["login_port"].as<uint16_t>()));
@@ -77,10 +72,12 @@ int main(int argc, char *argv[])
 			if (strcmp(cmd.c_str(), "exit") == 0 || strcmp(cmd.c_str(), "quit") == 0)
 			{
 				Logger().log(INFO) << "Shutting down the server";
-				running = false;
                 
-            //    login_thread.join();
-            //    zone_thread.join();
+                login_thread.interrupt();
+                login_thread.join();
+
+                zone_thread.interrupt();                
+                zone_thread.join();
 
 				break;
 			}

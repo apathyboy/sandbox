@@ -21,17 +21,11 @@
 #include "ZoneServer.h"
 #include "Logger.h"
 
-extern bool running;
-
 void ZoneRunnable::run(uint16_t port) {
 	ZoneServer zoned(port);
-	try {
-		zoned.InitServer();
-		zoned.Run();
-	} catch(SocketServerException()) {
-		running = false;
-		Logger().log(ERR) << "ERROR: Unable to run the Zone Server!";
-	}
+
+	zoned.InitServer();
+	zoned.Run();
 
 	Logger().log(ERR) << "Exiting the zoned thread";
 }

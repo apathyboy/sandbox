@@ -30,8 +30,6 @@
 
 using boost::asio::ip::udp;
 
-extern bool running;
-
 class SocketServerImpl
 {
 public:
@@ -62,15 +60,10 @@ public:
             )
         );    
     }
-  
-    void start()
-    {
-        io_service_.run();
-    }
 
-    void stop()
+    void poll()
     {
-        io_service_.stop();
+        io_service_.poll();
     }
   
     void sendResponse(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> buffer)
@@ -90,10 +83,7 @@ public:
            
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
-        boost::this_thread::yield();
-
         socket_server_->OnIncoming(remote_endpoint_, reinterpret_cast<char*>(&buffer_[0]), buffer_.size());
-
   	    listen();
     }
            
@@ -127,9 +117,7 @@ SocketServer::SocketServer(uint16_t port)
 {}
 
 SocketServer::~SocketServer()
-{
-    ShutdownServer();
-}
+{}
 
 /** Initialize Server function
  *	Stores the configuration file and prepares the socket for use.
@@ -145,25 +133,15 @@ void SocketServer::InitServer()
  */
 void SocketServer::Run()
 {	
-    pimpl_->start();
-
-	do
+    for(;;)
     {
-		mCurrentTime = time(0);
+        OnUpdate();
 
-		OnUpdate();
+        pimpl_->poll();
 
         boost::this_thread::yield();
+        boost::this_thread::interruption_point();
 	}
-    while (running); // Loop through until the running state is false.
-}
-
-/** Shutdown Server function
- *	Handles any cleanup the server requires before exiting.
- */
-void SocketServer::ShutdownServer()
-{
-  pimpl_->stop();
 }
 
 /** Add GalaxySession function

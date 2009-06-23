@@ -20,18 +20,13 @@
 #include "LoginRunnable.h"
 #include "LoginServer.h"
 #include "Logger.h"
-
-extern bool running;
+#include <boost/thread.hpp>
 
 void LoginRunnable::run(uint16_t port) {
 	LoginServer logind(port);
-	try {
-		logind.InitServer();
-		logind.Run();
-	} catch(SocketServerException()) {
-		running = false;
-		Logger().log(ERR) << "ERROR: Unable to initialize the login server!";
-	}
+		
+    logind.InitServer();
+	logind.Run();
 
 	Logger().log(ERR) << "Exiting the logind thread";
 }

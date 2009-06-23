@@ -65,16 +65,11 @@ public:
 	 */
 	virtual void InitServer();
 
-	/** Shutdown Server function
-	 *	Handles any cleanup the server requires before exiting.
-	 */
-	void ShutdownServer();
-
 	/** Run Server function
 	 *	Begins listening on the port specified in the configuration until
 	 *	the server status is no longer set to running.
 	 */
-	void Run();
+	virtual void Run();
 
 	/** On Incoming Data function
 	 *	Whenever information is received via the socket this function is

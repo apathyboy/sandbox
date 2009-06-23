@@ -42,5 +42,4 @@ void LoginServer::Run()
 {	
 	Logger().log(INFO) << "Login server listening on port [" << port() << "]";
 	SocketServer::Run();
-	ShutdownServer();
 }
