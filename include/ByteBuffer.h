@@ -84,12 +84,12 @@ template<typename T> const T ByteBuffer::peek(bool doSwapEndian)
 		throw std::out_of_range("Read past end of buffer");
 	}
 
-	T* data = reinterpret_cast<T*>(&data_[read_position_]);
+	T data = *reinterpret_cast<T*>(&data_[read_position_]);
 
 	if (doSwapEndian)
-		swapEndian<T>(*data);
+		swapEndian<T>(data);
 
-	return *data;
+	return data;
 }
 
 template<typename T> ByteBuffer& operator<<(ByteBuffer& buffer, const T& value)

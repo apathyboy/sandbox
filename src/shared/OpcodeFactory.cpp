@@ -23,7 +23,7 @@
 #include "ZoneInsertionHandler.h"
 #include "SpatialHandler.h"
 
-handlerFunc OpcodeFactory::GetOpcodeHandler(char *packet, unsigned int *opcode)
+handlerFunc OpcodeFactory::GetOpcodeHandler(const unsigned char *packet, unsigned int *opcode)
 {
 	// Get the map of opcode handlers.
 	OpcodeHandlers handlers = _buildOpcodeHandlerMap();

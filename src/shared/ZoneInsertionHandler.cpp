@@ -22,22 +22,22 @@
 #include "PacketTools.h"
 
 
-void HandleClientReady(GalaxySession *session, char *data, unsigned short length)
+void HandleClientReady(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 }
 
-void HandleLoadDone(GalaxySession *session, char *data, unsigned short length)
+void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendHardPacket("packets\\ZoneInsertion\\LoadDone.txt", true);
 }
 
-void HandleLoadTerrain(GalaxySession *session, char *data, unsigned short length)
+void HandleLoadTerrain(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 }
 
-void HandleSession(GalaxySession *session, char *data, unsigned short length)
+void HandleSession(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -45,7 +45,7 @@ void HandleSession(GalaxySession *session, char *data, unsigned short length)
 	session->SendHardPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
 }
 
-void HandleZoneInsertionRequest(GalaxySession *session, char *data, unsigned short length)
+void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 

@@ -23,7 +23,7 @@
 #include "Logger.h"
 #include "PacketTools.h"
 
-void HandleSpatial(GalaxySession *session, char *data, unsigned short length)
+void HandleSpatial(GalaxySession *session, const unsigned char * data, unsigned short length)
 {	
     unsigned int *opcode = (unsigned int*)(data+30);
 	// Try to handle the incoming packet.
@@ -47,7 +47,7 @@ void HandleSpatial(GalaxySession *session, char *data, unsigned short length)
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandlePositionUpdate(GalaxySession *session, char *data, unsigned short length)
+void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	signed short direction = *(signed short*)(data+44);
 
@@ -85,7 +85,7 @@ void HandlePositionUpdate(GalaxySession *session, char *data, unsigned short len
 //	session->IncrementServerSequence();	
 }
 
-void HandleSit(GalaxySession *session, char *data, unsigned short length)
+void HandleSit(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -93,7 +93,7 @@ void HandleSit(GalaxySession *session, char *data, unsigned short length)
 	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
 }
 
-void HandleStand(GalaxySession *session, char *data, unsigned short length)
+void HandleStand(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -101,7 +101,7 @@ void HandleStand(GalaxySession *session, char *data, unsigned short length)
 	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
 }
 
-void HandleProne(GalaxySession *session, char *data, unsigned short length)
+void HandleProne(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -109,7 +109,7 @@ void HandleProne(GalaxySession *session, char *data, unsigned short length)
 	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
 }
 
-void HandleKneel(GalaxySession *session, char *data, unsigned short length)
+void HandleKneel(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -118,7 +118,7 @@ void HandleKneel(GalaxySession *session, char *data, unsigned short length)
 
 }
 
-void HandleSpatialChat(GalaxySession *session, char *data, unsigned short length)
+void HandleSpatialChat(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -178,7 +178,7 @@ void HandleSpatialChat(GalaxySession *session, char *data, unsigned short length
 }
 
 
-void HandleMood(GalaxySession *session, char *data, unsigned short length)
+void HandleMood(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
@@ -210,7 +210,7 @@ void HandleMood(GalaxySession *session, char *data, unsigned short length)
     delete [] moodString;
 }
 
-void HandleEmote(GalaxySession *session, char *data, unsigned short length)
+void HandleEmote(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 

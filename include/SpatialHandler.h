@@ -28,14 +28,14 @@
 
 class GalaxySession;
 
-void HandleSpatial(GalaxySession *session, char *data, unsigned short length);
-void HandlePositionUpdate(GalaxySession *session, char *data, unsigned short length);
-void HandleSit(GalaxySession *session, char *data, unsigned short length);
-void HandleStand(GalaxySession *session, char *data, unsigned short length);
-void HandleSpatialChat(GalaxySession *session, char *data, unsigned short length);
-void HandleKneel(GalaxySession *session, char *data, unsigned short length);
-void HandleProne(GalaxySession *session, char *data, unsigned short length);
-void HandleMood(GalaxySession *session, char *data, unsigned short length);
-void HandleEmote(GalaxySession *session, char *data, unsigned short length);
+void HandleSpatial(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandlePositionUpdate(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleSit(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleStand(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleSpatialChat(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleKneel(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleProne(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleMood(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleEmote(GalaxySession *session, const unsigned char *data, unsigned short length);
 
 #endif // OPENSWG_SPATIAL_HANDLER_H

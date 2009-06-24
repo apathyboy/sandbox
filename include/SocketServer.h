@@ -29,6 +29,7 @@
 #include <map>
 #include <tr1/memory>
 
+#include "ByteBuffer.h"
 #include "NetworkAddress.h"
 
 class GalaxySession;
@@ -53,7 +54,7 @@ public:
 	 *	Whenever information is received via the socket this function is
 	 *	called to handle the data.
 	 */
-	void handleIncoming(const NetworkAddress& address, char *packet, size_t length);
+    void handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
 
 	/** Updates the server state.
 	 */
@@ -67,7 +68,7 @@ public:
 	/** Add New SWG Client function
 	 *	Adds a new swg client to the client map.
 	 */
-    std::tr1::shared_ptr<GalaxySession> AddGalaxySession(NetworkAddress address);
+    std::tr1::shared_ptr<GalaxySession> addGalaxySession(const NetworkAddress& address);
 
 	const uint16_t port();
 

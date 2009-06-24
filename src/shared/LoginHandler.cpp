@@ -22,7 +22,7 @@
 #include "GalaxySession.h"
 #include "PacketTools.h"
 
-void HandleAuthentication(GalaxySession *session, char *data, unsigned short length)
+void HandleAuthentication(GalaxySession *session, const unsigned char *data, unsigned short length)
 {
 	// Send the station identifier
 	session->SendHardPacket("packets\\Login\\StationIdentifier.txt", false);

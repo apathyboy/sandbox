@@ -27,6 +27,8 @@
 #endif
 
 #include <tr1/memory>
+
+#include "ByteBuffer.h"
 #include "Player.h"
 #include "SocketServer.h"
 
@@ -50,7 +52,7 @@ public:
 	/** Handle Packet function
 	 *	Processes any packets that are sent to the server.
 	 */
-	void HandlePacket(char *pData, size_t length);
+	void HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
 
 	/** Send Packet function
 	 *	Sends a packet to the specified to the specified client.
@@ -144,7 +146,7 @@ public:
 	 *	Preapres an incoming packet for use. This decompresses
 	 *	and decrypts the packets and returns the formatted data.
 	 */
-	char* PrepPacket(char* pData, unsigned short &length);
+    void PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet);
 
 	/** Get Player
 	 *	Returns an instance of the player associated with this session.

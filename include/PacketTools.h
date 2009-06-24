@@ -25,6 +25,8 @@
 #ifndef PACKET_TOOLS_H
 #define PACKET_TOOLS_H
 
+#include <vector>
+
 char* loadPacket(char* const name, unsigned short* length);
 int axtoi(char *hexStg);
 
@@ -90,4 +92,6 @@ void Decrypt(char *pData,unsigned short nLength, unsigned int nCrcSeed);
 
 char *Compress(char *pData,unsigned short &nLength);
 char *Decompress(char *pData, unsigned short &nLength);
+std::vector<char> Decompress(std::vector<char> pData);
+
 #endif

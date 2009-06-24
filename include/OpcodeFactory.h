@@ -34,7 +34,7 @@ class GalaxySession;
 
 /** Define our handler function type.
  */
-typedef void(*handlerFunc)(GalaxySession *session, char *packet, unsigned short length);
+typedef void(*handlerFunc)(GalaxySession *session, const unsigned char *packet, unsigned short length);
 
 /** Define the map to hold the opcode handlers.
  */
@@ -50,7 +50,7 @@ public:
 	 *	Returns the opcode handler by parsing the raw packet. This returns the
 	 *	handler for the first opcode found in the packet.
 	 */
-	static handlerFunc GetOpcodeHandler(char *packet, unsigned int *opcode=NULL);
+	static handlerFunc GetOpcodeHandler(const unsigned char *packet, unsigned int *opcode=NULL);
  
 	/** Get Opcode Handler
 	 *	Returns the opcode handler based on the opcode passed in.

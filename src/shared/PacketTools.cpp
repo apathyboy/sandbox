@@ -309,6 +309,57 @@ char *Decompress(char *pData, unsigned short &nLength)
 
 }
 
+std::vector<char> Decompress(std::vector<char> pData)
+{
+    
+    unsigned short offset;
+    if(pData[0] == 0x00)
+     offset = 2;
+    else
+     offset = 1;
+    z_stream packet;
+    char output[CompBuf];
+    unsigned short newLength=0;
+    packet.zalloc = Z_NULL;
+    packet.zfree = Z_NULL;
+    packet.opaque = Z_NULL;
+    packet.avail_in = 0;
+    packet.next_in = Z_NULL;
+    inflateInit(&packet);
+    packet.next_in = (Bytef*)(&pData[0]+offset);
+    packet.avail_in = (pData.size() - offset -3);
+    packet.next_out = (Bytef*)output;
+    packet.avail_out = CompBuf;
+    inflate(&packet,Z_FINISH);
+    newLength = static_cast<unsigned short>(packet.total_out);
+    inflateEnd(&packet);
+    
+    std::vector<char> tmpdata(newLength + offset + 3);
+
+    char *Decomp_pData  = &tmpdata[0];// new char [newLength + offset + 3];
+    char *begDecomp_pData = Decomp_pData;
+    *Decomp_pData = pData[0];
+    Decomp_pData++;
+    if(offset == 2)
+	{
+	 *Decomp_pData = pData[1];
+     Decomp_pData++;
+	}
+    for(short x=0;x<newLength;x++)
+    {
+        *Decomp_pData = output[x];
+        Decomp_pData++;
+    }
+	*Decomp_pData = 0x01;
+    Decomp_pData++;
+
+    *(unsigned short*)Decomp_pData = *(reinterpret_cast<unsigned short*>(&pData[pData.size()-2]));
+    Decomp_pData = begDecomp_pData;
+    //nLength = newLength + offset + 3;
+    return tmpdata;
+
+}
+
 char *Compress(char *pData, unsigned short &nLength)
 {
  unsigned short offset;

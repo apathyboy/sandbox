@@ -22,6 +22,6 @@
 
 class GalaxySession;
 
-void HandleAuthentication(GalaxySession *session, char *data, unsigned short length);
+void HandleAuthentication(GalaxySession *session, const unsigned char *data, unsigned short length);
 
 #endif // OPENSWG_LOGIN_HANDLER_H

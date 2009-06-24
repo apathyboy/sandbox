@@ -26,7 +26,7 @@
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleSessionRequest(GalaxySession *session, char *data, unsigned short length)
+void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length)
 { 	
 	// Store the connection id.
 	session->SetConnectionId(*(unsigned int*)(data+6));
@@ -58,7 +58,7 @@ void HandleSessionRequest(GalaxySession *session, char *data, unsigned short len
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleNetStatus(GalaxySession *session, char *data, unsigned short length)
+void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length)
 {     
 	// Get the tick value.
 	unsigned short tick  = *(unsigned short*)(data+2);
@@ -80,7 +80,7 @@ void HandleNetStatus(GalaxySession *session, char *data, unsigned short length)
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleMultiPacket(GalaxySession *session, char *data, unsigned short length)
+void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsigned short length)
 {       
     //"Multi-SOE Packet: "
     data+=2;
@@ -106,7 +106,8 @@ void HandleMultiPacket(GalaxySession *session, char *data, unsigned short length
 		data++;
 	    i++;
     
-		session->HandlePacket(data, segment_size);
+        std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
+		session->HandlePacket(buffer);
 
         i+=segment_size;
         data+=segment_size;
@@ -118,7 +119,7 @@ void HandleMultiPacket(GalaxySession *session, char *data, unsigned short length
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleAcknowledge(GalaxySession *session, char *data, unsigned short length)
+void HandleAcknowledge(GalaxySession *session, const unsigned char *data, unsigned short length)
 {	
 	session->SetSequenceRecv(*(unsigned short*)(data+2));
 
@@ -134,7 +135,7 @@ void HandleAcknowledge(GalaxySession *session, char *data, unsigned short length
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleDataChannel(GalaxySession *session, char *data, unsigned short length)
+void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsigned short length)
 {	
 	data+=2;
 	session->SetClientSequence(*(unsigned short*)(data));
@@ -165,7 +166,8 @@ void HandleDataChannel(GalaxySession *session, char *data, unsigned short length
             }
             data++;
             i++;
-			session->HandlePacket(data, segment_size);
+            std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
+			session->HandlePacket(buffer);
             i+=segment_size;
             data+=segment_size;
         }
@@ -174,7 +176,8 @@ void HandleDataChannel(GalaxySession *session, char *data, unsigned short length
 	else
     {
 		unsigned short segment_size = length-4;
-		session->HandlePacket(data, segment_size);
+        std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
+		session->HandlePacket(buffer);
     }
 }
 
@@ -183,7 +186,7 @@ void HandleDataChannel(GalaxySession *session, char *data, unsigned short length
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandleDisconnect(GalaxySession *session, char *data, unsigned short length)
+void HandleDisconnect(GalaxySession *session, const unsigned char *data, unsigned short length)
 {
 	session->SetServerSequence(0);
 	session->SetClientSequence(0);
@@ -195,7 +198,7 @@ void HandleDisconnect(GalaxySession *session, char *data, unsigned short length)
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-void HandlePing(GalaxySession *session, char *data, unsigned short length)
+void HandlePing(GalaxySession *session, const unsigned char *data, unsigned short length)
 {     
 	// Load in the raw packet data.
 	unsigned short size;

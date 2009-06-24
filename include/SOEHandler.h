@@ -22,12 +22,12 @@
 
 class GalaxySession;
 
-void HandleSessionRequest(GalaxySession *session, char *data, unsigned short length);
-void HandleNetStatus(GalaxySession *session, char *data, unsigned short length);
-void HandleMultiPacket(GalaxySession *session, char *data, unsigned short length);
-void HandleAcknowledge(GalaxySession *session, char *data, unsigned short length);
-void HandleDataChannel(GalaxySession *session, char *data, unsigned short length);
-void HandleDisconnect(GalaxySession *session, char *data, unsigned short length);
-void HandlePing(GalaxySession *session, char *data, unsigned short length);
+void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleAcknowledge(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleDisconnect(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandlePing(GalaxySession *session, const unsigned char *data, unsigned short length);
 
 #endif // OPENSWG_SOE_HANDLER_H

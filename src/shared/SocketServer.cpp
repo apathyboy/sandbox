@@ -83,7 +83,9 @@ public:
            
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
-        socket_server_->handleIncoming(remote_endpoint_, reinterpret_cast<char*>(&buffer_[0]), buffer_.size());
+        std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(&buffer_[0], bytes_received));
+        socket_server_->handleIncoming(remote_endpoint_, message);
+
   	    listen();
     }
            
@@ -138,7 +140,7 @@ void SocketServer::run()
 /** Add GalaxySession function
  *	Adds a new swg client to the client map.
  */
-std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddress address)
+std::tr1::shared_ptr<GalaxySession> SocketServer::addGalaxySession(const NetworkAddress& address)
 {
     std::string ip = address.address().to_string();
 
@@ -156,7 +158,7 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddres
  *	Whenever information is received via the socket this function is
  *	called to handle the data.
  */
-void SocketServer::handleIncoming(const NetworkAddress& address, char *packet, size_t length)
+void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
 {    
 	// Attempt to find the client in the session map.
 	GalaxySessionMap::iterator i = sessions_.find(address);
@@ -166,25 +168,25 @@ void SocketServer::handleIncoming(const NetworkAddress& address, char *packet, s
 	if (i != sessions_.end())
 	{
         std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-		packet = session->PrepPacket(packet, (unsigned short &)length);	
+		session->PrepPacket(message);	
 
-		session->HandlePacket(packet, length);
+		session->HandlePacket(message);
 	}
 
 	// Otherwise create a new client which stores it in the client map
 	// and then send the new client the packet data.
 	else
 	{
-		if (packet[1] == 1) 
-		{
-            std::tr1::shared_ptr<GalaxySession> session = AddGalaxySession(address);
-			packet = session->PrepPacket(packet, (unsigned short &)length);
+        if (message->peek<uint16_t>(true) == 0x0001) 
+		{        
+            std::tr1::shared_ptr<GalaxySession> session = addGalaxySession(address);
+			session->PrepPacket(message);
 
-			session->HandlePacket(packet, length);	
+			session->HandlePacket(message);	
 		}
 		else
 		{
-			Logger().log(ERR) << "Unexpected Opcode [" << packet[1] << "] from invalid client [" << address << "]";
+			Logger().log(ERR) << "Unexpected Opcode [" << message->peek<uint16_t>() << "] from invalid client [" << address << "]";
 		}
 	}
 }

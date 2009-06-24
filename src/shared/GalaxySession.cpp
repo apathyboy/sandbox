@@ -49,20 +49,20 @@ GalaxySession::GalaxySession(SocketServer* server, NetworkAddress address, std::
 /** Handle Packet function
  *	Processes any packets that are sent to the server.
  */
-void GalaxySession::HandlePacket(char *pData, size_t length)
+void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
 	unsigned int opcode;
 	// Try to handle the incoming packet.
 	try
 	{
 		// Search for the opcode handler function and pass it the packet data.
-		handlerFunc handler = OpcodeFactory::GetOpcodeHandler(pData, &opcode);
-		handler(this, pData, length);
+        handlerFunc handler = OpcodeFactory::GetOpcodeHandler(packet->data(), &opcode);
+		handler(this, packet->data(), packet->size());
 	}
 	catch(...)
 	{
 		// Log any unknown opcodes.
-		Logger().log(ERR) << "Unknown Opcode Found - Group: " << pData[1] << "  SWG: " << *(uint32_t*)(pData+2);
+        Logger().log(ERR) << "Unknown Opcode Found - Group: " << packet->read<uint16_t>() << "  SWG: " << packet->read<uint32_t>();
 		SendOk();
 	}
 }
@@ -164,71 +164,51 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
  *	code.
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
-char* GalaxySession::PrepPacket(char* pData, unsigned short &nLength)
+void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
-    bool comp = false;
+    std::vector<char> pData(packet->data(), packet->data() + packet->size());
+    unsigned short nLength = packet->size();
+
     switch(pData[1]) //switch to do packet manip before passing to handlers
     {
         case 3:
-        //"Multi-SOE Packet: "
-        if(CrcTest(pData,nLength,mCrcSeed))
-            Decrypt(pData,nLength,mCrcSeed);
-        if (pData[2] == 'x')
-        {
-            comp = true;
-            pData = Decompress(pData,nLength);
-        }
-        break;
-        case 9:
-        //"Data Channel: "
-        Decrypt(pData,nLength,mCrcSeed);
-        if (pData[2] == 'x')
-        {
-            comp = true;
-            pData = Decompress(pData,nLength);
-        }
-        break;
-        case 13:
-        //"Fragmented: "
-        Decrypt(pData,nLength,mCrcSeed);
-        if (pData[2] == 'x')
-        {
-            comp = true;
-            pData = Decompress(pData,nLength);
-        }
-        break;
-        case 6:
-        //"SOE Ping: "
-        Decrypt(pData,nLength,mCrcSeed);
-        break;
+            //"Multi-SOE Packet: "
+            if(CrcTest(&pData[0],nLength,mCrcSeed))
+                Decrypt(&pData[0],nLength,mCrcSeed);
+            if (pData[2] == 'x')
+            {
+                std::vector<char> tmp(Decompress(pData));
+                std::swap(pData, tmp);
+            }
+            break;
+        
         case 7:
-        //"Client Net-Status: "
-        Decrypt(pData,nLength,mCrcSeed);
-        if (pData[2] == 'x')
-        {
-            comp = true;
-            pData = Decompress(pData,nLength);
-        }
-        break;
-        case 21:
-        //"Acknowledge: "
-        Decrypt(pData,nLength,mCrcSeed);
-        break;
-        case 5:
-        //"Disconnect: "
-        Decrypt(pData,nLength,mCrcSeed);
-        break;
+        case 9:
+        case 13:
+            //"Fragmented: "
+            Decrypt(&pData[0],nLength,mCrcSeed);
+            if (pData[2] == 'x')
+            {
+                std::vector<char> tmp(Decompress(pData));
+                std::swap(pData, tmp);
+            }
+            break;
 
+        case 6:
+        case 21:
+        case 5:
         case 17:
-        //"Future Packet: "
-        Decrypt(pData,nLength,mCrcSeed);
-        break;
+            //"Future Packet: "
+            Decrypt(&pData[0],nLength,mCrcSeed);
+            break;
+
         default:
-        //"Unrecorded OP found: "
-        break;
+            //"Unrecorded OP found: "
+            break;
     }
 
-	return pData;
+    ByteBuffer tmp(reinterpret_cast<unsigned char*>(&pData[0]), pData.size());
+    packet->swap(tmp);
 }
 
 
