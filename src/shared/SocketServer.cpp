@@ -150,7 +150,7 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddres
 
 	// Create a new session and store it in the session map. 
     std::tr1::shared_ptr<GalaxySession> session(new GalaxySession(this, address, ip));
-	sessions_[ip.c_str()] = session;
+	sessions_[address] = session;
 
 	// Return the new session.
 	return session;
@@ -161,11 +161,9 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddres
  *	called to handle the data.
  */
 void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t length)
-{
-    std::string ip = address.address().to_string();
-    
+{    
 	// Attempt to find the client in the session map.
-	GalaxySessionMap::iterator i = sessions_.find(ip);
+	GalaxySessionMap::iterator i = sessions_.find(address);
 
 	// If the session exists retrieve it from the session map and send the
 	// packet data on to it's packet handler.
@@ -173,14 +171,7 @@ void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t lengt
 	{
         std::tr1::shared_ptr<GalaxySession> session = (*i).second;
 		packet = session->PrepPacket(packet, (unsigned short &)length);	
-		/* Uncomment to display incoming packet data.
-		printf("INCOMING PACKET\nPacket Size: %d \nPacket Data: \n", length);
-		for(int k = 0; k < length; k++)
-		{
-			printf("0x%02x ",(unsigned char)*(packet+k));
-		}
-		printf("\n\n");
-		*/
+
 		session->HandlePacket(packet, length);
 	}
 
@@ -192,14 +183,7 @@ void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t lengt
 		{
             std::tr1::shared_ptr<GalaxySession> session = AddGalaxySession(address);
 			packet = session->PrepPacket(packet, (unsigned short &)length);
-			/* Uncomment to display incoming packet data.
-			printf("INCOMING PACKET\nPacket Size: %d \nPacket Data: \n", length);
-			for(int k = 0; k < length; k++)
-			{
-				printf("0x%02x ",(unsigned char)*(packet+k));
-			}
-			printf("\n\n");
-			*/
+
 			session->HandlePacket(packet, length);	
 		}
 		else
@@ -226,17 +210,19 @@ const uint16_t SocketServer::port()
 
 void SocketServer::update()
 {
+    current_time_ = time(0);
+
     // Check to see if enough time has passed then update the session map.
-	if ((mCurrentTime - last_cleanup_time_) >= 1) {
+	if ((current_time_ - last_cleanup_time_) >= 1) {
 
         GalaxySessionMap::iterator end = sessions_.end();
 		for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i)
 		{
             std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-			session->Update(mCurrentTime);
+			session->Update(current_time_);
 		}
 
-	    last_cleanup_time_ = mCurrentTime;
+	    last_cleanup_time_ = current_time_;
 	}
 
     onUpdate();

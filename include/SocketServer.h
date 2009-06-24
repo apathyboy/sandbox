@@ -34,17 +34,12 @@
 
 #include "NetworkAddress.h"
 
-/** SWG Client Map
- *  This is a container for the clients that are currently connected to the server.
- */
 class GalaxySession;
-typedef std::map<std::string, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
-
+class SocketServerImpl;
 
 /** SocketServer class
  *  This class handles the sending and receiving of data from the client.
  */
-class SocketServerImpl;
 class SocketServer
 {
 public:
@@ -64,7 +59,7 @@ public:
 	 */
 	void OnIncoming(NetworkAddress address, char *packet, size_t length);
 
-	/** Updates the zone state.
+	/** Updates the server state.
 	 */
 	void update();
 
@@ -87,8 +82,10 @@ private:
 
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
 
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
 	GalaxySessionMap sessions_;	
-	time_t mCurrentTime;
+
+	time_t current_time_;
     time_t last_cleanup_time_;
 };
 
