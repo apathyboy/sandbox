@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\gtest\include&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlibd.lib"
 				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -87,7 +87,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y"
+				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\gtest\include&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -136,8 +136,8 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlib.lib"
-				OutputFile="&quot;$(SolutionDir)\$(ConfigurationName)\$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;"
+				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(ProjectName).exe&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
 				OptimizeReferences="2"
@@ -164,7 +164,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y"
+				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
