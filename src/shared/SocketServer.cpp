@@ -83,8 +83,12 @@ public:
            
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
-        std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(&buffer_[0], bytes_received));
-        socket_server_->handleIncoming(remote_endpoint_, message);
+        if (! error && bytes_received > 0) {
+            std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(&buffer_[0], bytes_received));
+            socket_server_->handleIncoming(remote_endpoint_, message);
+        } else {
+            Logger().log(ERR) << error.message();
+        }
 
   	    listen();
     }
