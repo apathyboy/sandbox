@@ -131,8 +131,7 @@ void SocketServer::run()
 
         pimpl_->poll();
 
-        boost::this_thread::yield();
-        boost::this_thread::interruption_point();
+        boost::this_thread::sleep(boost::posix_time::milliseconds(20));
 	}
 }
 
