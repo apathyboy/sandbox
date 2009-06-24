@@ -108,10 +108,6 @@ private:
 /** Socket Server constructor
  *	Initializes the Socket Servers data members.
  */
-SocketServer::SocketServer()
-    : pimpl_(new SocketServerImpl(this, 0))
-{}
-
 SocketServer::SocketServer(uint16_t port)
     : pimpl_(new SocketServerImpl(this, port))
 {}

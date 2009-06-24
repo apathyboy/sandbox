@@ -20,8 +20,6 @@
 #ifndef OPENSWG_SOCKET_SERVER_H
 #define OPENSWG_SOCKET_SERVER_H
 
-#define MAX_RECV_SIZE 512
-
 #ifdef _MSC_VER
 #include "stdint.h"
 #else
@@ -29,7 +27,6 @@
 #endif
 
 #include <map>
-#include <string>
 #include <tr1/memory>
 
 #include "NetworkAddress.h"
@@ -43,7 +40,6 @@ class SocketServerImpl;
 class SocketServer
 {
 public:
-	SocketServer();
     explicit SocketServer(uint16_t port);
     virtual ~SocketServer();
 
@@ -76,6 +72,10 @@ public:
 	const uint16_t port();
 
 private:	
+	SocketServer();
+    SocketServer(const SocketServer&);
+    SocketServer& operator=(const SocketServer&);
+
 	/** Updates the zone state.
 	 */
 	virtual void onUpdate() = 0;

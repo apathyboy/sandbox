@@ -22,10 +22,13 @@
 class LoginServer : public SocketServer
 {
 public:
-    LoginServer();
     explicit LoginServer(uint16_t port);
     virtual ~LoginServer();
 
 private:
+	LoginServer();
+    LoginServer(const LoginServer&);
+    LoginServer& operator=(const LoginServer&);
+
 	virtual void onUpdate();
 };

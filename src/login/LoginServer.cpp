@@ -20,10 +20,6 @@
 #include "LoginServer.h"
 #include "Logger.h"
 
-LoginServer::LoginServer()
-: SocketServer()
-{}
-
 LoginServer::LoginServer(uint16_t port)
 : SocketServer(port)
 {}

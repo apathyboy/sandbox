@@ -21,10 +21,6 @@
 #include "Logger.h"
 #include "GalaxySession.h"
 
-ZoneServer::ZoneServer()
-    : SocketServer()
-{}
-
 ZoneServer::ZoneServer(uint16_t port)
     : SocketServer(port)
 {}

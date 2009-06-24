@@ -22,10 +22,13 @@
 class ZoneServer : public SocketServer
 {
 public:
-    ZoneServer();
     explicit ZoneServer(uint16_t port);
     virtual ~ZoneServer();
 
 private:
+	ZoneServer();
+    ZoneServer(const ZoneServer&);
+    ZoneServer& operator=(const ZoneServer&);
+
     virtual void onUpdate();
 };
