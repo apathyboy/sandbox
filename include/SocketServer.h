@@ -41,14 +41,6 @@ class GalaxySession;
 typedef std::map<std::string, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
 
 
-/** Socket Server Exception structure
- *  This exception is thrown whenever there is an error that prevents 
- *	a method from executing. This allows any issues raised to be handled
- *	in the domain where they are relevant.
- */
-struct SocketServerException {};
-
-
 /** SocketServer class
  *  This class handles the sending and receiving of data from the client.
  */
@@ -64,7 +56,7 @@ public:
 	 *	Begins listening on the port specified in the configuration until
 	 *	the server status is no longer set to running.
 	 */
-	virtual void Run();
+	void run();
 
 	/** On Incoming Data function
 	 *	Whenever information is received via the socket this function is
@@ -74,7 +66,7 @@ public:
 
 	/** Updates the zone state.
 	 */
-	virtual void OnUpdate() = 0;
+	void update();
 
 	/** Send Packet function
 	 *	Sends a packet to the specified to the specified client.
@@ -89,13 +81,15 @@ public:
 	const uint16_t port();
 
 private:	
+	/** Updates the zone state.
+	 */
+	virtual void onUpdate() = 0;
+
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
 
-protected:	
-
-	GalaxySessionMap mSessions;
-	
+	GalaxySessionMap sessions_;	
 	time_t mCurrentTime;
+    time_t last_cleanup_time_;
 };
 
 #endif // OPENSWG_SOCKET_SERVER_H

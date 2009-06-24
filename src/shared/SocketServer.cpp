@@ -123,13 +123,14 @@ SocketServer::~SocketServer()
  *	Begins listening on the port specified in the configuration until
  *	the server status is no longer set to running.
  */
-void SocketServer::Run()
+void SocketServer::run()
 {	
     pimpl_->listen();
+	Logger().log(INFO) << "Server listening on port [" << pimpl_->port() << "]";
 
     for(;;)
     {
-        OnUpdate();
+        update();
 
         pimpl_->poll();
 
@@ -149,7 +150,7 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddres
 
 	// Create a new session and store it in the session map. 
     std::tr1::shared_ptr<GalaxySession> session(new GalaxySession(this, address, ip));
-	mSessions[ip.c_str()] = session;
+	sessions_[ip.c_str()] = session;
 
 	// Return the new session.
 	return session;
@@ -164,11 +165,11 @@ void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t lengt
     std::string ip = address.address().to_string();
     
 	// Attempt to find the client in the session map.
-	GalaxySessionMap::iterator i = mSessions.find(ip);
+	GalaxySessionMap::iterator i = sessions_.find(ip);
 
 	// If the session exists retrieve it from the session map and send the
 	// packet data on to it's packet handler.
-	if (i != mSessions.end())
+	if (i != sessions_.end())
 	{
         std::tr1::shared_ptr<GalaxySession> session = (*i).second;
 		packet = session->PrepPacket(packet, (unsigned short &)length);	
@@ -221,4 +222,22 @@ void SocketServer::SendPacket(const NetworkAddress& address, char *packet, unsig
 const uint16_t SocketServer::port()
 {
     return pimpl_->port();
+}
+
+void SocketServer::update()
+{
+    // Check to see if enough time has passed then update the session map.
+	if ((mCurrentTime - last_cleanup_time_) >= 1) {
+
+        GalaxySessionMap::iterator end = sessions_.end();
+		for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i)
+		{
+            std::tr1::shared_ptr<GalaxySession> session = (*i).second;
+			session->Update(mCurrentTime);
+		}
+
+	    last_cleanup_time_ = mCurrentTime;
+	}
+
+    onUpdate();
 }

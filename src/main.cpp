@@ -40,9 +40,6 @@ int main(int argc, char *argv[])
     po::variables_map sandbox_options = buildProgramOptions(argc, argv, config_filename);
    
 	// Send server header output.
-	//sLog.logTitle("OpenSWG Combat Upgrade Sandbox v1.0");
-	//sLog.logTitle("Copyright (c) 2006 OpenSWG Development Team\n");
-	//sLog.logString("Server starting with configuration file: %s.\n", config_filename);
     std::cout << "OpenSWG Combat Upgrade Sandbox v2.0" << std::endl;
     std::cout << "Copyright (c) 2009 Spira Studios LLC" << std::endl << std::endl;
     
@@ -52,10 +49,10 @@ int main(int argc, char *argv[])
 	// threads and then running until the exit command is received.
 	try {		
         LoginServer login_server(sandbox_options["login_port"].as<uint16_t>());
-        boost::thread login_thread(std::tr1::bind(&LoginServer::Run, &login_server));
+        boost::thread login_thread(std::tr1::bind(&LoginServer::run, &login_server));
 
         ZoneServer zone_server(sandbox_options["zone_port"].as<uint16_t>());
-        boost::thread zone_thread(std::tr1::bind(&ZoneServer::Run, &zone_server));
+        boost::thread zone_thread(std::tr1::bind(&ZoneServer::run, &zone_server));
 
 		for(;;)
 		{

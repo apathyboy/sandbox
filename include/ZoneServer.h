@@ -17,29 +17,15 @@
  * *********************************************************************
  */
 
-
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
-#include <cstdint>
-#endif
-
 #include "SocketServer.h"
 
 class ZoneServer : public SocketServer
 {
 public:
-public:
     ZoneServer();
     explicit ZoneServer(uint16_t port);
     virtual ~ZoneServer();
 
-	/**	Run the server
-	 *	This begins the zone server loop. The sole purpose of the zone
-	 *	server is to listen for and accept data as well as sending it
-	 *	out to the client. The data is then passed off to the appropriate
-	 *	opcode handler.
-	 */
-	virtual void Run();
-	virtual void OnUpdate();
+private:
+    virtual void onUpdate();
 };

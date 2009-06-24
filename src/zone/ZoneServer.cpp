@@ -22,35 +22,16 @@
 #include "GalaxySession.h"
 
 ZoneServer::ZoneServer()
-: SocketServer()
+    : SocketServer()
 {}
 
 ZoneServer::ZoneServer(uint16_t port)
-: SocketServer(port)
+    : SocketServer(port)
 {}
 
 ZoneServer::~ZoneServer()
 {}
 
-void ZoneServer::Run()
-{	
-	Logger().log(INFO) << "Zone server listening on port [" << port() << "]";
-	SocketServer::Run();
-}
+void ZoneServer::onUpdate()
+{}
 
-void ZoneServer::OnUpdate()
-{	
-	static time_t lastCleanupTime = mCurrentTime;
-
-	if ((mCurrentTime - lastCleanupTime) >= 1) {
-		for (GalaxySessionMap::iterator i = mSessions.begin();
-			 i != mSessions.end();
-			 i++)
-		{
-            std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-			session->Update(mCurrentTime);
-		}
-	}
-
-	lastCleanupTime = mCurrentTime;
-}

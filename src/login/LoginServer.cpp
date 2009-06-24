@@ -31,8 +31,5 @@ LoginServer::LoginServer(uint16_t port)
 LoginServer::~LoginServer()
 {}
 
-void LoginServer::Run()
-{	
-	Logger().log(INFO) << "Login server listening on port [" << port() << "]";
-	SocketServer::Run();
-}
+void LoginServer::onUpdate()
+{}

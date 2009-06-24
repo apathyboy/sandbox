@@ -19,12 +19,6 @@
 
 #include "SocketServer.h"
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
-#include <cstdint>
-#endif
-
 class LoginServer : public SocketServer
 {
 public:
@@ -32,12 +26,6 @@ public:
     explicit LoginServer(uint16_t port);
     virtual ~LoginServer();
 
-	/**	Run the server
-	 *	This begins the login server loop. The sole purpose of the login
-	 *	server is to listen for and accept data as well as sending it
-	 *	out to the client. The data is then passed off to the appropriate
-	 *	opcode handler.
-	 */
-	virtual void Run();
-	virtual void OnUpdate() { return; }
+private:
+	virtual void onUpdate();
 };
