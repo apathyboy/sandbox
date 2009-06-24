@@ -59,18 +59,18 @@ public:
 	 *
 	 *  @note: this is heavily borrowed from the swgemu team's similar function.
 	 */
-    void SendPacket(char *pData, unsigned short length, bool encrypted = false, bool compressed = false, bool crc = true);
+    void SendPacket(char *pData, uint16_t length, bool encrypted = false, bool compressed = false, bool crc = true);
 
 	/**	Send Hard Packet
 	 *	Sends a hardcoded packet to the specified client.
 	 */
 	void SendHardPacket(char *pName, bool compressed);
-	void SendHardPacket(char *packet, unsigned short length, bool compressed);
+	void SendHardPacket(char *packet, uint16_t length, bool compressed);
 
 	/**	Send Text
 	 *	Sends text to the client and the clients in the nearby area.
 	 */
-	void SendText(wchar_t *text, unsigned short length, uint64_t *moodId);
+	void SendText(wchar_t *text, uint16_t length, uint64_t *moodId);
 
 	/** Send Acknowledgement
 	 *	Sends an acknowledgement to the client that a message was received.
@@ -95,22 +95,22 @@ public:
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	const unsigned int GetConnectionId() { return mConnectionId; }
+	uint32_t GetConnectionId() { return mConnectionId; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetConnectionId(unsigned int connectionId) { mConnectionId = connectionId; }
+	void SetConnectionId(uint32_t connectionId) { mConnectionId = connectionId; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	const unsigned short GetServerSequence() { return mServerSequence; }
+	uint16_t GetServerSequence() { return mServerSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetServerSequence(unsigned short serverSequence) { mServerSequence = serverSequence; }
+	void SetServerSequence(uint16_t serverSequence) { mServerSequence = serverSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
@@ -120,22 +120,22 @@ public:
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	const unsigned short GetClientSequence() { return mClientSequence; }
+	uint16_t GetClientSequence() { return mClientSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetClientSequence(unsigned short clientSequence) { mClientSequence = clientSequence; }
+	void SetClientSequence(uint16_t clientSequence) { mClientSequence = clientSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	const unsigned short GetSequenceRecv() { return mSequenceRecv; }
+	uint16_t GetSequenceRecv() { return mSequenceRecv; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetSequenceRecv(unsigned short sequenceRecv) { mSequenceRecv = sequenceRecv; }
+	void SetSequenceRecv(uint16_t sequenceRecv) { mSequenceRecv = sequenceRecv; }
 
 	/** Prepare Packet
 	 *	Preapres an incoming packet for use. This decompresses
@@ -152,19 +152,20 @@ public:
 	void SendShuttleUpdate();
 
 private:
+    /* Disable unused compiler generated methods */
     GalaxySession();
     GalaxySession(const GalaxySession&);
     GalaxySession& operator=(const GalaxySession&);    
 
-	uint8_t mShuttleState;
-	unsigned int mConnectionId;
-	unsigned short mServerSequence;
-	unsigned short mClientSequence;
-	unsigned short mSequenceRecv;
-    uint32_t mCrcSeed;
 	NetworkAddress mSocketAddress;
 	SocketServer* p_mSocketServer;
     std::tr1::shared_ptr<Player> mPlayer;
+	uint8_t mShuttleState;
+	uint16_t mServerSequence;
+	uint16_t mClientSequence;
+	uint16_t mSequenceRecv;
+	uint32_t mConnectionId;
+    uint32_t mCrcSeed;
 };
 
 #endif // OPENSWG_GALAXY_SESSION_H

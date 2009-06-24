@@ -72,7 +72,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
  *
  *  @note: this is heavily borrowed from the swgemu team's similar function.
  */
-void GalaxySession::SendPacket(char *pData, unsigned short length, bool encrypted, bool compressed, bool crc)
+void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, bool compressed, bool crc)
 {
 	/* Uncomment to display all outgoing packet data.
 	printf("OUTGOING PACKET\nPacket Size: %d \nPacket Data: \n", length);
@@ -114,11 +114,11 @@ void GalaxySession::SendPacket(char *pData, unsigned short length, bool encrypte
 void GalaxySession::SendHardPacket(char *pName, bool compressed)
 {
 	// Load in the raw packet.
-	unsigned short length;
+	uint16_t length;
 	char *pData = loadPacket(pName, &length);
 	
 	// Add the server sequence to the packet and send the data.
-	*(unsigned short*)(pData+2) = (unsigned short)htons(GetServerSequence());
+	*(uint16_t*)(pData+2) = (uint16_t)htons(GetServerSequence());
 	SendPacket(pData, length, true, compressed, true);
 
 	IncrementServerSequence();	
@@ -127,7 +127,7 @@ void GalaxySession::SendHardPacket(char *pName, bool compressed)
 void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool compressed)
 {	
 	// Add the server sequence to the packet and send the data.
-	*(unsigned short*)(packet+2) = (unsigned short)htons(GetServerSequence());
+	*(uint16_t*)(packet+2) = (uint16_t)htons(GetServerSequence());
 	SendPacket(packet, length, true, compressed, true);
 
 	IncrementServerSequence();	
@@ -136,17 +136,17 @@ void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool com
 void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moodId)
 {
 	// Load in the raw packet.
-	unsigned short headerSize;
+	uint16_t headerSize;
 	char *header = loadPacket("packets\\Spatial\\PlayerChatHeader.txt", &headerSize);
 
-	unsigned short footerSize;
+	uint16_t footerSize;
 	char *footer = loadPacket("packets\\Spatial\\PlayerChatFooter.txt", &footerSize);
 
 	char *packet = new char[headerSize+footerSize+length];
 
 	memcpy(packet, header, headerSize);
 
-	*(unsigned short*)(packet+46) = length/2;
+	*(uint16_t*)(packet+46) = length/2;
 	memcpy(packet+50, text, length);
 	memcpy(packet+50+length, footer, footerSize);
 
@@ -167,7 +167,7 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
 void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
     std::vector<char> pData(packet->data(), packet->data() + packet->size());
-    unsigned short nLength = packet->size();
+    uint16_t nLength = packet->size();
 
     switch(pData[1]) //switch to do packet manip before passing to handlers
     {
@@ -207,7 +207,7 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
             break;
     }
 
-    ByteBuffer tmp(reinterpret_cast<unsigned char*>(&pData[0]), pData.size());
+    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
     packet->swap(tmp);
 }
 
@@ -233,11 +233,11 @@ std::tr1::shared_ptr<Player> GalaxySession::GetPlayer()
 void GalaxySession::SendAck()
 {
 	// Load in the raw packet data.
-	unsigned short length;
+	uint16_t length;
 	char *packet = loadPacket("packets\\SendAcknowledge.txt", &length);
 
 	// Add the sequence to the packet.
-	unsigned short *ptr = (unsigned short*)(packet+2);
+	uint16_t *ptr = (uint16_t*)(packet+2);
 	*ptr = GetClientSequence();
 
 	// Send out the packet.
@@ -247,7 +247,7 @@ void GalaxySession::SendAck()
 void GalaxySession::SendOk()
 {
 	// Load in the raw packet data.
-	unsigned short length;
+	uint16_t length;
 	char *packet = loadPacket("packets\\OkPacket.txt", &length);
 
 	// Send out the packet.
