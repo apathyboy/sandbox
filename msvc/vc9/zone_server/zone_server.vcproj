@@ -148,14 +148,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\zone\ZoneRunnable.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\ZoneRunnable.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\zone\ZoneServer.cpp"
 			>
 		</File>

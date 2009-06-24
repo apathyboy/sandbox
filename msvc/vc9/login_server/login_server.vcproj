@@ -148,14 +148,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\login\LoginRunnable.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\LoginRunnable.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\login\LoginServer.cpp"
 			>
 		</File>

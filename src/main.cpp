@@ -20,12 +20,12 @@
 #include <exception>
 #include <iostream>
 #include <string>
-#include "Logger.h"
-#include "LoginRunnable.h"
-#include "ZoneRunnable.h"
 
 #include <boost/thread.hpp>
 
+#include "Logger.h"
+#include "LoginServer.h"
+#include "ZoneServer.h"
 #include "ProgramOptions.h"
 
 namespace po = boost::program_options;
@@ -48,23 +48,17 @@ int main(int argc, char *argv[])
     
     Logger().log(INFO) << "Server starting with configuration file: " << config_filename;
 
-
 	// Begin the main execution phase. This begins by starting the server
 	// threads and then running until the exit command is received.
 	try {		
-		// Create the login and zone threads.
-        LoginRunnable login_dameon;
-        boost::thread login_thread(std::tr1::bind(&LoginRunnable::run, &login_dameon, sandbox_options["login_port"].as<uint16_t>()));
+        LoginServer login_server(sandbox_options["login_port"].as<uint16_t>());
+        boost::thread login_thread(std::tr1::bind(&LoginServer::Run, &login_server));
 
-        ZoneRunnable zone_dameon;
-        boost::thread zone_thread(std::tr1::bind(&ZoneRunnable::run, &zone_dameon, sandbox_options["zone_port"].as<uint16_t>()));
+        ZoneServer zone_server(sandbox_options["zone_port"].as<uint16_t>());
+        boost::thread zone_thread(std::tr1::bind(&ZoneServer::Run, &zone_server));
 
-
-		// This is the command loop. This watches for the incoming commands from 
-		// the console and updates the server threads accordingly.
 		for(;;)
 		{
-			// Check for a command.
             std::string cmd;
 			std::cin >> cmd;
 
@@ -82,11 +76,9 @@ int main(int argc, char *argv[])
 				break;
 			}
 
-			// Log the invalid command.
             Logger().log(ERR) << "Command not found";
 		}
     } catch (std::exception& e) {
-		// Catch any errors from the server threads.
 		 Logger().log(ERR) << e.what();
 	}
 
