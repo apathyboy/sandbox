@@ -49,11 +49,11 @@ public:
 	 */
 	void run();
 
-	/** On Incoming Data function
+	/** Handle Incoming Data function
 	 *	Whenever information is received via the socket this function is
 	 *	called to handle the data.
 	 */
-	void OnIncoming(NetworkAddress address, char *packet, size_t length);
+	void handleIncoming(const NetworkAddress& address, char *packet, size_t length);
 
 	/** Updates the server state.
 	 */
@@ -62,7 +62,7 @@ public:
 	/** Send Packet function
 	 *	Sends a packet to the specified to the specified client.
 	 */
-    void SendPacket(const NetworkAddress& address, char *packet, unsigned short length);
+    void sendPacket(const NetworkAddress& address, char *packet, unsigned short length);
 
 	/** Add New SWG Client function
 	 *	Adds a new swg client to the client map.

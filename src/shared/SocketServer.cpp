@@ -83,7 +83,7 @@ public:
            
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
-        socket_server_->OnIncoming(remote_endpoint_, reinterpret_cast<char*>(&buffer_[0]), buffer_.size());
+        socket_server_->handleIncoming(remote_endpoint_, reinterpret_cast<char*>(&buffer_[0]), buffer_.size());
   	    listen();
     }
            
@@ -156,7 +156,7 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::AddGalaxySession(NetworkAddres
  *	Whenever information is received via the socket this function is
  *	called to handle the data.
  */
-void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t length)
+void SocketServer::handleIncoming(const NetworkAddress& address, char *packet, size_t length)
 {    
 	// Attempt to find the client in the session map.
 	GalaxySessionMap::iterator i = sessions_.find(address);
@@ -192,7 +192,7 @@ void SocketServer::OnIncoming(NetworkAddress address, char *packet, size_t lengt
 /** Send Packet function
  *	Sends a packet to the specified to the specified client.
  */
-void SocketServer::SendPacket(const NetworkAddress& address, char *packet, unsigned short length)
+void SocketServer::sendPacket(const NetworkAddress& address, char *packet, unsigned short length)
 {	
     std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(reinterpret_cast<unsigned char *>(packet), length));
     

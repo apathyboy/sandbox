@@ -100,7 +100,7 @@ void GalaxySession::SendPacket(char *pData, unsigned short length, bool encrypte
 		AppendCRC(pData, length, mCrcSeed);
     }
 
-	p_mSocketServer->SendPacket(mSocketAddress, pData, length);
+	p_mSocketServer->sendPacket(mSocketAddress, pData, length);
 
     if(compressed)
     {
