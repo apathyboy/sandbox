@@ -82,11 +82,6 @@ public:
 	 */
 	void SendOk();
 
-	/** Get Ip function
-	 *	Returns the ip address for the current client.
-	 */
-	std::string GetIp() { return mIp; }
-
 	/** Get Socket Server function
 	 *	Returns the current instance of the socket server managing this client.
 	 */
@@ -157,13 +152,16 @@ public:
 	void SendShuttleUpdate();
 
 private:
+    GalaxySession();
+    GalaxySession(const GalaxySession&);
+    GalaxySession& operator=(const GalaxySession&);    
+
 	uint8_t mShuttleState;
 	unsigned int mConnectionId;
 	unsigned short mServerSequence;
 	unsigned short mClientSequence;
 	unsigned short mSequenceRecv;
     uint32_t mCrcSeed;
-	std::string mIp;
 	NetworkAddress mSocketAddress;
 	SocketServer* p_mSocketServer;
     std::tr1::shared_ptr<Player> mPlayer;
