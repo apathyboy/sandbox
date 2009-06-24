@@ -42,7 +42,7 @@ public:
     {}
 
 
-    const uint16_t port()
+    uint16_t port()
     {
         return port_;
     }
@@ -126,8 +126,7 @@ void SocketServer::run()
     pimpl_->listen();
 	Logger().log(INFO) << "Server listening on port [" << pimpl_->port() << "]";
 
-    for(;;)
-    {
+    for(;;) {
         update();
 
         pimpl_->poll();
@@ -142,12 +141,10 @@ void SocketServer::run()
  */
 std::tr1::shared_ptr<GalaxySession> SocketServer::addGalaxySession(const NetworkAddress& address)
 {
-    std::string ip = address.address().to_string();
-
     Logger().log(INFO) << "Adding session for [" << address << "]";
 
 	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<GalaxySession> session(new GalaxySession(this, address, ip));
+    std::tr1::shared_ptr<GalaxySession> session(new GalaxySession(this, address));
 	sessions_[address] = session;
 
 	// Return the new session.
@@ -165,28 +162,22 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 
 	// If the session exists retrieve it from the session map and send the
 	// packet data on to it's packet handler.
-	if (i != sessions_.end())
-	{
+	if (i != sessions_.end()) {
         std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-		session->PrepPacket(message);	
-
+        
+        session->PrepPacket(message);	
 		session->HandlePacket(message);
-	}
 
 	// Otherwise create a new client which stores it in the client map
 	// and then send the new client the packet data.
-	else
-	{
-        if (message->peek<uint16_t>(true) == 0x0001) 
-		{        
+	} else {
+        if (message->peek<uint16_t>(true) == 0x0001) {        
             std::tr1::shared_ptr<GalaxySession> session = addGalaxySession(address);
-			session->PrepPacket(message);
 
+			session->PrepPacket(message);
 			session->HandlePacket(message);	
-		}
-		else
-		{
-			Logger().log(ERR) << "Unexpected Opcode [" << message->peek<uint16_t>() << "] from invalid client [" << address << "]";
+		} else {
+            Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;
 		}
 	}
 }
@@ -194,14 +185,12 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 /** Send Packet function
  *	Sends a packet to the specified to the specified client.
  */
-void SocketServer::sendPacket(const NetworkAddress& address, char *packet, unsigned short length)
+void SocketServer::sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
 {	
-    std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(reinterpret_cast<unsigned char *>(packet), length));
-    
-    pimpl_->sendResponse(address, buffer);
+    pimpl_->sendResponse(address, message);
 }
 
-const uint16_t SocketServer::port()
+uint16_t SocketServer::port()
 {
     return pimpl_->port();
 }
@@ -214,8 +203,7 @@ void SocketServer::update()
 	if ((current_time_ - last_cleanup_time_) >= 1) {
 
         GalaxySessionMap::iterator end = sessions_.end();
-		for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i)
-		{
+        for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
             std::tr1::shared_ptr<GalaxySession> session = (*i).second;
 			session->Update(current_time_);
 		}

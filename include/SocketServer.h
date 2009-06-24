@@ -63,14 +63,14 @@ public:
 	/** Send Packet function
 	 *	Sends a packet to the specified to the specified client.
 	 */
-    void sendPacket(const NetworkAddress& address, char *packet, unsigned short length);
+    void sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
 
 	/** Add New SWG Client function
 	 *	Adds a new swg client to the client map.
 	 */
     std::tr1::shared_ptr<GalaxySession> addGalaxySession(const NetworkAddress& address);
 
-	const uint16_t port();
+	uint16_t port();
 
 private:	
 	SocketServer();

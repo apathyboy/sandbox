@@ -47,7 +47,7 @@ public:
 	/**	Galaxy Session constructor
 	 *	Takes the data necessary for the GalaxySession class to function.
 	 */
-	GalaxySession(SocketServer *server, NetworkAddress address, std::string ip);
+	GalaxySession(SocketServer *server, const NetworkAddress& address);
 
 	/** Handle Packet function
 	 *	Processes any packets that are sent to the server.

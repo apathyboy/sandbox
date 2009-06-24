@@ -25,14 +25,13 @@
 /**	Galaxy Session constructor
  *	Takes the data necessary for the GalaxySession class to function.
  */
-GalaxySession::GalaxySession(SocketServer* server, NetworkAddress address, std::string ip)
+GalaxySession::GalaxySession(SocketServer* server, const NetworkAddress& address)
     : mShuttleState(0) 
     , mConnectionId(0)
     , mServerSequence(0)
     , mClientSequence(0)
     , mSequenceRecv(0)
     , mCrcSeed(0xDEADBABE)
-    , mIp(ip)
     , mSocketAddress(address)
     , p_mSocketServer(server)
     , mPlayer(new Player())
@@ -100,7 +99,8 @@ void GalaxySession::SendPacket(char *pData, unsigned short length, bool encrypte
 		AppendCRC(pData, length, mCrcSeed);
     }
 
-	p_mSocketServer->sendPacket(mSocketAddress, pData, length);
+    std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
+	p_mSocketServer->sendPacket(mSocketAddress, message);
 
     if(compressed)
     {
