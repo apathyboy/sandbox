@@ -163,26 +163,21 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 	// Attempt to find the client in the session map.
 	GalaxySessionMap::iterator i = sessions_.find(address);
 
-	// If the session exists retrieve it from the session map and send the
-	// packet data on to it's packet handler.
+    std::tr1::shared_ptr<GalaxySession> session;
+
+	// If a session exists retrieve it from the session map otherwise verify
+    // the message is a session request and create a new one.
 	if (i != sessions_.end()) {
-        std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-        
-        session->PrepPacket(message);	
-		session->HandlePacket(message);
-
-	// Otherwise create a new client which stores it in the client map
-	// and then send the new client the packet data.
+        session = (*i).second;
+	} else if (message->peek<uint16_t>(true) == 0x0001) {        
+        session = addGalaxySession(address);
 	} else {
-        if (message->peek<uint16_t>(true) == 0x0001) {        
-            std::tr1::shared_ptr<GalaxySession> session = addGalaxySession(address);
-
-			session->PrepPacket(message);
-			session->HandlePacket(message);	
-		} else {
-            Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;
-		}
+        Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;	
+        return;
 	}
+        
+    session->PrepPacket(message);	
+	session->HandlePacket(message);
 }
 
 /** Send Packet function
