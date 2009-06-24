@@ -163,10 +163,9 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 	// Attempt to find the client in the session map.
 	GalaxySessionMap::iterator i = sessions_.find(address);
 
-    std::tr1::shared_ptr<GalaxySession> session;
-
 	// If a session exists retrieve it from the session map otherwise verify
     // the message is a session request and create a new one.
+    std::tr1::shared_ptr<GalaxySession> session;
 	if (i != sessions_.end()) {
         session = (*i).second;
 	} else if (message->peek<uint16_t>(true) == 0x0001) {        
