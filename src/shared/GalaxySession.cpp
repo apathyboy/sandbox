@@ -28,27 +28,33 @@
 GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAddress& address)
     : socket_address_(address)
     , socket_server_(server)
+    , player_(new Player())
     , mShuttleState(0) 
     , mConnectionId(0)
     , mServerSequence(0)
     , mClientSequence(0)
     , mSequenceRecv(0)
     , mCrcSeed(0xDEADBABE)
-    , mPlayer(new Player())
 {
-    mPlayer->SetXPos(-1443);
-    mPlayer->SetYPos(9);
-    mPlayer->SetZPos(2771);
-    mPlayer->SetLocation("naboo");
-    mPlayer->SetStationId(653564567);
-    mPlayer->SetMood(0);
-    mPlayer->ToggleInitialized();
+    player_->SetXPos(-1443);
+    player_->SetYPos(9);
+    player_->SetZPos(2771);
+    player_->SetLocation("naboo");
+    player_->SetStationId(653564567);
+    player_->SetMood(0);
+    player_->ToggleInitialized();
 }
 
 
 const SocketServer * const GalaxySession::server() const
 {
     return socket_server_;
+}
+
+
+std::tr1::shared_ptr<Player> GalaxySession::player()
+{
+	return player_;
 }
 	
 /** Handle Packet function
@@ -215,25 +221,6 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
 
     ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
     packet->swap(tmp);
-}
-
-
-std::tr1::shared_ptr<Player> GalaxySession::GetPlayer()
-{
-	/* If the player is not initialized, store the player settings.
-	if (! mPlayer)
-	{
-		mPlayer = new Player();
-		mPlayer->SetXPos(-1443);
-		mPlayer->SetYPos(9);
-		mPlayer->SetZPos(2771);
-		mPlayer->SetLocation("naboo");
-		mPlayer->ToggleInitialized();
-		mPlayer->SetStationId(653564567);
-		mPlayer->SetMood(4);
-	}
-	*/
-	return mPlayer;
 }
 
 void GalaxySession::SendAck()

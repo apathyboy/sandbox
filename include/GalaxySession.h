@@ -50,6 +50,7 @@ public:
 	GalaxySession(const SocketServer * const server, const NetworkAddress& address);
 
     const SocketServer * const server() const;
+    std::tr1::shared_ptr<Player> player();
 
 	/** Handle Packet function
 	 *	Processes any packets that are sent to the server.
@@ -140,11 +141,6 @@ public:
 	 */
     void PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet);
 
-	/** Get Player
-	 *	Returns an instance of the player associated with this session.
-	 */
-    std::tr1::shared_ptr<Player> GetPlayer();
-
 	void Update(time_t currentTime);
 	void SendShuttleUpdate();
 
@@ -156,7 +152,8 @@ private:
 
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;
-    std::tr1::shared_ptr<Player> mPlayer;
+    std::tr1::shared_ptr<Player> player_;
+
 	uint8_t mShuttleState;
 	uint16_t mServerSequence;
 	uint16_t mClientSequence;

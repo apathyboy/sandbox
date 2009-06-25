@@ -169,7 +169,7 @@ void HandleSpatialChat(GalaxySession *session, const unsigned char * data, unsig
 	moodId[4] = atoi(moods[4]);
 
 	if (moodId[2] == 0)
-		moodId[2] = (uint64_t)session->GetPlayer()->GetMood();
+		moodId[2] = (uint64_t)session->player()->GetMood();
 	
 	wchar_t *U_text = new wchar_t[(textsize)];
 	memcpy(U_text, data, textsize);
@@ -198,12 +198,12 @@ void HandleMood(GalaxySession *session, const unsigned char * data, unsigned sho
 		data+=2;
 	}
     
-	session->GetPlayer()->SetMood(atoi(moodString));
+	session->player()->SetMood(atoi(moodString));
 
 	unsigned short packetSize;
 	char *packet = loadPacket("packets\\ZoneInsertion\\Creo6.txt", &packetSize);
 
-	*(uint16_t *)(packet+99) = session->GetPlayer()->GetMood();
+	*(uint16_t *)(packet+99) = session->player()->GetMood();
 
 	session->SendHardPacket(packet, packetSize, true);
 
