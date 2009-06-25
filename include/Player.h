@@ -38,18 +38,14 @@ public:
     const Vector3<int>& position() const;
     void position(const Vector3<int>& position);
 
+    const std::string& stationName() const;
+    void stationName(const std::string& name);
+
     int stationId() const;
     void stationId(int id);
 
 	bool IsInitialized() { return mInitialized; };
 	void ToggleInitialized();
-
-	const char* GetStationName() { return mStationName.c_str(); }
-	void SetStationName(char* stationName[17]) {
-		std::string name((char*)stationName);
-		mStationName = name; 
-	}
-	
 
 	uint8_t GetMood() { return mMoodId; }
 	void SetMood(uint8_t moodId) { mMoodId = moodId; }
@@ -58,11 +54,11 @@ public:
 
 private:
     Vector3<int> position_;
-    int station_id_;
+    std::string  station_name_;
+    int          station_id_;
 
 	bool mInitialized;
 	uint8_t mMoodId;
-	std::string mStationName;
 	std::string mLocation;
 };
 

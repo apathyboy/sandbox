@@ -35,6 +35,16 @@ void Player::position(const Vector3<int>& position)
     position_ = position;
 }
 
+const std::string& Player::stationName() const
+{
+    return station_name_;
+}
+
+void Player::stationName(const std::string& name)
+{
+    station_name_ = name;
+}
+
 int Player::stationId() const
 {
     return station_id_;
