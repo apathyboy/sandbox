@@ -38,11 +38,11 @@ public:
     const Vector3<int>& position() const;
     void position(const Vector3<int>& position);
 
+    int stationId() const;
+    void stationId(int id);
+
 	bool IsInitialized() { return mInitialized; };
 	void ToggleInitialized();
-
-	int GetStationId() { return mStationId; }
-	void SetStationId(int stationId) { mStationId = stationId; }
 
 	const char* GetStationName() { return mStationName.c_str(); }
 	void SetStationName(char* stationName[17]) {
@@ -58,10 +58,10 @@ public:
 
 private:
     Vector3<int> position_;
+    int station_id_;
 
 	bool mInitialized;
 	uint8_t mMoodId;
-	int mStationId;
 	std::string mStationName;
 	std::string mLocation;
 };

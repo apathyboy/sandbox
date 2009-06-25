@@ -21,6 +21,7 @@
 
 Player::Player()
     : position_()
+    , station_id_(0)
     , mMoodId(0)
 {}
 
@@ -32,6 +33,16 @@ const Vector3<int>& Player::position() const
 void Player::position(const Vector3<int>& position)
 {
     position_ = position;
+}
+
+int Player::stationId() const
+{
+    return station_id_;
+}
+
+void Player::stationId(int id)
+{
+    station_id_ = id;
 }
 
 void Player::ToggleInitialized() { 
