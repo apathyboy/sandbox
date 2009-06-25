@@ -85,55 +85,57 @@ public:
 	 */
 	void SendOk();
 
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint32_t GetCrcSeed() { return mCrcSeed; }
+
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	uint32_t GetConnectionId() { return mConnectionId; }
+	uint32_t GetCrcSeed() { return crc_seed_; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetConnectionId(uint32_t connectionId) { mConnectionId = connectionId; }
+	uint32_t GetConnectionId() { return connection_id_; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	uint16_t GetServerSequence() { return mServerSequence; }
+	void SetConnectionId(uint32_t connectionId) { connection_id_ = connectionId; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetServerSequence(uint16_t serverSequence) { mServerSequence = serverSequence; }
+	uint16_t GetServerSequence() { return server_sequence_; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void IncrementServerSequence() { mServerSequence++; }
+	void SetServerSequence(uint16_t serverSequence) { server_sequence_ = serverSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	uint16_t GetClientSequence() { return mClientSequence; }
+	void IncrementServerSequence() { server_sequence_++; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetClientSequence(uint16_t clientSequence) { mClientSequence = clientSequence; }
+	uint16_t GetClientSequence() { return client_sequence_; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	uint16_t GetSequenceRecv() { return mSequenceRecv; }
+	void SetClientSequence(uint16_t clientSequence) { client_sequence_ = clientSequence; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
 	 */
-	void SetSequenceRecv(uint16_t sequenceRecv) { mSequenceRecv = sequenceRecv; }
+	uint16_t GetSequenceRecv() { return received_sequence_; }
+
+	/** Get Crc Seed function
+	 *	Returns the encryption key.
+	 */
+	void SetSequenceRecv(uint16_t sequenceRecv) { received_sequence_ = sequenceRecv; }
 
 	/** Prepare Packet
 	 *	Preapres an incoming packet for use. This decompresses
@@ -154,12 +156,12 @@ private:
 	const SocketServer* socket_server_;
     std::tr1::shared_ptr<Player> player_;
 
-	uint8_t mShuttleState;
-	uint16_t mServerSequence;
-	uint16_t mClientSequence;
-	uint16_t mSequenceRecv;
-	uint32_t mConnectionId;
-    uint32_t mCrcSeed;
+	uint8_t  shuttle_state_;
+	uint16_t server_sequence_;
+	uint16_t client_sequence_;
+	uint16_t received_sequence_;
+	uint32_t connection_id_;
+    uint32_t crc_seed_;
 };
 
 #endif // OPENSWG_GALAXY_SESSION_H

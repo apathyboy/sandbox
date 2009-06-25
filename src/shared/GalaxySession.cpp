@@ -29,12 +29,12 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     : socket_address_(address)
     , socket_server_(server)
     , player_(new Player())
-    , mShuttleState(0) 
-    , mConnectionId(0)
-    , mServerSequence(0)
-    , mClientSequence(0)
-    , mSequenceRecv(0)
-    , mCrcSeed(0xDEADBABE)
+    , shuttle_state_(0)
+    , server_sequence_(0)
+    , client_sequence_(0)
+    , received_sequence_(0)
+    , connection_id_(0)
+    , crc_seed_(0xDEADBABE)
 {
     player_->SetXPos(-1443);
     player_->SetYPos(9);
@@ -44,7 +44,6 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     player_->SetMood(0);
     player_->ToggleInitialized();
 }
-
 
 const SocketServer * const GalaxySession::server() const
 {
@@ -104,11 +103,11 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
 
     if(encrypted)
     {
-        Encrypt(pData, length, mCrcSeed);
+        Encrypt(pData, length, crc_seed_);
     }
     if(crc)
     {
-		AppendCRC(pData, length, mCrcSeed);
+		AppendCRC(pData, length, crc_seed_);
     }
 
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
@@ -185,8 +184,8 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
     {
         case 3:
             //"Multi-SOE Packet: "
-            if(CrcTest(&pData[0],nLength,mCrcSeed))
-                Decrypt(&pData[0],nLength,mCrcSeed);
+            if(CrcTest(&pData[0],nLength,crc_seed_))
+                Decrypt(&pData[0],nLength,crc_seed_);
             if (pData[2] == 'x')
             {
                 std::vector<char> tmp(Decompress(pData));
@@ -198,7 +197,7 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
         case 9:
         case 13:
             //"Fragmented: "
-            Decrypt(&pData[0],nLength,mCrcSeed);
+            Decrypt(&pData[0],nLength,crc_seed_);
             if (pData[2] == 'x')
             {
                 std::vector<char> tmp(Decompress(pData));
@@ -211,7 +210,7 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
         case 5:
         case 17:
             //"Future Packet: "
-            Decrypt(&pData[0],nLength,mCrcSeed);
+            Decrypt(&pData[0],nLength,crc_seed_);
             break;
 
         default:
@@ -263,14 +262,14 @@ void GalaxySession::Update(time_t currentTime)
 
 void GalaxySession::SendShuttleUpdate()
 {
-	if (mShuttleState == SHUTTLE_LANDED)
+	if (shuttle_state_ == SHUTTLE_LANDED)
 	{
 		SendHardPacket("packets\\Actions\\KerenStarshipTakeoff.txt", false);
-		mShuttleState = SHUTTLE_DEPARTED;
+		shuttle_state_ = SHUTTLE_DEPARTED;
 	}
 	else
 	{
 		SendHardPacket("packets\\Actions\\KerenStarshipLand.txt", false);
-		mShuttleState = SHUTTLE_LANDED;
+		shuttle_state_ = SHUTTLE_LANDED;
 	}
 }
