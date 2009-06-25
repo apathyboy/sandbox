@@ -24,6 +24,16 @@ Player::Player()
     , mMoodId(0)
 {}
 
+const Vector3<int>& Player::position() const
+{
+    return position_;
+}
+
+void Player::position(const Vector3<int>& position)
+{
+    position_ = position;
+}
+
 void Player::ToggleInitialized() { 
 	if (mInitialized)
 		mInitialized = false;

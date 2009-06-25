@@ -35,6 +35,9 @@ class Player
 public:
 	Player();
 
+    const Vector3<int>& position() const;
+    void position(const Vector3<int>& position);
+
 	bool IsInitialized() { return mInitialized; };
 	void ToggleInitialized();
 
