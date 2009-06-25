@@ -41,15 +41,6 @@ public:
 	bool IsInitialized() { return mInitialized; };
 	void ToggleInitialized();
 
-	int GetXPos() { return position_.x(); }
-	void SetXPos(int xPos) { position_.x(xPos); }
-
-	int GetYPos() { return position_.y(); }
-	void SetYPos(int yPos) { position_.y(yPos); }
-
-	int GetZPos() { return position_.z(); }
-	void SetZPos(int zPos) { position_.z(zPos); }
-
 	int GetStationId() { return mStationId; }
 	void SetStationId(int stationId) { mStationId = stationId; }
 

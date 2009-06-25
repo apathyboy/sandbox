@@ -36,9 +36,7 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     , connection_id_(0)
     , crc_seed_(0xDEADBABE)
 {
-    player_->SetXPos(-1443);
-    player_->SetYPos(9);
-    player_->SetZPos(2771);
+    player_->position(Vector3<int>(-1443, 9, 2771));
     player_->SetLocation("naboo");
     player_->SetStationId(653564567);
     player_->SetMood(0);
