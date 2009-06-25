@@ -47,7 +47,9 @@ public:
 	/**	Galaxy Session constructor
 	 *	Takes the data necessary for the GalaxySession class to function.
 	 */
-	GalaxySession(SocketServer *server, const NetworkAddress& address);
+	GalaxySession(const SocketServer * const server, const NetworkAddress& address);
+
+    const SocketServer * const server() const;
 
 	/** Handle Packet function
 	 *	Processes any packets that are sent to the server.
@@ -81,11 +83,6 @@ public:
 	 *	Sends an OK statement to the client.
 	 */
 	void SendOk();
-
-	/** Get Socket Server function
-	 *	Returns the current instance of the socket server managing this client.
-	 */
-	SocketServer* GetSocketServer() { return p_mSocketServer; }
 
 	/** Get Crc Seed function
 	 *	Returns the encryption key.
@@ -158,7 +155,7 @@ private:
     GalaxySession& operator=(const GalaxySession&);    
 
 	NetworkAddress socket_address_;
-	SocketServer* p_mSocketServer;
+	const SocketServer* socket_server_;
     std::tr1::shared_ptr<Player> mPlayer;
 	uint8_t mShuttleState;
 	uint16_t mServerSequence;

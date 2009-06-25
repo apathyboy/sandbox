@@ -47,7 +47,7 @@ void HandleSessionRequest(GalaxySession *session, const unsigned char *data, uns
 	session->SendPacket(packet, size, false, false, false);
 
 	// Send the connection packet.
-	if (session->GetSocketServer()->port() == 44453) 
+	if (session->server()->port() == 44453) 
 		session->SendHardPacket("packets\\SOE\\LoginServer.txt", false);		
 	else
 		session->SendHardPacket("packets\\SOE\\ConnectionServer.txt", false);

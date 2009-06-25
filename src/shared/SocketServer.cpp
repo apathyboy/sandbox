@@ -42,7 +42,7 @@ public:
     {}
 
 
-    uint16_t port()
+    uint16_t port() const
     {
         return port_;
     }
@@ -182,12 +182,12 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 /** Send Packet function
  *	Sends a packet to the specified to the specified client.
  */
-void SocketServer::sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void SocketServer::sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const
 {	
     pimpl_->sendResponse(address, message);
 }
 
-uint16_t SocketServer::port()
+uint16_t SocketServer::port() const
 {
     return pimpl_->port();
 }

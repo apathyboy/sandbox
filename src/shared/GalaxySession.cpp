@@ -25,15 +25,15 @@
 /**	Galaxy Session constructor
  *	Takes the data necessary for the GalaxySession class to function.
  */
-GalaxySession::GalaxySession(SocketServer* server, const NetworkAddress& address)
+GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAddress& address)
     : socket_address_(address)
+    , socket_server_(server)
     , mShuttleState(0) 
     , mConnectionId(0)
     , mServerSequence(0)
     , mClientSequence(0)
     , mSequenceRecv(0)
     , mCrcSeed(0xDEADBABE)
-    , p_mSocketServer(server)
     , mPlayer(new Player())
 {
     mPlayer->SetXPos(-1443);
@@ -43,6 +43,12 @@ GalaxySession::GalaxySession(SocketServer* server, const NetworkAddress& address
     mPlayer->SetStationId(653564567);
     mPlayer->SetMood(0);
     mPlayer->ToggleInitialized();
+}
+
+
+const SocketServer * const GalaxySession::server() const
+{
+    return socket_server_;
 }
 	
 /** Handle Packet function
@@ -100,7 +106,7 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
     }
 
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	p_mSocketServer->sendPacket(socket_address_, message);
+	socket_server_->sendPacket(socket_address_, message);
 
     if(compressed)
     {
