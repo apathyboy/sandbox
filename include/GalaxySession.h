@@ -157,7 +157,7 @@ private:
     GalaxySession(const GalaxySession&);
     GalaxySession& operator=(const GalaxySession&);    
 
-	NetworkAddress mSocketAddress;
+	NetworkAddress socket_address_;
 	SocketServer* p_mSocketServer;
     std::tr1::shared_ptr<Player> mPlayer;
 	uint8_t mShuttleState;

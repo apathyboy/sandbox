@@ -26,13 +26,13 @@
  *	Takes the data necessary for the GalaxySession class to function.
  */
 GalaxySession::GalaxySession(SocketServer* server, const NetworkAddress& address)
-    : mShuttleState(0) 
+    : socket_address_(address)
+    , mShuttleState(0) 
     , mConnectionId(0)
     , mServerSequence(0)
     , mClientSequence(0)
     , mSequenceRecv(0)
     , mCrcSeed(0xDEADBABE)
-    , mSocketAddress(address)
     , p_mSocketServer(server)
     , mPlayer(new Player())
 {
@@ -100,7 +100,7 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
     }
 
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	p_mSocketServer->sendPacket(mSocketAddress, message);
+	p_mSocketServer->sendPacket(socket_address_, message);
 
     if(compressed)
     {
