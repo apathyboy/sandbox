@@ -63,6 +63,120 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
     return packet;
 }
 
+
+void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
+{
+    std::vector<char> pData(packet->data(), packet->data() + packet->size());
+    uint16_t nLength = packet->size();
+
+    unsigned short offset;
+    if(pData[0] == 0x00) {
+        offset = 2;
+    } else {
+        offset = 1;
+    }
+
+    std::vector<char> output(nLength+20);
+ 
+    z_stream stream;
+    stream.zalloc   = Z_NULL;
+    stream.zfree    = Z_NULL;
+    stream.opaque   = Z_NULL;
+    stream.avail_in = 0;
+    stream.next_in  = Z_NULL;
+ 
+    deflateInit(&stream, Z_DEFAULT_COMPRESSION);
+ 
+    stream.next_in      = (Bytef* )(&pData[0+offset]);
+    stream.avail_in     = nLength - offset - 3;
+    stream.next_out     = (Bytef* )&output[0];
+    stream.avail_out    = nLength + 20;
+ 
+    deflate(&stream, Z_FINISH);
+ 
+    unsigned short newLength = static_cast<unsigned short>(stream.total_out);
+ 
+    deflateEnd(&stream);
+
+    std::vector<char> compressed(newLength+ offset + 3);
+    compressed.push_back(pData[0]);
+
+    if (offset == 2) {
+        compressed.push_back(pData[1]);
+    }
+
+    for (short x=0; x < newLength; x++) {
+        compressed.push_back(output[x]);
+    }
+
+    compressed.push_back(0x01);
+    compressed.push_back(pData[nLength-2]);
+    compressed.push_back(pData[nLength-1]);
+    
+    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&compressed[0]), compressed.size());
+    packet->swap(tmp);
+}
+
+void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
+{
+    std::vector<uint8_t> packet_data(packet->data(), packet->data() + packet->size());
+    char* pData = reinterpret_cast<char*>(&packet_data[0]);
+
+    uint16_t nLength = packet->size();
+
+    unsigned int *Data;
+    if(pData[0] == 0x00)
+    {
+     nLength-=4;
+     Data = (unsigned int*)(pData+2);
+    }
+    else
+    {
+     nLength-=3;
+     Data = (unsigned int*)(pData+1);
+    }
+    short block_count = (nLength / 4);
+    short byte_count = (nLength % 4);
+ 
+    for(short count = 0;count<block_count;count++)
+    {
+        seed ^= *Data;
+        *Data = seed;
+        //*Data ^= nCrcSeed;
+        //nCrcSeed = *Data;
+        Data++;
+    }
+    pData = (char*)Data;
+    for(short count = 0;count<byte_count;count++)
+    {
+        *pData ^= (char)seed;
+        pData++;
+    }
+
+    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&packet_data[0]), packet_data.size());
+    packet->swap(tmp);
+}
+
+void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+{
+    std::vector<char> pData(packet->data(), packet->data() + packet->size());
+    uint16_t nLength = packet->size();
+
+    if (seedLength > 0)
+    {
+        unsigned int crc = GenerateCrc(&pData[0], (nLength-seedLength), seed);
+       // pData += (nLength-seedLength);
+        for( short i = 0; i < seedLength; i++ )
+        {
+            pData[(nLength - 1) - i] = (char)((crc >> (8 * i)) & 0xFF);
+        }
+    }
+
+    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
+    packet->swap(tmp);
+}
+
+
 char* loadPacket(const std::string& name, unsigned short* length = NULL) 
 {
 	// Create a container for the packet data and a buffer
@@ -276,8 +390,10 @@ void Encrypt(char *pData, unsigned short nLength,unsigned int nCrcSeed)
  
     for(short count = 0;count<block_count;count++)
     {
-        *Data ^= nCrcSeed;
-        nCrcSeed = *Data;
+        nCrcSeed ^= *Data;
+        *Data = nCrcSeed;
+        //*Data ^= nCrcSeed;
+        //nCrcSeed = *Data;
         Data++;
     }
     pData = (char*)Data;

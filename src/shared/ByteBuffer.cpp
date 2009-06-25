@@ -242,6 +242,8 @@ std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer)
 				message << data[i+k];
 			}
 		}
+	    
+        message << std::endl;
 	}
 
 	message << std::endl;

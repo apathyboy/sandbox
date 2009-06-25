@@ -138,14 +138,8 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
  */
 void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, bool compressed, bool crc)
 {
-	/* Uncomment to display all outgoing packet data.
-	printf("OUTGOING PACKET\nPacket Size: %d \nPacket Data: \n", length);
-	for(int k = 0; k < length; k++)
-	{
-		printf("0x%02x ",(unsigned char)*(pData+k));
-	}
-	printf("\n\n");
-	*/
+    ByteBuffer tmp(reinterpret_cast<unsigned char*>(pData), length);    
+    Logger().log(INFO) << "Outgoing Packet: " << std::endl << tmp << std::endl;
 
 	// @note: this is taken almost straight from the swgemu code, look into better integration
 	// of the encryption and compression routines.
@@ -153,23 +147,26 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
     {
         pData = Compress(pData, length);
     }
-
+    /*
     if(encrypted)
     {
         Encrypt(pData, length, crc_seed_);
     }
+    */
+    std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
+	  
+    if(encrypted)
+    {
+        Encrypt(message, crc_seed_);
+    }
+    
     if(crc)
     {
-		AppendCRC(pData, length, crc_seed_);
+		AppendCrc(message, crc_seed_);
     }
+    
+    socket_server_->sendPacket(socket_address_, message);
 
-    std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	socket_server_->sendPacket(socket_address_, message);
-
-    if(compressed)
-    {
-        delete [] pData;
-    }
 }
 
 /**	Send Hard Packet
@@ -273,6 +270,8 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
 
     ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
     packet->swap(tmp);
+
+    Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
 }
 
 void GalaxySession::SendAck()
