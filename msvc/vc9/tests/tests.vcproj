@@ -180,6 +180,10 @@
 			RelativePath="..\..\..\test\TestByteBuffer.cpp"
 			>
 		</File>
+		<File
+			RelativePath="..\..\..\test\TestLoadPacketFromTextFile.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
