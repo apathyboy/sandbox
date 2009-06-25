@@ -175,11 +175,11 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
 /**	Send Hard Packet
  *	Sends a hardcoded packet to the specified client.
  */
-void GalaxySession::SendHardPacket(char *pName, bool compressed)
+void GalaxySession::SendHardPacket(const std::string& name, bool compressed)
 {
 	// Load in the raw packet.
 	uint16_t length;
-	char *pData = loadPacket(pName, &length);
+	char *pData = loadPacket(name, &length);
 	
 	// Add the server sequence to the packet and send the data.
 	*(uint16_t*)(pData+2) = (uint16_t)htons(server_sequence_);

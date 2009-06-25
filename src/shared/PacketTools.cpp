@@ -63,7 +63,7 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
     return packet;
 }
 
-char* loadPacket(char* const name, unsigned short* length = NULL) 
+char* loadPacket(const std::string& name, unsigned short* length = NULL) 
 {
 	// Create a container for the packet data and a buffer
 	// to use when reading in the file data.
@@ -74,7 +74,7 @@ char* loadPacket(char* const name, unsigned short* length = NULL)
 	static const char whitespace[] = " \n\t\v\r\f";
 
 	// Read in the file a line at a time.
-	std::ifstream ifs(name);
+    std::ifstream ifs(name.c_str());
 	while (std::getline(ifs, buffer)) {
 		// Remove any comments.
 		buffer = buffer.substr( 0, buffer.find('#'));	

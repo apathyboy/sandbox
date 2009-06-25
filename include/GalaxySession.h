@@ -82,7 +82,7 @@ public:
 	/**	Send Hard Packet
 	 *	Sends a hardcoded packet to the specified client.
 	 */
-	void SendHardPacket(char *pName, bool compressed);
+    void SendHardPacket(const std::string& name, bool compressed);
 	void SendHardPacket(char *packet, uint16_t length, bool compressed);
 
 	/**	Send Text

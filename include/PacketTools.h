@@ -32,7 +32,7 @@
 
 std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name);
 
-char* loadPacket(char* const name, unsigned short* length);
+char* loadPacket(const std::string& name, unsigned short* length);
 uint8_t axtoi(const char * const hexString);
 
 /** SWGEmu Code Below This Point
