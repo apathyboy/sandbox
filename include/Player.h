@@ -44,19 +44,21 @@ public:
     const std::string& locationName() const;
     void locationName(const std::string& name);
 
+    uint8_t mood() const;
+    void mood(uint8_t moodId);
+
     int stationId() const;
     void stationId(int id);
 
-	uint8_t GetMood() { return mMoodId; }
-	void SetMood(uint8_t moodId) { mMoodId = moodId; }
-
 private:
+    Player(const Player&);
+    Player& operator=(const Player&);
+
     Vector3<int> position_;
     std::string  station_name_;
     std::string  location_name_;
+    uint8_t      mood_id_;
     int          station_id_;
-
-	uint8_t mMoodId;
 };
 
 #endif // OPENSWG_PLAYER_H

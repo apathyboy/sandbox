@@ -22,7 +22,7 @@
 Player::Player()
     : position_()
     , station_id_(0)
-    , mMoodId(0)
+    , mood_id_(0)
 {}
 
 const Vector3<int>& Player::position() const
@@ -53,6 +53,16 @@ const std::string& Player::locationName() const
 void Player::locationName(const std::string& name)
 {
     location_name_ = name;
+}
+
+uint8_t Player::mood() const
+{ 
+    return mood_id_; 
+}
+
+void Player::mood(uint8_t moodId) 
+{ 
+    mood_id_ = moodId; 
 }
 
 int Player::stationId() const
