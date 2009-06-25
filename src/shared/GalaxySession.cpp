@@ -40,7 +40,6 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     player_->stationId(653564567);
     player_->locationName("naboo");
     player_->SetMood(0);
-    player_->ToggleInitialized();
 }
 
 const SocketServer * const GalaxySession::server() const

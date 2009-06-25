@@ -65,9 +65,3 @@ void Player::stationId(int id)
     station_id_ = id;
 }
 
-void Player::ToggleInitialized() { 
-	if (mInitialized)
-		mInitialized = false;
-	else
-		mInitialized = true;
-};

@@ -47,9 +47,6 @@ public:
     int stationId() const;
     void stationId(int id);
 
-	bool IsInitialized() { return mInitialized; };
-	void ToggleInitialized();
-
 	uint8_t GetMood() { return mMoodId; }
 	void SetMood(uint8_t moodId) { mMoodId = moodId; }
 
@@ -59,7 +56,6 @@ private:
     std::string  location_name_;
     int          station_id_;
 
-	bool mInitialized;
 	uint8_t mMoodId;
 };
 
