@@ -83,6 +83,26 @@ void ByteBuffer::clear()
 	data_.clear();
 }
 
+size_t ByteBuffer::readPosition() const
+{
+    return read_position_;
+}
+
+void   ByteBuffer::readPosition(size_t position)
+{
+    read_position_ = position;
+}
+
+size_t ByteBuffer::writePosition() const
+{
+    return write_position_;
+}
+
+void   ByteBuffer::writePosition(size_t position)
+{
+    write_position_ = position;
+}
+
 const unsigned char* ByteBuffer::data() const
 {
 	return &data_[0];

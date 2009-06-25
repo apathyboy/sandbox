@@ -48,6 +48,12 @@ public:
 	void write (const unsigned char* data, size_t size);
 	void clear ();
 
+    size_t readPosition() const;
+    void   readPosition(size_t position);
+
+    size_t writePosition() const;
+    void   writePosition(size_t position);
+
     void                 reserve  (size_t length);
 	size_t               size     () const;
 	size_t               capacity () const;
