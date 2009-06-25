@@ -36,6 +36,8 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     , connection_id_(0)
     , crc_seed_(0xDEADBABE)
 {
+    // Initialize the player to a default location and state. 
+    // @todo: This information should be pulled from storage
     player_->position(Vector3<int>(-1443, 9, 2771));
     player_->stationId(653564567);
     player_->locationName("naboo");
