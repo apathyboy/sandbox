@@ -35,6 +35,33 @@
 		
 #include <fstream>
 #include <string>
+#include <regex>
+
+std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
+{
+    std::string line_buffer;
+    std::tr1::shared_ptr<ByteBuffer> packet(new ByteBuffer());
+
+    static const std::tr1::regex pattern("0x([0-9a-fA-F]+)");
+    const int keep[] = {1}; 
+    std::tr1::smatch result;
+
+    std::ifstream file_stream(name.c_str());
+    while (std::getline(file_stream, line_buffer)) {
+        
+        // Loop over the line searching for the pattern. Note the "keep"
+        // is used to select the 1st subpattern to keep. Leaving this off
+        // matches the 0x as well.
+        const std::tr1::sregex_token_iterator end;
+        for (std::tr1::sregex_token_iterator i(
+                line_buffer.begin(), line_buffer.end(), pattern, keep); 
+             i != end; ++i) {
+                 *packet << axtoi((*i).str().c_str());
+        }
+    }
+
+    return packet;
+}
 
 char* loadPacket(char* const name, unsigned short* length = NULL) 
 {
@@ -95,22 +122,22 @@ char* loadPacket(char* const name, unsigned short* length = NULL)
 	return packet;
 }
 
-int axtoi(char *hexStg) {
-	int n = 0;         // position in string
-	int m = 0;         // position in digit[] to shift
-	int count;         // loop index
-	int intValue = 0;  // integer value of hex string
-	int digit[5];      // hold values to convert
+uint8_t axtoi(const char * const hexString) {
+	uint8_t n = 0;         // position in string
+	uint8_t m = 0;         // position in digit[] to shift
+	uint8_t count;         // loop index
+	uint8_t intValue = 0;  // integer value of hex string
+	uint8_t digit[5];      // hold values to convert
 	while (n < 4) {
-		if (hexStg[n]=='\0')
+		if (hexString[n]=='\0')
 			break;
-		if (hexStg[n]!='\n'&&hexStg[n]!=' '&&hexStg[n]!='\a') {
-			if (hexStg[n] > 0x2f && hexStg[n] < 0x40 ) //if 0 to 9
-				digit[n] = hexStg[n] & 0x0f;            //convert to int
-			else if (hexStg[n] >='a' && hexStg[n] <= 'f') //if a to f
-				digit[n] = (hexStg[n] & 0x0f) + 9;      //convert to int
-			else if (hexStg[n] >='A' && hexStg[n] <= 'F') //if A to F
-				digit[n] = (hexStg[n] & 0x0f) + 9;      //convert to int
+		if (hexString[n]!='\n'&&hexString[n]!=' '&&hexString[n]!='\a') {
+			if (hexString[n] > 0x2f && hexString[n] < 0x40 ) //if 0 to 9
+				digit[n] = hexString[n] & 0x0f;            //convert to int
+			else if (hexString[n] >='a' && hexString[n] <= 'f') //if a to f
+				digit[n] = (hexString[n] & 0x0f) + 9;      //convert to int
+			else if (hexString[n] >='A' && hexString[n] <= 'F') //if A to F
+				digit[n] = (hexString[n] & 0x0f) + 9;      //convert to int
 			else break;
 		}
 		n++;

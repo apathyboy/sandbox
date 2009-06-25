@@ -26,9 +26,14 @@
 #define PACKET_TOOLS_H
 
 #include <vector>
+#include <tr1/memory>
+
+#include "ByteBuffer.h"
+
+std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name);
 
 char* loadPacket(char* const name, unsigned short* length);
-int axtoi(char *hexStg);
+uint8_t axtoi(const char * const hexString);
 
 /** SWGEmu Code Below This Point
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
