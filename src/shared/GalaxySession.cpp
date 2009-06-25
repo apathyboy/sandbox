@@ -143,18 +143,19 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypted, boo
 
 	// @note: this is taken almost straight from the swgemu code, look into better integration
 	// of the encryption and compression routines.
+    /*
     if(compressed)
     {
         pData = Compress(pData, length);
     }
-    /*
-    if(encrypted)
-    {
-        Encrypt(pData, length, crc_seed_);
-    }
     */
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	  
+	
+    if(compressed)
+    {
+        Compress(message);
+    }
+
     if(encrypted)
     {
         Encrypt(message, crc_seed_);
