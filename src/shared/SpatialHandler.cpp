@@ -78,7 +78,7 @@ void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, un
 	memcpy(packet+24, &direction, 2);
 
 	
-	*(unsigned short*)(packet+2) = (unsigned short)htons(session->GetServerSequence());
+	*(unsigned short*)(packet+2) = (unsigned short)htons(session->serverSequence());
 //	session->SendPacket(packet, size, true, false, true);
 
 	//delete [] pData;

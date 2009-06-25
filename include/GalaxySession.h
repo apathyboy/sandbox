@@ -52,7 +52,22 @@ public:
     const SocketServer * const server() const;
     std::tr1::shared_ptr<Player> player();
 
-	/** Handle Packet function
+    uint16_t serverSequence() const;
+    uint16_t serverSequence(uint16_t sequence);
+
+    uint16_t clientSequence() const;
+    uint16_t clientSequence(uint16_t sequence);
+
+    uint16_t receivedSequence() const;
+    uint16_t receivedSequence(uint16_t sequence);
+
+    uint32_t connectionId() const;
+    uint32_t connectionId(uint32_t id);
+
+    uint32_t crcSeed() const;
+    uint32_t crcSeed(uint32_t seed);
+	
+    /** Handle Packet function
 	 *	Processes any packets that are sent to the server.
 	 */
 	void HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
@@ -84,58 +99,6 @@ public:
 	 *	Sends an OK statement to the client.
 	 */
 	void SendOk();
-
-
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint32_t GetCrcSeed() { return crc_seed_; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint32_t GetConnectionId() { return connection_id_; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	void SetConnectionId(uint32_t connectionId) { connection_id_ = connectionId; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint16_t GetServerSequence() { return server_sequence_; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	void SetServerSequence(uint16_t serverSequence) { server_sequence_ = serverSequence; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	void IncrementServerSequence() { server_sequence_++; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint16_t GetClientSequence() { return client_sequence_; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	void SetClientSequence(uint16_t clientSequence) { client_sequence_ = clientSequence; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	uint16_t GetSequenceRecv() { return received_sequence_; }
-
-	/** Get Crc Seed function
-	 *	Returns the encryption key.
-	 */
-	void SetSequenceRecv(uint16_t sequenceRecv) { received_sequence_ = sequenceRecv; }
 
 	/** Prepare Packet
 	 *	Preapres an incoming packet for use. This decompresses

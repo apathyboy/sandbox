@@ -21,15 +21,10 @@
 #include "GalaxySession.h"
 #include "PacketTools.h"
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length)
 { 	
 	// Store the connection id.
-	session->SetConnectionId(*(unsigned int*)(data+6));
+	session->connectionId(*(unsigned int*)(data+6));
 
 	// Load in the raw packet data.
 	unsigned short size;
@@ -37,11 +32,11 @@ void HandleSessionRequest(GalaxySession *session, const unsigned char *data, uns
 
 	// Add the connection id to the packet data.
 	unsigned int *ptr	= (unsigned int*)(packet+2);
-	*ptr = session->GetConnectionId();
+	*ptr = session->connectionId();
 
 	// Add the crc seed to the packet data.
 	ptr	 = (unsigned int*)(packet+6);
-	*ptr = htonl(session->GetCrcSeed());
+	*ptr = htonl(session->crcSeed());
 
 	// Send out the packet.
 	session->SendPacket(packet, size, false, false, false);
@@ -53,11 +48,6 @@ void HandleSessionRequest(GalaxySession *session, const unsigned char *data, uns
 		session->SendHardPacket("packets\\SOE\\ConnectionServer.txt", false);
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length)
 {     
 	// Get the tick value.
@@ -75,11 +65,6 @@ void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned
 	session->SendPacket(packet, size, true, true, false);
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsigned short length)
 {       
     //"Multi-SOE Packet: "
@@ -114,31 +99,21 @@ void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsign
 	}	
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleAcknowledge(GalaxySession *session, const unsigned char *data, unsigned short length)
 {	
-	session->SetSequenceRecv(*(unsigned short*)(data+2));
+	session->receivedSequence(*(unsigned short*)(data+2));
 
     //you can add a check here *shrug*
     //if(oclient.seq_recv == oclient.server_sequence)
     //its ok, if not, re-request packet?
     data+=2;
-	session->SetClientSequence(*(unsigned short*)(data));
+	session->clientSequence(*(unsigned short*)(data));
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsigned short length)
 {	
 	data+=2;
-	session->SetClientSequence(*(unsigned short*)(data));
+	session->clientSequence(*(unsigned short*)(data));
     
 	session->SendAck();
 
@@ -181,23 +156,13 @@ void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsign
     }
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandleDisconnect(GalaxySession *session, const unsigned char *data, unsigned short length)
 {
-	session->SetServerSequence(0);
-	session->SetClientSequence(0);
-	session->SetSequenceRecv(0);
+	session->serverSequence(0);
+	session->clientSequence(0);
+	session->receivedSequence(0);
 }
 
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
 void HandlePing(GalaxySession *session, const unsigned char *data, unsigned short length)
 {     
 	// Load in the raw packet data.

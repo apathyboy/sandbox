@@ -50,11 +50,65 @@ const SocketServer * const GalaxySession::server() const
     return socket_server_;
 }
 
-
 std::tr1::shared_ptr<Player> GalaxySession::player()
 {
 	return player_;
 }
+
+uint16_t GalaxySession::serverSequence() const
+{
+    return server_sequence_;
+}
+
+uint16_t GalaxySession::serverSequence(uint16_t sequence)
+{
+    server_sequence_ = sequence;
+    return server_sequence_;
+}
+
+uint16_t GalaxySession::clientSequence() const
+{
+    return client_sequence_;
+}
+
+uint16_t GalaxySession::clientSequence(uint16_t sequence)
+{
+    client_sequence_ = sequence;
+    return client_sequence_;
+}
+
+uint16_t GalaxySession::receivedSequence() const
+{
+    return received_sequence_;
+}
+
+uint16_t GalaxySession::receivedSequence(uint16_t sequence)
+{
+    received_sequence_ = sequence;
+    return received_sequence_;
+}
+
+uint32_t GalaxySession::connectionId() const
+{
+    return connection_id_;
+}
+
+uint32_t GalaxySession::connectionId(uint32_t id)
+{
+    connection_id_ = id;
+    return connection_id_;
+}
+
+uint32_t GalaxySession::crcSeed() const
+{
+    return crc_seed_;
+}
+
+uint32_t GalaxySession::crcSeed(uint32_t seed)
+{
+    crc_seed_ = seed;
+    return crc_seed_;
+}	
 	
 /** Handle Packet function
  *	Processes any packets that are sent to the server.
@@ -129,19 +183,19 @@ void GalaxySession::SendHardPacket(char *pName, bool compressed)
 	char *pData = loadPacket(pName, &length);
 	
 	// Add the server sequence to the packet and send the data.
-	*(uint16_t*)(pData+2) = (uint16_t)htons(GetServerSequence());
+	*(uint16_t*)(pData+2) = (uint16_t)htons(server_sequence_);
 	SendPacket(pData, length, true, compressed, true);
 
-	IncrementServerSequence();	
+	++server_sequence_;	
 }
 
 void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool compressed)
 {	
 	// Add the server sequence to the packet and send the data.
-	*(uint16_t*)(packet+2) = (uint16_t)htons(GetServerSequence());
+	*(uint16_t*)(packet+2) = (uint16_t)htons(server_sequence_);
 	SendPacket(packet, length, true, compressed, true);
 
-	IncrementServerSequence();	
+	++server_sequence_;	
 }
 
 void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moodId)
@@ -230,7 +284,7 @@ void GalaxySession::SendAck()
 
 	// Add the sequence to the packet.
 	uint16_t *ptr = (uint16_t*)(packet+2);
-	*ptr = GetClientSequence();
+	*ptr = client_sequence_;
 
 	// Send out the packet.
 	SendPacket(packet, length, true);
