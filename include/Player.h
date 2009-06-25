@@ -28,21 +28,24 @@
 
 #include <string>
 
+#include "Vector3.h"
+
 class Player
 {
 public:
 	Player();
+
 	bool IsInitialized() { return mInitialized; };
 	void ToggleInitialized();
 
-	int GetXPos() { return mXpos; }
-	void SetXPos(int xPos) { mXpos = xPos; }
+	int GetXPos() { return position_.x(); }
+	void SetXPos(int xPos) { position_.x(xPos); }
 
-	int GetYPos() { return mYpos; }
-	void SetYPos(int yPos) { mYpos = yPos; }
+	int GetYPos() { return position_.y(); }
+	void SetYPos(int yPos) { position_.y(yPos); }
 
-	int GetZPos() { return mZpos; }
-	void SetZPos(int zPos) { mZpos = zPos; }
+	int GetZPos() { return position_.z(); }
+	void SetZPos(int zPos) { position_.z(zPos); }
 
 	int GetStationId() { return mStationId; }
 	void SetStationId(int stationId) { mStationId = stationId; }
@@ -60,11 +63,10 @@ public:
 	void SetLocation(std::string location) { mLocation = location; }
 
 private:
+    Vector3<int> position_;
+
 	bool mInitialized;
 	uint8_t mMoodId;
-	int mXpos;
-	int mYpos;
-	int mZpos;
 	int mStationId;
 	std::string mStationName;
 	std::string mLocation;

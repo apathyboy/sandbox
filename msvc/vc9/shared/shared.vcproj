@@ -236,6 +236,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\Vector3.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\shared\ZoneInsertionHandler.cpp"
 			>
 		</File>

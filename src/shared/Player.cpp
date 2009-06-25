@@ -20,7 +20,8 @@
 #include "Player.h"
 
 Player::Player()
-    : mMoodId(0)
+    : position_()
+    , mMoodId(0)
 {}
 
 void Player::ToggleInitialized() { 
