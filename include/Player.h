@@ -41,6 +41,9 @@ public:
     const std::string& stationName() const;
     void stationName(const std::string& name);
 
+    const std::string& locationName() const;
+    void locationName(const std::string& name);
+
     int stationId() const;
     void stationId(int id);
 
@@ -49,17 +52,15 @@ public:
 
 	uint8_t GetMood() { return mMoodId; }
 	void SetMood(uint8_t moodId) { mMoodId = moodId; }
-	std::string GetLocation() { return mLocation; }
-	void SetLocation(std::string location) { mLocation = location; }
 
 private:
     Vector3<int> position_;
     std::string  station_name_;
+    std::string  location_name_;
     int          station_id_;
 
 	bool mInitialized;
 	uint8_t mMoodId;
-	std::string mLocation;
 };
 
 #endif // OPENSWG_PLAYER_H

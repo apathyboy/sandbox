@@ -45,6 +45,16 @@ void Player::stationName(const std::string& name)
     station_name_ = name;
 }
 
+const std::string& Player::locationName() const
+{
+    return location_name_;
+}
+
+void Player::locationName(const std::string& name)
+{
+    location_name_ = name;
+}
+
 int Player::stationId() const
 {
     return station_id_;

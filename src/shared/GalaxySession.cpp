@@ -38,7 +38,7 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
 {
     player_->position(Vector3<int>(-1443, 9, 2771));
     player_->stationId(653564567);
-    player_->SetLocation("naboo");
+    player_->locationName("naboo");
     player_->SetMood(0);
     player_->ToggleInitialized();
 }
