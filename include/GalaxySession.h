@@ -77,7 +77,7 @@ public:
 	 *
 	 *  @note: this is heavily borrowed from the swgemu team's similar function.
 	 */
-    void SendPacket(char *pData, uint16_t length, bool encrypted = false, bool compressed = false, bool crc = true);
+    void SendPacket(char *pData, uint16_t length, bool encrypt = false, bool compress = false, bool crc = true);
 
 	/**	Send Hard Packet
 	 *	Sends a hardcoded packet to the specified client.
