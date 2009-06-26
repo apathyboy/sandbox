@@ -66,14 +66,18 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
 
 void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
 {
-    std::vector<char> packet_data(packet->data(), packet->data() + packet->size());
-    char* pData = reinterpret_cast<char*>(&packet_data[0]);
-    uint16_t nLength = packet->size();
+    // Grab a reference to the internals of the packet. Generally
+    // this should not be done but this is one of the special circumstances
+    // the raw() was implemented for. This allows us to work on
+    // the raw data with a non-standard library and minimize the amount
+    // of copying.
+    std::vector<uint8_t>& packet_data = packet->raw();  
 
-    uint16_t offset = (pData[0] == 0x00) ? 2 : 1;
-  
-    std::vector<char> output(nLength+20);
+    // Determine the offset to begin compressing data at.
+    uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
 
+    // Create a container for the compressed data and initialize the 
+    // z_stream with the necessary default values.
     z_stream stream;
 
     stream.zalloc   = Z_NULL;
@@ -81,33 +85,29 @@ void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
     stream.opaque   = Z_NULL;
     stream.avail_in = 0;
     stream.next_in  = Z_NULL;
+
+    deflateInit(&stream, Z_DEFAULT_COMPRESSION); 
  
-    deflateInit(&stream, Z_DEFAULT_COMPRESSION);
+    // Prepare the stream for compression and then compress the data.
+    std::vector<uint8_t> compression_output(packet->size() + 20);
  
-    stream.next_in   = reinterpret_cast<Bytef *>(pData+offset);
-    stream.avail_in  = nLength - offset - 3;
-    stream.next_out  = reinterpret_cast<Bytef *>(&output[0]);
-    stream.avail_out = nLength + 20;
- 
+    stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
+    stream.avail_in  = packet->size() - offset - 3;
+    stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
+    stream.avail_out = packet->size() + 20;
+
     deflate(&stream, Z_FINISH);
- 
-    uint16_t newLength = static_cast<uint16_t>(stream.total_out);
- 
-    deflateEnd(&stream);
 
-    std::vector<char> compressed_data;
-    compressed_data.push_back(pData[0]);
+    // SOE protocol requires this bit at the end of compressed data.
+    compression_output[stream.total_out] = 0x01;
 
-    if (offset == 2) {
-        compressed_data.push_back(pData[1]);
-    }
-
-    compressed_data.insert(compressed_data.end(), output.begin(), output.begin() + newLength);
-    compressed_data.push_back(0x01);
-    compressed_data.insert(compressed_data.end(), packet_data.end() - 2, packet_data.end());
-
-    ByteBuffer tmp(reinterpret_cast<uint8_t *>(&compressed_data[0]), compressed_data.size());
-    packet->swap(tmp);
+    // Replace the section of the packet data copy between the offset and 
+    // the crc bits.
+    packet_data.insert(
+        packet_data.erase(packet_data.begin() + offset, packet_data.end() - 2),
+        compression_output.begin(),
+        compression_output.begin() + stream.total_out + 1 // The +1 is for the added SOE bit.
+        );
 }
 
 void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
