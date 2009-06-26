@@ -94,17 +94,22 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
 
     std::ifstream file_stream(name.c_str());
     while (std::getline(file_stream, line_buffer)) {
-        
+        // Remove any comments and/or whitespace from the beginning/end of the line.
+		line_buffer = line_buffer.substr( 0, line_buffer.find('#'));	
+		line_buffer.erase(0, line_buffer.find_first_not_of(" \n\t\v\r\f"));
+
         // Loop over the line searching for the pattern. Note the "keep"
         // is used to select the 1st subpattern to keep. Leaving this off
         // matches the 0x as well.
         const std::tr1::sregex_token_iterator end;
         for (std::tr1::sregex_token_iterator i(
                 line_buffer.begin(), line_buffer.end(), pattern, keep); 
-             i != end; ++i) {
-                 *packet << axtoi((*i).str().c_str());
+             i != end; ++i) {            
+            *packet << axtoi((*i).str().c_str());
         }
     }
+
+    file_stream.close();
 
     return packet;
 }
