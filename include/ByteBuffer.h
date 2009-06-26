@@ -59,6 +59,8 @@ public:
 	size_t               capacity () const;
 	const unsigned char* data     () const;
 
+    std::vector<unsigned char>&  raw();
+
 private:
 	template<typename T> void swapEndian(T& data);
 
