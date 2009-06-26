@@ -174,8 +174,7 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
         Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;	
         return;
 	}
-        
-    session->prepPacket(message);	
+
 	session->HandlePacket(message);
 }
 

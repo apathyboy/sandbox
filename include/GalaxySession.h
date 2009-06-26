@@ -67,7 +67,6 @@ public:
     uint32_t crcSeed() const;
     uint32_t crcSeed(uint32_t seed);
     
-    void prepPacket(std::tr1::shared_ptr<ByteBuffer> packet);
     void sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc);
 	
     void sendHardcodedPacket(const std::string& name, bool compressed);

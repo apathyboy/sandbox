@@ -122,20 +122,6 @@ uint32_t GalaxySession::crcSeed(uint32_t seed)
 }	
 
 
-void GalaxySession::prepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
-{    
-    if(CrcTest(packet, crc_seed_)) {
-        Decrypt(packet, crc_seed_);
-    }
-
-    if (packet->peekAt<uint8_t>(2) == 'x') {
-        Decompress(packet);
-    }
-
-    //Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
-}
-
-
 void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
 {
     //Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
@@ -153,6 +139,14 @@ void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool enc
  */
 void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
+    if(CrcTest(packet, crc_seed_)) {
+        Decrypt(packet, crc_seed_);
+    }
+
+    if (packet->peekAt<uint8_t>(2) == 'x') {
+        Decompress(packet);
+    }
+
 	unsigned int opcode;
 	// Try to handle the incoming packet.
 	try
