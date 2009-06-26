@@ -78,6 +78,14 @@ void ByteBuffer::write(const unsigned char* data, size_t size)
 	write_position_ += size;
 }
 
+void ByteBuffer::write(size_t offset, const unsigned char* data, size_t size)
+{
+	data_.insert(
+        data_.erase(data_.begin() + offset, data_.begin() + offset + size),
+        data, 
+        data + size);
+}
+
 void ByteBuffer::clear()
 {
 	data_.clear();

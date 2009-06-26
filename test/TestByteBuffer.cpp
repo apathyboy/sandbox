@@ -182,4 +182,19 @@ TEST(ByteBufferTests, CanPeekAtOffset)
     EXPECT_EQ(32, buffer.peekAt<int>(4));
 }
 
+TEST(ByteBufferTests, CanWriteAtOffset)
+{
+    ByteBuffer buffer;
+    buffer.write<int>(3);
+    buffer.write<int>(32);
+    buffer.write<int>(979);
+    buffer.write<int>(5467);
+
+    buffer.writeAt<int>(8, 52);
+    buffer.writeAt<int>(4, 3532);
+
+    EXPECT_EQ(52, buffer.peekAt<int>(8));
+    EXPECT_EQ(3532, buffer.peekAt<int>(4));
+}
+
 }
