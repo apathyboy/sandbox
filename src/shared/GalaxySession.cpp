@@ -148,20 +148,28 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool 
     socket_server_->sendPacket(socket_address_, message);
 }
 
+void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
+{
+    Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
+
+    if (compress) Compress(packet);
+    if (encrypt)  Encrypt(packet, crc_seed_);    
+    if (crc)	  AppendCrc(packet, crc_seed_);
+
+    socket_server_->sendPacket(socket_address_, packet);
+}
+
 /**	Send Hard Packet
  *	Sends a hardcoded packet to the specified client.
  */
 void GalaxySession::SendHardPacket(const std::string& name, bool compressed)
-{
-	// Load in the raw packet.
-	uint16_t length;
-	char *pData = loadPacket(name, &length);
-	
-	// Add the server sequence to the packet and send the data.
-	*(uint16_t*)(pData+2) = (uint16_t)htons(server_sequence_);
-	SendPacket(pData, length, true, compressed, true);
+{        
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
 
-	++server_sequence_;	
+    packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
+    sendPacket(packet, true, compressed, true);
+
+    ++server_sequence_;
 }
 
 void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool compressed)

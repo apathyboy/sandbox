@@ -66,6 +66,8 @@ public:
 
     uint32_t crcSeed() const;
     uint32_t crcSeed(uint32_t seed);
+    
+    void sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc);
 	
     /** Handle Packet function
 	 *	Processes any packets that are sent to the server.
