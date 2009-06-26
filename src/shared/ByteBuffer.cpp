@@ -237,7 +237,7 @@ std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer)
 			if (i == lines && j >= extra) {
 				message << "   ";
 			} else {
-				message << std::setw(2) << static_cast<unsigned>(data[i+j]) << " ";
+				message << std::setw(2) << static_cast<unsigned>(data[(i * 16)+j]) << " ";
 			}
 		}
 
@@ -248,11 +248,11 @@ std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer)
 			// print a ' ' for these characters.
 			if ((i == lines) & (k >= extra)) {
 				message << " ";
-			} else if (data[i+k] < ' ' || data[i+k] > '~') {
+			} else if (data[(i * 16)+k] < ' ' || data[(i * 16)+k] > '~') {
 				// Else if it's not an ascii value print a '.'
 				message << '.';
 			} else {
-				message << data[i+k];
+				message << data[(i * 16)+k];
 			}
 		}
 	    
