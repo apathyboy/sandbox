@@ -45,20 +45,5 @@ void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t 
 char* loadPacket(const std::string& name, unsigned short* length);
 uint8_t axtoi(const char * const hexString);
 
-/** SWGEmu Code Below This Point
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
-
-static const int CompBuf = 800;
-
-unsigned int GenerateCrc(char* pData,unsigned short nLength,unsigned int nCrcSeed);
-bool CrcTest(char *pData,unsigned short nLength,unsigned int nCrcSeed, short nCrcLength=2);
-void AppendCRC(char *pData,unsigned short nLength,unsigned int nCrcSeed, short nCrcLength=2);
-
-void Encrypt(char *pData,unsigned short nLength,unsigned int nCRCSeed);
-void Decrypt(char *pData,unsigned short nLength, unsigned int nCrcSeed);
-
-char *Decompress(char *pData, unsigned short &nLength);
-std::vector<char> Decompress(std::vector<char> pData);
-
 #endif
+
