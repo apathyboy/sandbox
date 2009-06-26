@@ -139,7 +139,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool compress, bool crc)
 {
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
+	//Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
 
     if (compress) Compress(message);
     if (encrypt)  Encrypt(message, crc_seed_);    
@@ -250,7 +250,7 @@ void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
     ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
     packet->swap(tmp);
 
-    Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
+    //Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
 }
 
 void GalaxySession::SendAck()

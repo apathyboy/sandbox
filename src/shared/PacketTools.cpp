@@ -70,53 +70,63 @@ void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
     char* pData = reinterpret_cast<char*>(&compressed_data[0]);
     uint16_t nLength = packet->size();
 
- unsigned short offset;
- if(pData[0] == 0x00)
-   offset = 2;
- else
-   offset = 1;
- z_stream stream;
- char *output = new char[nLength+20];
- stream.zalloc = Z_NULL;
- stream.zfree = Z_NULL;
- stream.opaque = Z_NULL;
- stream.avail_in = 0;
- stream.next_in = Z_NULL;
- deflateInit(&stream,Z_DEFAULT_COMPRESSION);
- stream.next_in = (Bytef* )(pData+offset);
- stream.avail_in = nLength - offset - 3;
- stream.next_out = (Bytef* )output;
- stream.avail_out = nLength + 20;
- deflate(&stream,Z_FINISH);
- unsigned short newLength = static_cast<unsigned short>(stream.total_out);
- deflateEnd(&stream);
- char *comp_pData  = new char [newLength+ offset + 3];
- char *begcomp_pData;
- begcomp_pData = comp_pData;
- *comp_pData = pData[0];
- comp_pData++;
- if(offset == 2)
- {
-   *comp_pData = pData[1];
-   comp_pData++;
- }
- for(short x=0;x<newLength;x++)
- {
-  *comp_pData = output[x];
-  comp_pData++;
-  }
- *comp_pData = 0x01;
- comp_pData++;
- pData += (nLength-2);
- *(unsigned short*)comp_pData = *(unsigned short*)pData;
- comp_pData = begcomp_pData;
- nLength = newLength + offset + 3;
+    uint16_t offset = (pData[0] == 0x00) ? 2 : 1;
+  
+    char *output = new char[nLength+20];
+
+    z_stream stream;
+
+    stream.zalloc = Z_NULL;
+    stream.zfree = Z_NULL;
+    stream.opaque = Z_NULL;
+    stream.avail_in = 0;
+    stream.next_in = Z_NULL;
+ 
+    deflateInit(&stream,Z_DEFAULT_COMPRESSION);
+ 
+    stream.next_in = (Bytef* )(pData+offset);
+    stream.avail_in = nLength - offset - 3;
+    stream.next_out = (Bytef* )output;
+    stream.avail_out = nLength + 20;
+ 
+    deflate(&stream,Z_FINISH);
+ 
+    uint16_t newLength = static_cast<uint16_t>(stream.total_out);
+ 
+    deflateEnd(&stream);
+ 
+    char *comp_pData  = new char [newLength+ offset + 3];
+    char *begcomp_pData;
+ 
+    begcomp_pData = comp_pData;
+ 
+    *comp_pData = pData[0];
+    comp_pData++;
+ 
+    if(offset == 2) {
+        *comp_pData = pData[1];
+        comp_pData++;
+    }
+ 
+    for(short x=0;x<newLength;x++) {
+        *comp_pData = output[x];
+        comp_pData++;
+    }
+ 
+    *comp_pData = 0x01;
+    comp_pData++;
+ 
+    pData += (nLength-2);
+    *(uint16_t*)comp_pData = *(uint16_t*)pData;
+ 
+    comp_pData = begcomp_pData;
+    
+    nLength = newLength + offset + 3;
     
     ByteBuffer tmp(reinterpret_cast<uint8_t*>(comp_pData), nLength);
     packet->swap(tmp);
 
-    
- delete [] comp_pData;
+    delete [] comp_pData;
 }
 
 void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
