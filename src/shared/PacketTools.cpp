@@ -211,44 +211,35 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
 }
 
 
-void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
+void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
 {
-    std::vector<uint8_t> packet_data(packet->data(), packet->data() + packet->size());
-    char* pData = reinterpret_cast<char*>(&packet_data[0]);
+    // Grab a reference to the internals of the packet. Generally
+    // this should not be done but this is one of the special circumstances
+    // the raw() was implemented for. This allows us to work on
+    // the raw data with a non-standard library and minimize the amount
+    // of copying.
+    std::vector<uint8_t>& packet_data = packet->raw();  
 
-    uint16_t nLength = packet->size();
+    // Determine the offset to begin decrypting data at.
+    uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
 
-    unsigned int *Data;
-    if(pData[0] == 0x00)
-    {
-     nLength-=4;
-     Data = (unsigned int*)(pData+2);
-    }
-    else
-    {
-     nLength-=3;
-     Data = (unsigned int*)(pData+1);
-    }
-    short block_count = (nLength / 4);
-    short byte_count = (nLength % 4);
- 
-    for(short count = 0;count<block_count;count++)
-    {
-        seed ^= *Data;
-        *Data = seed;
-        //*Data ^= nCrcSeed;
-        //nCrcSeed = *Data;
-        Data++;
-    }
-    pData = (char*)Data;
-    for(short count = 0;count<byte_count;count++)
-    {
-        *pData ^= (char)seed;
-        pData++;
+    // Determine the block and byte counts to assist in processing.
+    uint16_t block_count = (packet_data.size() - offset - seedLength) / 4;
+    uint16_t byte_count  = (packet_data.size() - offset - seedLength) % 4;
+
+    // Grab the value at the current position and store it in the tmp
+    // holder before processing.
+    for (uint16_t count = 0; count < block_count; ++count) {
+        uint32_t* current = reinterpret_cast<uint32_t *>(&packet_data[offset + (count * 4)]);
+        
+        seed ^= *current;
+        *current = seed;
     }
 
-    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&packet_data[0]), packet_data.size());
-    packet->swap(tmp);
+    for (uint16_t count = 0; count < byte_count; ++count) {
+        uint8_t* current = &packet_data[offset + (block_count * 4) + count];
+        *current ^= seed;
+    }
 }
 
 
@@ -355,21 +346,21 @@ bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
 
 void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
 {
-    std::vector<char> pData(packet->data(), packet->data() + packet->size());
-    uint16_t nLength = packet->size();
+    if (seedLength > 0) {
+        // Grab a reference to the internals of the packet. Generally
+        // this should not be done but this is one of the special circumstances
+        // the raw() was implemented for. This allows us to work on
+        // the raw data with a non-standard library and minimize the amount
+        // of copying.
+        std::vector<uint8_t>& packet_data = packet->raw();  
 
-    if (seedLength > 0)
-    {
-        unsigned int crc = GenerateCrc(&pData[0], (nLength-seedLength), seed);
-       // pData += (nLength-seedLength);
-        for( short i = 0; i < seedLength; i++ )
-        {
-            pData[(nLength - 1) - i] = (char)((crc >> (8 * i)) & 0xFF);
+        // Generate the CRC and append it to the packet.
+        unsigned int crc = GenerateCrc(packet, seed);
+
+        for (int16_t i = 0; i < seedLength; ++i) {
+            packet_data[(packet_data.size() - 1) - i] = ((crc >> (8 * i)) & 0xFF);
         }
     }
-
-    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
-    packet->swap(tmp);
 }
 
 

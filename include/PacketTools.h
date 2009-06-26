@@ -35,7 +35,7 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
 void Compress(std::tr1::shared_ptr<ByteBuffer> packet);
 void Decompress(std::tr1::shared_ptr<ByteBuffer> packet);
 
-void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed);
+void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
 void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
 
 uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
