@@ -175,7 +175,7 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
         return;
 	}
         
-    session->PrepPacket(message);	
+    session->prepPacket(message);	
 	session->HandlePacket(message);
 }
 

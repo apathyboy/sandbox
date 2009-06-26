@@ -44,20 +44,24 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     player_->mood(0);
 }
 
+
 const SocketServer * const GalaxySession::server() const
 {
     return socket_server_;
 }
+
 
 std::tr1::shared_ptr<Player> GalaxySession::player()
 {
 	return player_;
 }
 
+
 uint16_t GalaxySession::serverSequence() const
 {
     return server_sequence_;
 }
+
 
 uint16_t GalaxySession::serverSequence(uint16_t sequence)
 {
@@ -65,10 +69,12 @@ uint16_t GalaxySession::serverSequence(uint16_t sequence)
     return server_sequence_;
 }
 
+
 uint16_t GalaxySession::clientSequence() const
 {
     return client_sequence_;
 }
+
 
 uint16_t GalaxySession::clientSequence(uint16_t sequence)
 {
@@ -76,10 +82,12 @@ uint16_t GalaxySession::clientSequence(uint16_t sequence)
     return client_sequence_;
 }
 
+
 uint16_t GalaxySession::receivedSequence() const
 {
     return received_sequence_;
 }
+
 
 uint16_t GalaxySession::receivedSequence(uint16_t sequence)
 {
@@ -87,10 +95,12 @@ uint16_t GalaxySession::receivedSequence(uint16_t sequence)
     return received_sequence_;
 }
 
+
 uint32_t GalaxySession::connectionId() const
 {
     return connection_id_;
 }
+
 
 uint32_t GalaxySession::connectionId(uint32_t id)
 {
@@ -98,17 +108,46 @@ uint32_t GalaxySession::connectionId(uint32_t id)
     return connection_id_;
 }
 
+
 uint32_t GalaxySession::crcSeed() const
 {
     return crc_seed_;
 }
+
 
 uint32_t GalaxySession::crcSeed(uint32_t seed)
 {
     crc_seed_ = seed;
     return crc_seed_;
 }	
-	
+
+
+void GalaxySession::prepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
+{    
+    if(CrcTest(packet, crc_seed_)) {
+        Decrypt(packet, crc_seed_);
+    }
+
+    if (packet->peekAt<uint8_t>(2) == 'x') {
+        Decompress(packet);
+    }
+
+    //Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
+}
+
+
+void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
+{
+    //Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
+
+    if (compress) Compress(packet);
+    if (encrypt)  Encrypt(packet, crc_seed_);    
+    if (crc)	  AppendCrc(packet, crc_seed_);
+
+    socket_server_->sendPacket(socket_address_, packet);
+}
+
+
 /** Handle Packet function
  *	Processes any packets that are sent to the server.
  */
@@ -148,16 +187,6 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool 
     socket_server_->sendPacket(socket_address_, message);
 }
 
-void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
-{
-    Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
-
-    if (compress) Compress(packet);
-    if (encrypt)  Encrypt(packet, crc_seed_);    
-    if (crc)	  AppendCrc(packet, crc_seed_);
-
-    socket_server_->sendPacket(socket_address_, packet);
-}
 
 /**	Send Hard Packet
  *	Sends a hardcoded packet to the specified client.
@@ -206,24 +235,6 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
 	delete [] packet;		
 }
 
-
-/** The body of this function was written by SWGEmu. It may be replaced
- *	in the future to better integrate with the rest of the OpenSWG
- *	code.
- *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
- */
-void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
-{    
-    if(CrcTest(packet, crc_seed_)) {
-        Decrypt(packet, crc_seed_);
-    }
-
-    if (packet->peekAt<uint8_t>(2) == 'x') {
-        Decompress(packet);
-    }
-
-    //Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
-}
 
 void GalaxySession::SendAck()
 {
