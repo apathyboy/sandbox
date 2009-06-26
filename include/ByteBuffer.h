@@ -43,6 +43,7 @@ public:
 
 	template<typename T> ByteBuffer& write (T data);
 	template<typename T> const T     peek  (bool doSwapEndian = false);
+	template<typename T> const T     peekAt  (uint32_t offset, bool doSwapEndian = false);
 	template<typename T> const T 	 read  (bool doSwapEndian = false);
 
 	void write (const unsigned char* data, size_t size);
@@ -88,11 +89,16 @@ template<typename T> const T ByteBuffer::read(bool doSwapEndian)
 
 template<typename T> const T ByteBuffer::peek(bool doSwapEndian)
 {
-	if (data_.size() < read_position_ + sizeof(T)) {
+	return peekAt<T>(read_position_, doSwapEndian);
+}
+
+template<typename T> const T ByteBuffer::peekAt(uint32_t offset, bool doSwapEndian)
+{
+	if (data_.size() < offset + sizeof(T)) {
 		throw std::out_of_range("Read past end of buffer");
 	}
 
-	T data = *reinterpret_cast<T*>(&data_[read_position_]);
+	T data = *reinterpret_cast<T*>(&data_[offset]);
 
 	if (doSwapEndian)
 		swapEndian<T>(data);

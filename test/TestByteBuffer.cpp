@@ -170,4 +170,16 @@ TEST(ByteBufferTests, CanReadAndWriteUnsignedData)
 	EXPECT_EQ(3, buffer.read<uint16_t>()); // Check that the value is correct.
 }
 
+TEST(ByteBufferTests, CanPeekAtOffset)
+{
+    ByteBuffer buffer;
+    buffer.write<int>(3);
+    buffer.write<int>(32);
+    buffer.write<int>(979);
+    buffer.write<int>(5467);
+
+    EXPECT_EQ(979, buffer.peekAt<int>(8));
+    EXPECT_EQ(32, buffer.peekAt<int>(4));
+}
+
 }
