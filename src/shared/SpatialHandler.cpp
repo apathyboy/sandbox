@@ -89,32 +89,32 @@ void HandleSit(GalaxySession *session, const unsigned char * data, unsigned shor
 {
 	session->SendOk();
 
-	session->SendHardPacket("packets\\Spatial\\SelfPostureUpdate_Sit.txt", false);
-	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Sit.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
 }
 
 void HandleStand(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
-	session->SendHardPacket("packets\\Spatial\\SelfPostureUpdate_Stand.txt", false);
-	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Stand.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
 }
 
 void HandleProne(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
-	session->SendHardPacket("packets\\Spatial\\SelfPostureUpdate_Prone.txt", false);
-	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
+	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Prone.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
 }
 
 void HandleKneel(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
 	session->SendOk();
 
-	session->SendHardPacket("packets\\Spatial\\SelfPostureUpdate_Kneel.txt", false);
-	session->SendHardPacket("packets\\Spatial\\PostureUpdate_Kneel.txt",false);
+	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Kneel.txt", false);
+	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Kneel.txt",false);
 
 }
 

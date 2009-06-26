@@ -191,14 +191,18 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool 
 /**	Send Hard Packet
  *	Sends a hardcoded packet to the specified client.
  */
-void GalaxySession::SendHardPacket(const std::string& name, bool compressed)
+void GalaxySession::sendHardcodedPacket(const std::string& name, bool compressed)
 {        
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
+    sendHardcodedPacket(packet, compressed);
+}
 
+void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
+{	
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
     sendPacket(packet, true, compressed, true);
 
-    ++server_sequence_;
+    ++server_sequence_;;	
 }
 
 void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool compressed)
@@ -276,14 +280,11 @@ void GalaxySession::Update(time_t currentTime)
 
 void GalaxySession::SendShuttleUpdate()
 {
-	if (shuttle_state_ == SHUTTLE_LANDED)
-	{
-		SendHardPacket("packets\\Actions\\KerenStarshipTakeoff.txt", false);
+	if (shuttle_state_ == SHUTTLE_LANDED) {
+		sendHardcodedPacket("packets\\Actions\\KerenStarshipTakeoff.txt", false);
 		shuttle_state_ = SHUTTLE_DEPARTED;
-	}
-	else
-	{
-		SendHardPacket("packets\\Actions\\KerenStarshipLand.txt", false);
+	} else {
+		sendHardcodedPacket("packets\\Actions\\KerenStarshipLand.txt", false);
 		shuttle_state_ = SHUTTLE_LANDED;
 	}
 }

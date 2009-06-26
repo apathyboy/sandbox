@@ -29,7 +29,7 @@ void HandleClientReady(GalaxySession *session, const unsigned char * data, unsig
 
 void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendHardPacket("packets\\ZoneInsertion\\LoadDone.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\LoadDone.txt", true);
 }
 
 void HandleLoadTerrain(GalaxySession *session, const unsigned char * data, unsigned short length)
@@ -42,7 +42,7 @@ void HandleSession(GalaxySession *session, const unsigned char * data, unsigned 
 	session->SendOk();
 
 	// Send the character options to the client.
-	session->SendHardPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
 }
 
 void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * data, unsigned short length)
@@ -50,37 +50,37 @@ void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * da
 	session->SendOk();
 
 	// Send the initial batch of packets.
-	session->SendHardPacket("packets\\ZoneInsertion\\UnkByteFlag.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\Int900Pkt.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\LoadTerrain.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\UnkByteFlag.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Int900Pkt.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\LoadTerrain.txt", true);
 
 	// Begin loading the character.
-	session->SendHardPacket("packets\\ZoneInsertion\\PreloadCharacter.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\CreoCreate.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\PreloadCharacter.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\CreoCreate.txt", false);
 	//session->SendHardPacket("packets\\ZoneInsertion\\PrecloseClose.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo3.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo6.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo3.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo6.txt", true);
 
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo1.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo1.txt", true);
 
 	// @TODO Implement a better way to send hardcoded fragmented packets.
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo4.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo4pt2.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo4pt3.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo4pt4.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo4.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo4pt2.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo4pt3.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo4pt4.txt", true);
 
 	// Create our character.
-	session->SendHardPacket("packets\\ZoneInsertion\\Creo8.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Play8.txt", true);
-	session->SendHardPacket("packets\\ZoneInsertion\\Play9.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\PrecloseClose.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\PlayClose.txt", false);
-	session->SendHardPacket("packets\\ZoneInsertion\\Play9Update.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo8.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Play8.txt", true);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Play9.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\PrecloseClose.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\PlayClose.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Play9Update.txt", false);
 
 	// Inventory
-	session->SendHardPacket("packets\\ZoneInsertion\\Inventory.txt", false);
+	session->sendHardcodedPacket("packets\\ZoneInsertion\\Inventory.txt", false);
 
 	// Environment
-	session->SendHardPacket("packets\\Objects\\KerenStarship.txt", false);
-	session->SendHardPacket("packets\\Objects\\KerenStarshipTicketCollector.txt", false);
+	session->sendHardcodedPacket("packets\\Objects\\KerenStarship.txt", false);
+	session->sendHardcodedPacket("packets\\Objects\\KerenStarshipTicketCollector.txt", false);
 }

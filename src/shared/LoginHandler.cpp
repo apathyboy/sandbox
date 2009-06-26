@@ -25,10 +25,10 @@
 void HandleAuthentication(GalaxySession *session, const unsigned char *data, unsigned short length)
 {
 	// Send the station identifier
-	session->SendHardPacket("packets\\Login\\StationIdentifier.txt", false);
+	session->sendHardcodedPacket("packets\\Login\\StationIdentifier.txt", false);
 
 	// Send the server list.
-	session->SendHardPacket("packets\\Login\\ServerList.txt", false);
+	session->sendHardcodedPacket("packets\\Login\\ServerList.txt", false);
 
 	// Send the server ip list.
 	//session->SendHardPacket("packets\\Login\\ServerIpList.txt", false);
@@ -53,5 +53,5 @@ void HandleAuthentication(GalaxySession *session, const unsigned char *data, uns
 	session->SendHardPacket(tmp, ipListSize+galaxyIp.length()+3, false);
 	
 	// Send the character list.
-	session->SendHardPacket("packets\\Login\\ServerCharacterList.txt", false);
+	session->sendHardcodedPacket("packets\\Login\\ServerCharacterList.txt", false);
 }

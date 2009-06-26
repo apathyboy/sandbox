@@ -70,6 +70,9 @@ public:
     void prepPacket(std::tr1::shared_ptr<ByteBuffer> packet);
     void sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc);
 	
+    void sendHardcodedPacket(const std::string& name, bool compressed);
+    void sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed);
+
     /** Handle Packet function
 	 *	Processes any packets that are sent to the server.
 	 */
@@ -85,7 +88,6 @@ public:
 	/**	Send Hard Packet
 	 *	Sends a hardcoded packet to the specified client.
 	 */
-    void SendHardPacket(const std::string& name, bool compressed);
 	void SendHardPacket(char *packet, uint16_t length, bool compressed);
 
 	/**	Send Text
