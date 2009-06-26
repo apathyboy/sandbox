@@ -187,7 +187,7 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
     inflateInit(&stream);
  
     // Prepare the stream for compression and then compress the data.
-    std::vector<uint8_t> compression_output(packet->size() + 20);
+    std::vector<uint8_t> compression_output(packet->size() + 21);
  
     stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
     stream.avail_in  = packet->size() - offset - 3;
@@ -282,6 +282,74 @@ void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
         uint8_t* current = &packet_data[offset + (block_count * 4) + count];
         *current ^= seed;
     }
+}
+
+
+uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+{
+    uint32_t crc = crc32table[(~seed) & 0xFF];
+    crc ^= 0x00FFFFFF;
+
+    uint32_t index = (seed >> 8) ^ crc;
+    crc = (crc >> 8) & 0x00FFFFFF;
+    crc ^= crc32table[index & 0xFF];
+
+    index = (seed >> 16) ^ crc;
+    crc = (crc >> 8) & 0x00FFFFFF;
+    crc ^= crc32table[index & 0xFF];
+    
+    index = (seed >> 24) ^ crc;
+    crc = (crc >> 8) &0x00FFFFFF;
+    crc ^= crc32table[index & 0xFF];
+
+    // Grab a reference to the internals of the packet. Generally
+    // this should not be done but this is one of the special circumstances
+    // the raw() was implemented for. This allows us to work on
+    // the raw data with a non-standard library and minimize the amount
+    // of copying.
+    std::vector<uint8_t>& packet_data = packet->raw();  
+
+    uint16_t packet_crc_length = packet->size() - seedLength;
+    for(uint16_t i = 0; i < packet_crc_length; i++ ) {
+        index = (packet_data[i]) ^ crc;
+        crc = (crc >> 8) & 0x00FFFFFF;
+        crc ^= crc32table[index & 0xFF];
+    }
+
+    return ~crc;
+}
+
+
+bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+{
+    if(seedLength > 0) {
+        uint32_t packetCrc = GenerateCrc(packet, seed, seedLength);
+        uint32_t testCrc   = 0;
+        uint32_t mask      = 0;
+        uint32_t pullbyte  = 0;
+    
+        // Grab a reference to the internals of the packet. Generally
+        // this should not be done but this is one of the special circumstances
+        // the raw() was implemented for. This allows us to work on
+        // the raw data with a non-standard library and minimize the amount
+        // of copying.
+        std::vector<uint8_t>& packet_data = packet->raw();  
+
+        for (int16_t i = 0; i < seedLength; ++i) {
+            pullbyte = packet_data[(packet_data.size() - seedLength) + i];
+            testCrc |= (pullbyte << (((seedLength - 1) - i) * 8));
+            mask <<= 8;
+            mask |= 0xFF;
+        }
+
+        packetCrc &= mask;
+
+        if (packetCrc != testCrc) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 

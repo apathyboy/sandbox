@@ -205,50 +205,14 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
  *	Copyright (C) 2006 Team SWGEmu <http://www.swgemu.com>
  */
 void GalaxySession::PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet)
-{
-    std::vector<char> pData(packet->data(), packet->data() + packet->size());
-    uint16_t nLength = packet->size();
-
-    switch(pData[1]) //switch to do packet manip before passing to handlers
-    {
-        case 3:
-            //"Multi-SOE Packet: "
-            if(CrcTest(&pData[0],nLength,crc_seed_))
-                Decrypt(&pData[0],nLength,crc_seed_);
-            if (pData[2] == 'x')
-            {
-                std::vector<char> tmp(Decompress(pData));
-                std::swap(pData, tmp);
-            }
-            break;
-        
-        case 7:
-        case 9:
-        case 13:
-            //"Fragmented: "
-            Decrypt(&pData[0],nLength,crc_seed_);
-            if (pData[2] == 'x')
-            {
-                std::vector<char> tmp(Decompress(pData));
-                std::swap(pData, tmp);
-            }
-            break;
-
-        case 6:
-        case 21:
-        case 5:
-        case 17:
-            //"Future Packet: "
-            Decrypt(&pData[0],nLength,crc_seed_);
-            break;
-
-        default:
-            //"Unrecorded OP found: "
-            break;
+{    
+    if(CrcTest(packet, crc_seed_)) {
+        Decrypt(packet, crc_seed_);
     }
 
-    ByteBuffer tmp(reinterpret_cast<uint8_t*>(&pData[0]), pData.size());
-    packet->swap(tmp);
+    if (packet->peekAt<uint8_t>(2) == 'x') {
+        Decompress(packet);
+    }
 
     //Logger().log(INFO) << "Incoming Packet: " << std::endl << tmp << std::endl;    
 }

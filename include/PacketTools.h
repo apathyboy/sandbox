@@ -38,6 +38,8 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet);
 void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed);
 void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
 
+uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
+bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
 void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength = 2);
 
 char* loadPacket(const std::string& name, unsigned short* length);
