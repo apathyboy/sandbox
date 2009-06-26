@@ -125,7 +125,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 	catch(...)
 	{
 		// Log any unknown opcodes.
-        Logger().log(ERR) << "Unknown Opcode Found - Group: " << packet->read<uint16_t>() << "  SWG: " << packet->read<uint32_t>();
+        Logger().log(ERR) << "Unidentified packet:" << std::endl << *packet;
 		SendOk();
 	}
 }
