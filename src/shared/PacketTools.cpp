@@ -161,6 +161,7 @@ void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
     deflateEnd(&stream);
 }
 
+
 void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
 {
     // Grab a reference to the internals of the packet. Generally
@@ -209,6 +210,7 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
     inflateEnd(&stream);
 }
 
+
 void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
 {
     std::vector<uint8_t> packet_data(packet->data(), packet->data() + packet->size());
@@ -248,6 +250,40 @@ void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed)
     ByteBuffer tmp(reinterpret_cast<uint8_t*>(&packet_data[0]), packet_data.size());
     packet->swap(tmp);
 }
+
+
+void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+{
+    // Grab a reference to the internals of the packet. Generally
+    // this should not be done but this is one of the special circumstances
+    // the raw() was implemented for. This allows us to work on
+    // the raw data with a non-standard library and minimize the amount
+    // of copying.
+    std::vector<uint8_t>& packet_data = packet->raw();  
+
+    // Determine the offset to begin decrypting data at.
+    uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
+
+    // Determine the block and byte counts to assist in processing.
+    uint16_t block_count = (packet_data.size() - offset - seedLength) / 4;
+    uint16_t byte_count  = (packet_data.size() - offset - seedLength) % 4;
+
+    // Grab the value at the current position and store it in the tmp
+    // holder before processing.
+    for (uint16_t count = 0; count < block_count; ++count) {
+        uint32_t* current = reinterpret_cast<uint32_t *>(&packet_data[offset + (count * 4)]);
+        
+        uint32_t tmp = *current;
+        *current    ^= seed;
+        seed         = tmp;
+    }
+
+    for (uint16_t count = 0; count < byte_count; ++count) {
+        uint8_t* current = &packet_data[offset + (block_count * 4) + count];
+        *current ^= seed;
+    }
+}
+
 
 void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
 {
@@ -364,6 +400,7 @@ uint8_t axtoi(const char * const hexString) {
   
 	return (intValue);
 }
+
 
 
 /** SWGEmu Code Below This Point
