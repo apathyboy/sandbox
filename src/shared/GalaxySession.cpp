@@ -121,6 +121,19 @@ uint32_t GalaxySession::crcSeed(uint32_t seed)
     return crc_seed_;
 }	
 
+void GalaxySession::sendHardcodedPacket(const std::string& name, bool compressed)
+{        
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
+    sendHardcodedPacket(packet, compressed);
+}
+
+void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
+{	
+    packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
+    sendToRemote(packet, true, compressed, true);
+
+    ++server_sequence_;;	
+}
 
 void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
@@ -214,33 +227,6 @@ void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool 
     if (crc)	  AppendCrc(message, crc_seed_);
 
     socket_server_->sendPacket(socket_address_, message);
-}
-
-
-/**	Send Hard Packet
- *	Sends a hardcoded packet to the specified client.
- */
-void GalaxySession::sendHardcodedPacket(const std::string& name, bool compressed)
-{        
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
-    sendHardcodedPacket(packet, compressed);
-}
-
-void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
-{	
-    packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
-    sendToRemote(packet, true, compressed, true);
-
-    ++server_sequence_;;	
-}
-
-void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool compressed)
-{	
-	// Add the server sequence to the packet and send the data.
-	*(uint16_t*)(packet+2) = (uint16_t)htons(server_sequence_);
-	SendPacket(packet, length, true, compressed, true);
-
-	++server_sequence_;	
 }
 
 

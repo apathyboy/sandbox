@@ -90,10 +90,6 @@ public:
 	 */
     void SendPacket(char *pData, uint16_t length, bool encrypt = false, bool compress = false, bool crc = true);
 
-	/**	Send Hard Packet
-	 *	Sends a hardcoded packet to the specified client.
-	 */
-	void SendHardPacket(char *packet, uint16_t length, bool compressed);
 
 	void Update(time_t currentTime);
 	void SendShuttleUpdate();
