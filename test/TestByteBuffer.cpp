@@ -129,6 +129,33 @@ TEST(ByteBufferTests, CanReadUnicodeStringWrittenToTheBuffer)
 	EXPECT_EQ(test_string, buffer.read<std::wstring>());
 }
 
+TEST(ByteBufferTests, UnicodeStringStoredAs16Bit)
+{
+	ByteBuffer buffer;
+	std::wstring test_string(L"testdata");
+
+	buffer.write<std::wstring>(test_string);
+
+    EXPECT_EQ(8, buffer.read<uint32_t>());
+
+    EXPECT_EQ('t', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('e', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('s', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('t', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('d', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('a', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('t', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+    EXPECT_EQ('a', buffer.read<uint8_t>());
+    EXPECT_EQ(0, buffer.read<uint8_t>());
+}
+
 TEST(ByteBufferTests, CanClearBufferData)
 {
 	ByteBuffer buffer;

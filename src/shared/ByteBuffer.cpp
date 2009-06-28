@@ -194,7 +194,7 @@ template<> ByteBuffer& ByteBuffer::write<std::wstring>(std::wstring data)
 	}
 	
 	for (size_t i = 0; i < length; ++i)
-		data_[write_position_+i] = static_cast<unsigned char>(data[i]);
+		*reinterpret_cast<wchar_t*>(&data_[write_position_+(i*2)]) = static_cast<uint8_t>(data[i]);
 
 	write_position_ += length * 2;
 
@@ -209,7 +209,9 @@ template<> const std::wstring ByteBuffer::read<std::wstring>(bool do_swap_endian
 		throw std::out_of_range("Read past end of buffer");
 	}
 
-	std::wstring data(data_.begin()+read_position_,data_.begin()+read_position_+length);
+    wchar_t* string_data = reinterpret_cast<wchar_t*>(&data_[read_position_]);
+
+	std::wstring data(string_data, string_data+length);
 	read_position_ += length * 2;
 
 	return data;
