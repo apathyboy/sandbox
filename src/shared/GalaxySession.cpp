@@ -122,13 +122,21 @@ uint32_t GalaxySession::crcSeed(uint32_t seed)
 }	
 
 
-void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
+void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
 {
     //Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
 
-    if (compress) Compress(packet);
-    if (encrypt)  Encrypt(packet, crc_seed_);    
-    if (crc)	  AppendCrc(packet, crc_seed_);
+    if (compress) {
+        Compress(packet);
+    }
+
+    if (encrypt) {
+        Encrypt(packet, crc_seed_);    
+    }
+
+    if (crc) {
+        AppendCrc(packet, crc_seed_);
+    }
 
     socket_server_->sendPacket(socket_address_, packet);
 }
@@ -139,6 +147,7 @@ void GalaxySession::sendPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool enc
  */
 void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
+    // Decrypt and decompress the incoming data as needed.
     if(CrcTest(packet, crc_seed_)) {
         Decrypt(packet, crc_seed_);
     }
@@ -148,15 +157,13 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
     }
 
 	unsigned int opcode;
+
 	// Try to handle the incoming packet.
-	try
-	{
+	try	{
 		// Search for the opcode handler function and pass it the packet data.
         handlerFunc handler = OpcodeFactory::GetOpcodeHandler(packet->data(), &opcode);
 		handler(this, packet->data(), packet->size());
-	}
-	catch(...)
-	{
+	} catch(...) {
 		// Log any unknown opcodes.
         Logger().log(ERR) << "Unidentified packet:" << std::endl << *packet;
 		SendOk();
@@ -194,7 +201,7 @@ void GalaxySession::sendHardcodedPacket(const std::string& name, bool compressed
 void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
 {	
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
-    sendPacket(packet, true, compressed, true);
+    sendToRemote(packet, true, compressed, true);
 
     ++server_sequence_;;	
 }
@@ -250,6 +257,7 @@ void GalaxySession::SendAck()
 
 void GalaxySession::SendOk()
 {
+    //std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
 	// Load in the raw packet data.
 	uint16_t length;
 	char *packet = loadPacket("packets\\OkPacket.txt", &length);
