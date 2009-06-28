@@ -232,12 +232,21 @@ void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool com
 
 void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moodId)
 {
+    std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
+
+    *message << static_cast<uint16_t>(length / 2) << text;
+    *message << *LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
+
+
+    std::tr1::shared_ptr<ByteBuffer> footer = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
+/*
+
 	// Load in the raw packet.
 	uint16_t headerSize;
 	char *header = loadPacket("packets\\Spatial\\PlayerChatHeader.txt", &headerSize);
 
 	uint16_t footerSize;
-	char *footer = loadPacket("packets\\Spatial\\PlayerChatFooter.txt", &footerSize);
+//	char *footer = loadPacket("packets\\Spatial\\PlayerChatFooter.txt", &footerSize);
 
 	char *packet = new char[headerSize+footerSize+length];
 
@@ -252,7 +261,8 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
 
 	SendHardPacket(packet, (headerSize + footerSize + length), true);
 
-	delete [] packet;		
+	delete [] packet;	
+    */
 }
 
 

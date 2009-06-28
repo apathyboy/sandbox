@@ -57,6 +57,11 @@ void ByteBuffer::swap(ByteBuffer& from)
 	std::swap(write_position_, from.write_position_);
 }
 
+void ByteBuffer::append(const ByteBuffer& from)
+{
+    write(from.data(), from.size());
+}
+
 void ByteBuffer::reserve(size_t length)
 {
   data_.reserve(length);

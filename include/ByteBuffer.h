@@ -39,7 +39,9 @@ public:
 	ByteBuffer			      (const ByteBuffer& from);
 	ByteBuffer& operator= (const ByteBuffer& from);
 
-	void swap (ByteBuffer& from);
+	void swap(ByteBuffer& from);
+
+    void append(const ByteBuffer& from);
 
 	template<typename T> ByteBuffer& write (T data);
 	template<typename T> ByteBuffer& writeAt (size_t offset, T data);

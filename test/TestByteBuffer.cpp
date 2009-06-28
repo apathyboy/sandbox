@@ -197,4 +197,22 @@ TEST(ByteBufferTests, CanWriteAtOffset)
     EXPECT_EQ(3532, buffer.peekAt<int>(4));
 }
 
+TEST(ByteBufferTests, CanAppendBuffers)
+{
+    ByteBuffer buffer1;
+    buffer1.write<int>(0);
+    buffer1.write<int>(1);
+    buffer1.write<int>(2);
+
+    ByteBuffer buffer2;
+    buffer2.write<int>(3);
+    buffer2.write<int>(4);
+    buffer2.write<int>(5);
+
+    buffer1.append(buffer2);
+
+    EXPECT_EQ(6 * sizeof(int), buffer1.size());
+    EXPECT_EQ(5, buffer1.peekAt<int>(5 * sizeof(int)));
+}
+
 }
