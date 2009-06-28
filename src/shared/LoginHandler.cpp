@@ -33,25 +33,17 @@ void HandleAuthentication(GalaxySession *session, const unsigned char *data, uns
 	// Send the server ip list.
 	//session->SendHardPacket("packets\\Login\\ServerIpList.txt", false);
 
-	unsigned short ipListSize;
-	char *ipList = loadPacket("packets\\Login\\ServerIpList.txt", &ipListSize);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Login\\ServerIpList.txt");
+    
+    std::string galaxy_ip = "127.0.0.1"; // @todo: Replace with a call to configuration.
+    
+    packet->writeAt<uint16_t>(18, static_cast<uint16_t>(galaxy_ip.length()));    
+    
+    std::vector<uint8_t>& packet_data = packet->raw();  
+    packet_data.insert(packet_data.begin() + 20, galaxy_ip.begin(), galaxy_ip.end());
+    
+    session->sendHardcodedPacket(packet, false);
 
-    std::string galaxyIp = "127.0.0.1"; // @todo replace with a call to configuration.
-
-	char *tmp = new char[ipListSize+galaxyIp.length()+4];
-	memcpy(tmp, ipList, 18); // Copy in the beginning of the packet.
-
-	// Add the connection id to the packet data.
-	unsigned int *ptr	= (unsigned int*)(tmp+18);
-	*ptr = (uint16_t)galaxyIp.length();
-
-	ptr = (unsigned int*)(tmp+20);
-	memcpy(ptr, galaxyIp.c_str(), galaxyIp.length());
-
-	memcpy(tmp+20+galaxyIp.length(), ipList+18, 30); // Copy in the end of the packet.
-
-	session->SendHardPacket(tmp, ipListSize+galaxyIp.length()+3, false);
-	
 	// Send the character list.
 	session->sendHardcodedPacket("packets\\Login\\ServerCharacterList.txt", false);
 }
