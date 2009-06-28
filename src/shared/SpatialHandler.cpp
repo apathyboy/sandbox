@@ -197,15 +197,14 @@ void HandleMood(GalaxySession *session, const unsigned char * data, unsigned sho
 	}
     
 	session->player()->mood(atoi(moodString));
-
-	unsigned short packetSize;
-	char *packet = loadPacket("packets\\ZoneInsertion\\Creo6.txt", &packetSize);
-
-	*(uint16_t *)(packet+99) = session->player()->mood();
-
-	session->SendHardPacket(packet, packetSize, true);
-
+    
     delete [] moodString;
+
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
+
+    // Insert the player mood into the packet.
+    packet->writeAt<uint16_t>(99, static_cast<uint16_t>(session->player()->mood()));
+    session->sendHardcodedPacket(packet, true);
 }
 
 void HandleEmote(GalaxySession *session, const unsigned char * data, unsigned short length)
