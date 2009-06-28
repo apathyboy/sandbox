@@ -189,12 +189,12 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
     inflateInit(&stream);
  
     // Prepare the stream for compression and then compress the data.
-    std::vector<uint8_t> compression_output(packet->size() + 21);
+    std::vector<uint8_t> compression_output(800);
  
     stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
     stream.avail_in  = packet->size() - offset - 3;
     stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
-    stream.avail_out = packet->size() + 20;
+    stream.avail_out = 800;
 
     inflate(&stream, Z_FINISH);
 
