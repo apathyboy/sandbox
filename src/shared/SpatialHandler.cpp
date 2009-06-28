@@ -241,10 +241,10 @@ void HandleEmote(GalaxySession *session, const unsigned char * data, unsigned sh
     emoteId = atoi(emoteString);
 	delete [] emoteString;
 
-	unsigned short packetSize;
-	char *packet = loadPacket("packets\\Spatial\\PlayerEmote.txt", &packetSize);
+    
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
 
-	*(uint16_t *)(packet+46) = emoteId;
-
-	session->SendHardPacket(packet, packetSize, true);
+    // Insert the player mood into the packet.
+    packet->writeAt<uint16_t>(46, emoteId);
+    session->sendHardcodedPacket(packet, true);
 }
