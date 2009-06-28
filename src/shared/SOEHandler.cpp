@@ -80,7 +80,7 @@ void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsign
 	    i++;
     
         std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
-		session->HandlePacket(buffer);
+		session->handlePacket(buffer);
 
         i+=segment_size;
         data+=segment_size;
@@ -130,7 +130,7 @@ void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsign
             data++;
             i++;
             std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
-			session->HandlePacket(buffer);
+			session->handlePacket(buffer);
             i+=segment_size;
             data+=segment_size;
         }
@@ -140,7 +140,7 @@ void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsign
     {
 		unsigned short segment_size = length-4;
         std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer(data, segment_size));
-		session->HandlePacket(buffer);
+		session->handlePacket(buffer);
     }
 }
 

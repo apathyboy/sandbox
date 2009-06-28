@@ -175,7 +175,7 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
         return;
 	}
 
-	session->HandlePacket(message);
+	session->handlePacket(message);
 }
 
 /** Send Packet function
@@ -201,7 +201,7 @@ void SocketServer::update()
         GalaxySessionMap::iterator end = sessions_.end();
         for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
             std::tr1::shared_ptr<GalaxySession> session = (*i).second;
-			session->Update(current_time_);
+			session->update(current_time_);
 		}
 
 	    last_cleanup_time_ = current_time_;

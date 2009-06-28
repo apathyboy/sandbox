@@ -77,28 +77,17 @@ public:
 
     void sendText(const std::wstring& text, uint64_t* moodId);
 
+	void handlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
 
-    /** Handle Packet function
-	 *	Processes any packets that are sent to the server.
-	 */
-	void HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
-
-	/** Send Packet function
-	 *	Sends a packet to the specified to the specified client.
-	 *
-	 *  @note: this is heavily borrowed from the swgemu team's similar function.
-	 */
-    void SendPacket(char *pData, uint16_t length, bool encrypt = false, bool compress = false, bool crc = true);
-
-
-	void Update(time_t currentTime);
-	void SendShuttleUpdate();
+	void update(time_t currentTime);
 
 private:
     /* Disable unused compiler generated methods */
     GalaxySession();
     GalaxySession(const GalaxySession&);
     GalaxySession& operator=(const GalaxySession&);    
+
+	void sendShuttleUpdate();
 
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;

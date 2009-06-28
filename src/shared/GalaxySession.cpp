@@ -182,11 +182,7 @@ void GalaxySession::sendText(const std::wstring& text, uint64_t* moodId)
     sendHardcodedPacket(message, true);
 }
 
-
-/** Handle Packet function
- *	Processes any packets that are sent to the server.
- */
-void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
+void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
     // Decrypt and decompress the incoming data as needed.
     if(CrcTest(packet, crc_seed_)) {
@@ -212,37 +208,19 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 }
 
 
-/** Send Packet function
- *	Sends a packet to the specified to the specified client.
- *
- *  @note: this is heavily borrowed from the swgemu team's similar function.
- */
-void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool compress, bool crc)
-{
-    std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	//Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
-
-    if (compress) Compress(message);
-    if (encrypt)  Encrypt(message, crc_seed_);    
-    if (crc)	  AppendCrc(message, crc_seed_);
-
-    socket_server_->sendPacket(socket_address_, message);
-}
-
-
-void GalaxySession::Update(time_t currentTime)
+void GalaxySession::update(time_t currentTime)
 {
 	static time_t lastShuttleTime = currentTime;
 
 	if ((currentTime - lastShuttleTime) >= (1*60)) // Replace the 1 with a call to configuration.
 	{
 		lastShuttleTime = currentTime;
-		SendShuttleUpdate();
+		sendShuttleUpdate();
 	}
 }
 
 
-void GalaxySession::SendShuttleUpdate()
+void GalaxySession::sendShuttleUpdate()
 {
 	if (shuttle_state_ == SHUTTLE_LANDED) {
 		sendHardcodedPacket("packets\\Actions\\KerenStarshipTakeoff.txt", false);
