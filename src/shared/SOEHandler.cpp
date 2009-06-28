@@ -153,10 +153,6 @@ void HandleDisconnect(GalaxySession *session, const unsigned char *data, unsigne
 
 void HandlePing(GalaxySession *session, const unsigned char *data, unsigned short length)
 {     
-	// Load in the raw packet data.
-	unsigned short size;
-	char *packet = loadPacket("packets\\SOE\\PingResponse.txt", &size);
-
-	// Send out the packet.
-	session->SendPacket(packet, size, true, false, true);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
+    session->sendToRemote(packet, true, false, true);
 }
