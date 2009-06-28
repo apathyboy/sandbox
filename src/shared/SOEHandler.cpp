@@ -44,17 +44,13 @@ void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned
 {     
 	// Get the tick value.
 	unsigned short tick  = *(unsigned short*)(data+2);
+    
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
 
-	// Load in the raw packet data.
-	unsigned short size;
-	char *packet = loadPacket("packets\\SOE\\NetStatus.txt", &size);
+    packet->writeAt<uint16_t>(2, tick);
 
-	// Insert the tick into the packet data.
-	unsigned short *ptr = (unsigned short*)(packet+2);
-	*ptr = tick;
 
-	// Send out the packet.
-	session->SendPacket(packet, size, true, true, false);
+    session->sendToRemote(packet, true, true, false);
 }
 
 void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsigned short length)
