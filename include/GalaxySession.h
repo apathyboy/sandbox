@@ -70,8 +70,10 @@ public:
     void sendHardcodedPacket(const std::string& name, bool compressed);
     void sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed);
 
-    void sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt = false, bool compress = false, bool crc = true);
+    void sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt = false, bool compress = false, bool crc = true) const;
 
+    void sendHeartbeat() const;
+    void sendAcknowledge() const;
 
 
     /** Handle Packet function
@@ -95,16 +97,6 @@ public:
 	 *	Sends text to the client and the clients in the nearby area.
 	 */
 	void SendText(wchar_t *text, uint16_t length, uint64_t *moodId);
-
-	/** Send Acknowledgement
-	 *	Sends an acknowledgement to the client that a message was received.
-	 */
-	void SendAck();
-
-	/** Send Ok
-	 *	Sends an OK statement to the client.
-	 */
-	void SendOk();
 
 	/** Prepare Packet
 	 *	Preapres an incoming packet for use. This decompresses

@@ -122,9 +122,9 @@ uint32_t GalaxySession::crcSeed(uint32_t seed)
 }	
 
 
-void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc)
+void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
-    //Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
+   // Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
 
     if (compress) {
         Compress(packet);
@@ -139,6 +139,21 @@ void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool e
     }
 
     socket_server_->sendPacket(socket_address_, packet);
+}
+
+void GalaxySession::sendHeartbeat() const
+{
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
+
+    sendToRemote(packet, true);
+}
+
+void GalaxySession::sendAcknowledge() const
+{
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
+    packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
+
+    sendToRemote(packet, true);
 }
 
 
@@ -166,7 +181,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 	} catch(...) {
 		// Log any unknown opcodes.
         Logger().log(ERR) << "Unidentified packet:" << std::endl << *packet;
-		SendOk();
+		sendHeartbeat();
 	}
 }
 
@@ -179,7 +194,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool compress, bool crc)
 {
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-	//Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
+//	Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
 
     if (compress) Compress(message);
     if (encrypt)  Encrypt(message, crc_seed_);    
@@ -239,33 +254,6 @@ void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moo
 
 	delete [] packet;		
 }
-
-
-void GalaxySession::SendAck()
-{
-	// Load in the raw packet data.
-	uint16_t length;
-	char *packet = loadPacket("packets\\SendAcknowledge.txt", &length);
-
-	// Add the sequence to the packet.
-	uint16_t *ptr = (uint16_t*)(packet+2);
-	*ptr = client_sequence_;
-
-	// Send out the packet.
-	SendPacket(packet, length, true);
-}
-
-void GalaxySession::SendOk()
-{
-    //std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
-	// Load in the raw packet data.
-	uint16_t length;
-	char *packet = loadPacket("packets\\OkPacket.txt", &length);
-
-	// Send out the packet.
-	SendPacket(packet, length, true);
-}
-
 
 
 void GalaxySession::Update(time_t currentTime)

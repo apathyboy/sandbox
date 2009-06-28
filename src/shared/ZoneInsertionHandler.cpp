@@ -24,7 +24,7 @@
 
 void HandleClientReady(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 }
 
 void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned short length)
@@ -34,12 +34,12 @@ void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned
 
 void HandleLoadTerrain(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 }
 
 void HandleSession(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	// Send the character options to the client.
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
@@ -47,7 +47,7 @@ void HandleSession(GalaxySession *session, const unsigned char * data, unsigned 
 
 void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	// Send the initial batch of packets.
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\UnkByteFlag.txt", false);

@@ -37,7 +37,7 @@ void HandleSpatial(GalaxySession *session, const unsigned char * data, unsigned 
 	{
 		// Log any unknown opcodes.
 		Logger().log(ERR) << "Unknown Spatial Opcode Found: " << *(opcode);	
-		session->SendOk();
+		session->sendHeartbeat();
 	}
 }
 
@@ -87,7 +87,7 @@ void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, un
 
 void HandleSit(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Sit.txt", false);
 	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
@@ -95,7 +95,7 @@ void HandleSit(GalaxySession *session, const unsigned char * data, unsigned shor
 
 void HandleStand(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Stand.txt", false);
 	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
@@ -103,7 +103,7 @@ void HandleStand(GalaxySession *session, const unsigned char * data, unsigned sh
 
 void HandleProne(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Prone.txt", false);
 	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
@@ -111,7 +111,7 @@ void HandleProne(GalaxySession *session, const unsigned char * data, unsigned sh
 
 void HandleKneel(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	session->sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Kneel.txt", false);
 	session->sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Kneel.txt",false);
@@ -120,7 +120,7 @@ void HandleKneel(GalaxySession *session, const unsigned char * data, unsigned sh
 
 void HandleSpatialChat(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	data += 42;
 	uint32_t textsize = *(uint32_t*)(data);
@@ -180,7 +180,7 @@ void HandleSpatialChat(GalaxySession *session, const unsigned char * data, unsig
 
 void HandleMood(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	data += 42;
 	uint32_t size = *(uint32_t*)(data);
@@ -212,7 +212,7 @@ void HandleMood(GalaxySession *session, const unsigned char * data, unsigned sho
 
 void HandleEmote(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
-	session->SendOk();
+	session->sendHeartbeat();
 
 	data += 42;
 	uint32_t size = *(uint32_t*)(data);

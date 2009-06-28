@@ -115,7 +115,7 @@ void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsign
 	data+=2;
 	session->clientSequence(*(unsigned short*)(data));
     
-	session->SendAck();
+	session->sendAcknowledge();
 
 	data+=2;
     if(data[0] == 0x00 && data[1] == 0x19)
