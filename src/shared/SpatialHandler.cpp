@@ -173,13 +173,6 @@ void HandleSpatialChat(GalaxySession *session, const unsigned char * data, unsig
 	
     std::wstring text(reinterpret_cast<const wchar_t*>(data), reinterpret_cast<const wchar_t*>(data)+(textsize/2));
     session->sendText(text, moodId);
-
-	/*
-    wchar_t *U_text = new wchar_t[(textsize)];
-	memcpy(U_text, data, textsize);
-
-	session->SendText(U_text, textsize, moodId);
-    */
 }
 
 

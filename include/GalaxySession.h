@@ -95,17 +95,6 @@ public:
 	 */
 	void SendHardPacket(char *packet, uint16_t length, bool compressed);
 
-	/**	Send Text
-	 *	Sends text to the client and the clients in the nearby area.
-	 */
-	void SendText(wchar_t *text, uint16_t length, uint64_t *moodId);
-
-	/** Prepare Packet
-	 *	Preapres an incoming packet for use. This decompresses
-	 *	and decrypts the packets and returns the formatted data.
-	 */
-    void PrepPacket(std::tr1::shared_ptr<ByteBuffer> packet);
-
 	void Update(time_t currentTime);
 	void SendShuttleUpdate();
 
