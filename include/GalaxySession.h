@@ -75,6 +75,8 @@ public:
     void sendHeartbeat() const;
     void sendAcknowledge() const;
 
+    void sendText(const std::wstring& text, uint64_t* moodId);
+
 
     /** Handle Packet function
 	 *	Processes any packets that are sent to the server.

@@ -124,7 +124,7 @@ uint32_t GalaxySession::crcSeed(uint32_t seed)
 
 void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
-   // Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
+    Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
 
     if (compress) {
         Compress(packet);
@@ -154,6 +154,21 @@ void GalaxySession::sendAcknowledge() const
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
 
     sendToRemote(packet, true);
+}
+
+void GalaxySession::sendText(const std::wstring& text, uint64_t* moodId)
+{
+    std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
+    message->write<std::wstring>(text);
+
+    message->append(*LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
+
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 2, moodId[1]);
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 4, moodId[2]);
+
+    sendHardcodedPacket(message, true);
+
+   // std::tr1::shared_ptr<ByteBuffer> footer = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
 }
 
 
@@ -194,7 +209,7 @@ void GalaxySession::HandlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 void GalaxySession::SendPacket(char *pData, uint16_t length, bool encrypt, bool compress, bool crc)
 {
     std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(reinterpret_cast<unsigned char*>(pData), length));
-//	Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
+	//Logger().log(INFO) << "Outgoing Packet: " << std::endl << *message << std::endl;
 
     if (compress) Compress(message);
     if (encrypt)  Encrypt(message, crc_seed_);    
@@ -232,37 +247,47 @@ void GalaxySession::SendHardPacket(char *packet, unsigned short length, bool com
 
 void GalaxySession::SendText(wchar_t *text, unsigned short length, uint64_t *moodId)
 {
+    /*
     std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
 
-    *message << static_cast<uint16_t>(length / 2) << text;
-    *message << *LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
+    std::string new_text;
+    new_text.insert(new_text.begin(), text, text + length);
+    Logger().log(INFO) << "Sending text:" << text << ": wstring version: " << new_text.c_str();
+    message << new_text;
 
+    message->append(*LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
 
-    std::tr1::shared_ptr<ByteBuffer> footer = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
-/*
+    message->writeAt<uint16_t>(50 + length + 2, moodId[1]);
+    message->writeAt<uint16_t>(50 + length + 4, moodId[2]);
+
+    sendHardcodedPacket(message, true);
+
+   // std::tr1::shared_ptr<ByteBuffer> footer = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt");
+   */
+
 
 	// Load in the raw packet.
 	uint16_t headerSize;
 	char *header = loadPacket("packets\\Spatial\\PlayerChatHeader.txt", &headerSize);
 
 	uint16_t footerSize;
-//	char *footer = loadPacket("packets\\Spatial\\PlayerChatFooter.txt", &footerSize);
+	char *footer = loadPacket("packets\\Spatial\\PlayerChatFooter.txt", &footerSize);
 
-	char *packet = new char[headerSize+footerSize+length];
+	char *packet = new char[headerSize+4+footerSize+length];
 
 	memcpy(packet, header, headerSize);
 
-	*(uint16_t*)(packet+46) = length/2;
+	*(uint32_t*)(packet+46) = length/2;
 	memcpy(packet+50, text, length);
 	memcpy(packet+50+length, footer, footerSize);
 
 	*(uint16_t *)(packet+50+length+2) = moodId[1];
 	*(uint16_t *)(packet+50+length+4) = moodId[2];
 
-	SendHardPacket(packet, (headerSize + footerSize + length), true);
+	SendHardPacket(packet, (headerSize + 4 + footerSize + length), true);
 
 	delete [] packet;	
-    */
+    
 }
 
 
