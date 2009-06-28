@@ -57,7 +57,6 @@ void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * da
 	// Begin loading the character.
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\PreloadCharacter.txt", false);
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\CreoCreate.txt", false);
-	//session->SendHardPacket("packets\\ZoneInsertion\\PrecloseClose.txt", false);
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo3.txt", true);
 	session->sendHardcodedPacket("packets\\ZoneInsertion\\Creo6.txt", true);
 
