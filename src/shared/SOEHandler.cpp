@@ -26,20 +26,12 @@ void HandleSessionRequest(GalaxySession *session, const unsigned char *data, uns
 	// Store the connection id.
 	session->connectionId(*(unsigned int*)(data+6));
 
-	// Load in the raw packet data.
-	unsigned short size;
-	char *packet = loadPacket("packets\\SOE\\SessionResponse.txt", &size);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
 
-	// Add the connection id to the packet data.
-	unsigned int *ptr	= (unsigned int*)(packet+2);
-	*ptr = session->connectionId();
+    packet->writeAt<uint32_t>(2, session->connectionId());
+    packet->writeAt<uint32_t>(6, htonl(session->crcSeed()));
 
-	// Add the crc seed to the packet data.
-	ptr	 = (unsigned int*)(packet+6);
-	*ptr = htonl(session->crcSeed());
-
-	// Send out the packet.
-	session->SendPacket(packet, size, false, false, false);
+    session->sendToRemote(packet, false, false, false);
 
 	// Send the connection packet.
 	if (session->server()->port() == 44453) 
