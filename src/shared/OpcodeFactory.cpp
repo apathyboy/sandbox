@@ -18,12 +18,13 @@
  */
 
 #include "OpcodeFactory.h"
+#include "ByteBuffer.h"
 #include "SOEHandler.h"
 #include "LoginHandler.h"
 #include "ZoneInsertionHandler.h"
 #include "SpatialHandler.h"
 
-handlerFunc OpcodeFactory::GetOpcodeHandler(const unsigned char *packet, unsigned int *opcode)
+handlerFunc OpcodeFactory::GetOpcodeHandler(std::tr1::shared_ptr<ByteBuffer> packet)
 {
 	// Get the map of opcode handlers.
 	OpcodeHandlers handlers = _buildOpcodeHandlerMap();
@@ -31,7 +32,7 @@ handlerFunc OpcodeFactory::GetOpcodeHandler(const unsigned char *packet, unsigne
 	// Prepare a container for the handler function.
 	handlerFunc handler = NULL;
 
-	OpcodeHandlers::iterator i = handlers.find(packet[1]);
+	OpcodeHandlers::iterator i = handlers.find(packet->peekAt<uint8_t>(1));
 
 	if (i != handlers.end())
 	{
@@ -40,18 +41,13 @@ handlerFunc OpcodeFactory::GetOpcodeHandler(const unsigned char *packet, unsigne
 
 	if (! handler)
 	{
-        //packet+=2;
-		opcode = (unsigned int*)(packet+2);
-		i = handlers.find(*opcode);
+        i = handlers.find(packet->peekAt<uint32_t>(2));
 
-		if (i != handlers.end())
-		{
-			handler = (*i).second;
-		}
-		else
-		{
-			throw new OpcodeHandlerException();
-		}
+        if (i != handlers.end()) {
+            handler = (*i).second;
+        } else {
+            throw new OpcodeHandlerException();
+        }
 	}
 
 	return handler;

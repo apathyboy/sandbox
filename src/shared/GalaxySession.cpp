@@ -193,12 +193,10 @@ void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
         Decompress(packet);
     }
 
-	unsigned int opcode;
-
 	// Try to handle the incoming packet.
 	try	{
 		// Search for the opcode handler function and pass it the packet data.
-        handlerFunc handler = OpcodeFactory::GetOpcodeHandler(packet->data(), &opcode);
+        handlerFunc handler = OpcodeFactory::GetOpcodeHandler(packet);
 		handler(this, packet->data(), packet->size());
 	} catch(...) {
 		// Log any unknown opcodes.

@@ -31,6 +31,7 @@ struct OpcodeHandlerException
 
 // Forward declaration of GalaxySession needed b the opcode handlers.
 class GalaxySession;
+class ByteBuffer;
 
 /** Define our handler function type.
  */
@@ -50,7 +51,7 @@ public:
 	 *	Returns the opcode handler by parsing the raw packet. This returns the
 	 *	handler for the first opcode found in the packet.
 	 */
-	static handlerFunc GetOpcodeHandler(const unsigned char *packet, unsigned int *opcode=NULL);
+	static handlerFunc GetOpcodeHandler(std::tr1::shared_ptr<ByteBuffer> packet);
  
 	/** Get Opcode Handler
 	 *	Returns the opcode handler based on the opcode passed in.
