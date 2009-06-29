@@ -208,6 +208,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\shared\Protocol.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\Protocol.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\shared\SocketServer.cpp"
 			>
 		</File>
