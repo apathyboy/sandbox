@@ -114,6 +114,14 @@ if exist "%VS_BASE_DIR%"\Common7\IDE\devenv.com (
   set "DEVENV=%VS_BASE_DIR%\Common7\IDE\vcexpress.exe"
 )
 
+
+
+set DOTNET_BASE_DIR=C:\WINDOWS\Microsoft.NET\Framework\v3.5
+if not exist "%DOTNET_BASE_DIR%" (
+  echo ***** Microsoft .NET Framework 3.5 required *****
+  exit /b 1
+)
+
 set "MSBUILD=%DOTNET_BASE_DIR%\msbuild.exe"
 
 call "%VS_BASE_DIR%"\VC\vcvarsall.bat
@@ -177,25 +185,25 @@ rem --- Builds the boost library for use with this project.                  ---
 echo BUILDING: Boost libraries - http://www.boost.org/ 
 
 rem Only build boost if it hasn't been built already.
-if exist "%PROJECT_BASE%"\msvc\%MSVC_VERSION%\lib\libboost_*.lib (
+if exist "%PROJECT_BASE%\msvc\%MSVC_VERSION%\lib\libboost_*.lib" (
   echo Boost libraries already built ... skipping
   echo.
   goto :eof
 )
 
 rem Build BJAM which is needed to build boost.
-if not exist "%PROJECT_BASE%"\boost\tools\jam\src\bin.ntx86\bjam.exe (
-  cd "%PROJECT_BASE%"\boost\tools\jam\src
-  cmd /c "%PROJECT_BASE%"\boost\tools\jam\src\build
+if not exist "%PROJECT_BASE%\boost\tools\jam\src\bin.ntx86\bjam.exe" (
+  cd "%PROJECT_BASE%\boost\tools\jam\src"
+  cmd /c "%PROJECT_BASE%\boost\tools\jam\src\build"
 )
 
 rem Build the boost libraries we need.
-cd %PROJECT_BASE%\boost
-cmd /c "%PROJECT_BASE%"\boost\tools\jam\src\bin.ntx86\bjam --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options --with-python --build-type=complete stage
+cd "%PROJECT_BASE%\boost"
+cmd /c "%PROJECT_BASE%\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options --with-python --build-type=complete stage
 
-if exist "%PROJECT_BASE%"\boost\stage\lib (
+if exist "%PROJECT_BASE%\boost\stage\lib" (
   echo Copying boost library files to final location
-  xcopy "%PROJECT_BASE%"\boost\stage\lib "%PROJECT_BASE%"\msvc\%MSVC_VERSION%\lib /s /e /Y /i
+  xcopy "%PROJECT_BASE%"\boost\stage\lib" "%PROJECT_BASE%\msvc\%MSVC_VERSION%\lib" /s /e /Y /i
 )
 goto :eof
 rem --- End of BUILD_BOOST -----------------------------------------------------
