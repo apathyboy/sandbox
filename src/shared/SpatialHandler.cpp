@@ -42,9 +42,47 @@ void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> mess
 	}
 }
 
+
 void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
     // @TODO: Write this.
+}
+
+
+void HandleSit(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Sit.txt", false);
+	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
+}
+
+
+void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Stand.txt", false);
+	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
+}
+
+
+void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Prone.txt", false);
+	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
+}
+
+
+void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Kneel.txt", false);
+	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Kneel.txt",false);
+
 }
 
 

@@ -33,6 +33,10 @@ class ByteBuffer;
 
 void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSit(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSpatial(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandlePositionUpdate(GalaxySession *session, const unsigned char *data, unsigned short length);
