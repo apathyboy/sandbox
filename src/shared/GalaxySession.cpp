@@ -137,7 +137,7 @@ void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet,
 
 void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
-    //Logger().log(INFO) << "Outgoing Packet" << std::endl << *packet << std::endl;
+    Logger().log(INFO) << "Outgoing Packet" << std::endl << *packet << std::endl;
 
     if (compress) {
         Compress(packet);

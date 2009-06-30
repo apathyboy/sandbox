@@ -91,23 +91,15 @@ void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
     session.sendHeartbeat();
 
     uint32_t textsize = message->peekAt<uint32_t>(42);
-    message->readPosition(46);
+    message->readPosition(66);
 
-    std::vector<uint64_t> mood;
+    std::vector<uint64_t> mood(5, 0);
 
-    for (int8_t i = 0; i < 5; ++i) {
-        mood[i] = message->read<uint16_t>();
-        message->read<uint16_t>();
-    }
-
-	if (mood[2] == 0)
-		mood[2] = (uint64_t)session.player()->mood();
-
-    std::vector<uint8_t>& packet_data = message->raw();  
+    std::vector<uint8_t>& packet_data = message->raw();
 
     std::wstring text(
         reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition()]), 
-        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition() + (textsize - 10)]));
+        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition() + ((textsize-10) * 2)]));
     session.sendText(text, &mood[0]);
 }
 

@@ -92,8 +92,6 @@ void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 
 void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {	
-    Logger().log(INFO) << "Datachannel 0:" << std::endl << *message;
-
     message->read<uint16_t>();
 
     session.clientSequence(message->read<uint16_t>());
@@ -125,7 +123,7 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
         }        
     } else {
     
-        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-7));
+        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-6));
 		session.handlePacket(segment);
     }
 }
