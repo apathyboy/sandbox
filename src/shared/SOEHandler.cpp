@@ -20,6 +20,7 @@
 #include "SOEHandler.h"
 #include "GalaxySession.h"
 #include "PacketTools.h"
+#include "Logger.h"
 
 void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 { 	
@@ -54,14 +55,10 @@ void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> me
 
 void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {       
-    //"Multi-SOE Packet: "
-    if (message->peek<uint16_t>() == 0x0003) {
-        message->read<uint16_t>();
-    }
-
+    message->read<uint16_t>();
 
     // Loop through the message until the compression bit is reached.
-    while (message->readPosition() < message->size() - 3)
+    while (message->readPosition() < message->size() - 4)
     {
         uint8_t segment_size = message->read<uint8_t>();
         
@@ -75,12 +72,11 @@ void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
                 message->read<uint8_t>();
             }
         }
-
     
         std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
-		session.handlePacket(segment);
-
         message->readPosition(message->readPosition() + segment_size);
+
+		session.handlePacket(segment);
     }
 }
 
@@ -96,12 +92,16 @@ void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 
 void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {	
+    Logger().log(INFO) << "Datachannel 0:" << std::endl << *message;
+
     message->read<uint16_t>();
 
     session.clientSequence(message->read<uint16_t>());
     session.sendAcknowledge();
 
-    if (message->peek<uint16_t>() == 0x0019) {
+    if (ntohs(message->peek<uint16_t>()) == 0x0019) {
+        message->read<uint16_t>();
+
         // Loop through the message until the compression bit is reached.
         while (message->readPosition() < message->size() - 3)
         {
@@ -117,7 +117,6 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
                     message->read<uint8_t>();
                 }
             }
-
     
             std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
 		    session.handlePacket(segment);
@@ -125,7 +124,9 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
             message->readPosition(message->readPosition() + segment_size);
         }        
     } else {
-		session.handlePacket(message);
+    
+        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-7));
+		session.handlePacket(segment);
     }
 }
 

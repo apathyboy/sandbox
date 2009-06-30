@@ -137,7 +137,7 @@ void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet,
 
 void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
-   // Logger().log(INFO) << "Outgoing Packet: " << std::endl << *packet << std::endl;
+    //Logger().log(INFO) << "Outgoing Packet" << std::endl << *packet << std::endl;
 
     if (compress) {
         Compress(packet);
@@ -198,8 +198,8 @@ void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 	// Try to handle the incoming packet.
 	try	{
 		// Search for the opcode handler function and pass it the packet data.
-        handlerFunc handler = OpcodeFactory::GetOpcodeHandler(packet);
-		handler(this, packet->data(), packet->size());
+        MessageHandler handler = OpcodeFactory::getOpcodeHandler(packet);
+		handler(*this, packet);
 	} catch(...) {
 		// Log any unknown opcodes.
         Logger().log(ERR) << "Unidentified packet:" << std::endl << *packet;
