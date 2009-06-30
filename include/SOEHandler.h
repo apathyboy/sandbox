@@ -33,12 +33,4 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 void HandleDisconnect(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandlePing(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
-void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleMultiPacket(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleAcknowledge(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleDataChannel(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleDisconnect(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandlePing(GalaxySession *session, const unsigned char *data, unsigned short length);
-
 #endif // OPENSWG_SOE_HANDLER_H

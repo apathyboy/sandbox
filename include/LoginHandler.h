@@ -27,6 +27,4 @@ class ByteBuffer;
 
 void HandleAuthentication(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
-void HandleAuthentication(GalaxySession *session, const unsigned char *data, unsigned short length);
-
 #endif // OPENSWG_LOGIN_HANDLER_H

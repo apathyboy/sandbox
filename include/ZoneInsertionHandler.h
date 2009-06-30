@@ -31,10 +31,4 @@ void HandleLoadTerrain(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 void HandleSession(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleZoneInsertionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
-void HandleClientReady(GalaxySession *session, const unsigned char * data, unsigned short length);
-void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned short length);
-void HandleLoadTerrain(GalaxySession *session, const unsigned char * data, unsigned short length);
-void HandleSession(GalaxySession *session, const unsigned char * data, unsigned short length);
-void HandleZoneInsertionRequest(GalaxySession *session, const unsigned char * data, unsigned short length);
-
 #endif // OPENSWG_ZONE_INSERTION_HANDLER_H

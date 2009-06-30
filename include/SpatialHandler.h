@@ -41,14 +41,4 @@ void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
-void HandleSpatial(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandlePositionUpdate(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleSit(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleStand(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleSpatialChat(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleKneel(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleProne(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleMood(GalaxySession *session, const unsigned char *data, unsigned short length);
-void HandleEmote(GalaxySession *session, const unsigned char *data, unsigned short length);
-
 #endif // OPENSWG_SPATIAL_HANDLER_H
