@@ -112,6 +112,49 @@ void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 }
 
 
+void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+    uint32_t size = message->peekAt<uint32_t>(42);
+    message->readPosition(46);
+
+    std::vector<int8_t> mood;
+
+    for (uint32_t i = 0; i < size; ++i) {
+        if (message->peek<int8_t>() == 0 || message->peek<int8_t>() == 32) break;
+
+        mood[i] = message->read<int8_t>();
+    }
+
+    session.player()->mood(atoi(&mood[0]));
+
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
+
+    // Insert the player mood into the packet.
+    packet->writeAt<uint16_t>(99, static_cast<uint16_t>(session.player()->mood()));
+    session.sendHardcodedPacket(packet, true);
+}
+
+
+void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+    uint32_t size = message->peekAt<uint32_t>(42);
+    message->readPosition(46);
+
+    message->read<uint16_t>();
+	uint16_t emoteId = message->read<uint16_t>();
+    
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
+
+    // Insert the player mood into the packet.
+    packet->writeAt<uint16_t>(46, emoteId);
+    session.sendHardcodedPacket(packet, true);
+}
+
+
 
 
 

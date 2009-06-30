@@ -38,6 +38,8 @@ void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSpatial(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandlePositionUpdate(GalaxySession *session, const unsigned char *data, unsigned short length);
