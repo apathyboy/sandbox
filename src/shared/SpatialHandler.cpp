@@ -88,35 +88,71 @@ void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 
 void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
+    Logger().log(INFO) << "Spatial Chat Packet" << std::endl << *message;
     session.sendHeartbeat();
 
     uint32_t textsize = message->peekAt<uint32_t>(42);
-    message->readPosition(66);
+    message->readPosition(46);
 
+    std::vector<int8_t> moodString(32, 0);
     std::vector<uint64_t> mood(5, 0);
+    uint8_t moodLength = 0;
+
+    int8_t moodPosition = 0;
+	int8_t j = 0;
+    while (moodPosition < 5) {
+        int8_t current = message->read<uint8_t>();
+
+        if (current == 32) {
+            ++moodLength;
+            message->read<int8_t>();
+
+            mood[moodPosition] = atoi(&moodString[0]);
+            moodString.empty();
+            ++moodPosition;
+	        j = 0;
+            continue;
+        }   
+
+        if (current == 0) {
+            continue;
+        }
+
+        ++moodLength;
+        moodString[j] = current;
+    }
+
+	if (mood[2] == 0)
+		mood[2] = (uint16_t)session.player()->mood();
 
     std::vector<uint8_t>& packet_data = message->raw();
 
+    while (message->readPosition() + ((textsize-10) * 2) >= message->size()) {
+        *message << 0x00;
+    }
+
     std::wstring text(
         reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition()]), 
-        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition() + ((textsize-10) * 2)]));
-    session.sendText(text, &mood[0]);
+        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition() + ((textsize-moodLength) * 2)]));
+    session.sendText(text, mood);
 }
 
 
 void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
+    Logger().log(INFO) << "Mood Packet" << std::endl << *message;
 	session.sendHeartbeat();
 
     int32_t size = message->peekAt<uint32_t>(42);
     message->readPosition(46);
 
-    std::vector<int8_t> mood(size);
+    std::vector<int8_t> mood(size+1, 0);
 
     for (int32_t i = 0; i < size; ++i) {
         if (message->peek<int8_t>() == 0 || message->peek<int8_t>() == 32) break;
 
-        mood[i] = static_cast<int8_t>(message->read<int16_t>());
+        mood[i] = message->read<int8_t>();
+        message->read<int8_t>();
     }
 
     session.player()->mood(atoi(&mood[0]));
@@ -131,13 +167,24 @@ void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message
 
 void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
+    Logger().log(INFO) << "Emote Packet" << std::endl << *message;
 	session.sendHeartbeat();
 
     uint32_t size = message->peekAt<uint32_t>(42);
     message->readPosition(46);
 
-    message->read<uint16_t>();
-	uint16_t emoteId = message->read<uint16_t>();
+    message->read<uint32_t>();
+
+    std::vector<int8_t> emote(size);
+
+    for (uint32_t i = 0; i < size; ++i) {
+        if (message->peek<int8_t>() == 0 || message->peek<int8_t>() == 32) break;
+
+        emote[i] = message->read<int8_t>();
+        message->read<int8_t>();
+    }
+
+	uint16_t emoteId = atoi(&emote[0]);
     
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
 

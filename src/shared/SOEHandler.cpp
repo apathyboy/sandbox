@@ -123,7 +123,7 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
         }        
     } else {
     
-        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-6));
+        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-7));
 		session.handlePacket(segment);
     }
 }

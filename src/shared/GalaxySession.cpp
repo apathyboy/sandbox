@@ -169,7 +169,7 @@ void GalaxySession::sendAcknowledge() const
     sendToRemote(packet, true);
 }
 
-void GalaxySession::sendText(const std::wstring& text, uint64_t* moodId)
+void GalaxySession::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 {
     std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
     message->write<std::wstring>(text);
@@ -193,7 +193,7 @@ void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
         Decompress(packet);
     }
 
-    //Logger().log(INFO) << "Incoming Message" << std::endl << *packet;
+    Logger().log(INFO) << "Incoming Message" << std::endl << *packet;
 
 	// Try to handle the incoming packet.
 	try	{

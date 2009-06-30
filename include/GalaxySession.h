@@ -75,7 +75,7 @@ public:
     void sendHeartbeat() const;
     void sendAcknowledge() const;
 
-    void sendText(const std::wstring& text, uint64_t* moodId);
+    void sendText(const std::wstring& text, std::vector<uint64_t> moodId);
 
 	void handlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
 
