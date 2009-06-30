@@ -29,6 +29,7 @@ void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffe
 void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length);
