@@ -20,7 +20,16 @@
 #ifndef OPENSWG_ZONE_INSERTION_HANDLER_H
 #define OPENSWG_ZONE_INSERTION_HANDLER_H
 
+#include <tr1/memory>
+
 class GalaxySession;
+class ByteBuffer;
+
+void HandleClientReady(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleLoadDone(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleLoadTerrain(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSession(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleZoneInsertionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleClientReady(GalaxySession *session, const unsigned char * data, unsigned short length);
 void HandleLoadDone(GalaxySession *session, const unsigned char * data, unsigned short length);
