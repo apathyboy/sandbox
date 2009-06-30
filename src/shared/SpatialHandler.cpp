@@ -42,6 +42,11 @@ void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> mess
 	}
 }
 
+void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+    // @TODO: Write this.
+}
+
 
 
 
@@ -71,6 +76,7 @@ void HandleSpatial(GalaxySession *session, const unsigned char * data, unsigned 
  */
 void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, unsigned short length)
 {
+    /*
 	signed short direction = *(signed short*)(data+44);
 
 	float x = *(float*)(data+46);
@@ -84,12 +90,10 @@ void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, un
 	c = (int)(z * 4);
 	
 	// Load in the raw packet data.
-	unsigned short size;
-	char *packet = loadPacket("packets\\Spatial\\PositionUpdate.txt", &size);
-
-	memcpy(packet+14, &a, 2);
-	memcpy(packet+16, &c, 2);
-	memcpy(packet+18, &b, 2);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PositionUpdate.txt");
+    packet->writeAt<int16_t>(14, a);
+    packet->writeAt<int16_t>(16, b);
+    packet->writeAt<int16_t>(18, c);
 
 	a = *(unsigned short*)(packet+20)+1;
 	b = 0;
@@ -105,6 +109,7 @@ void HandlePositionUpdate(GalaxySession *session, const unsigned char * data, un
 
 	//delete [] pData;
 //	session->IncrementServerSequence();	
+    */
 }
 
 void HandleSit(GalaxySession *session, const unsigned char * data, unsigned short length)

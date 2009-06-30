@@ -32,6 +32,7 @@ class GalaxySession;
 class ByteBuffer;
 
 void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSpatial(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandlePositionUpdate(GalaxySession *session, const unsigned char *data, unsigned short length);
