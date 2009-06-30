@@ -20,7 +20,14 @@
 #ifndef OPENSWG_OPCODE_FACTORY_H
 #define OPENSWG_OPCODE_FACTORY_H
 
+#ifdef _MSC_VER
+#include "stdint.h"
+#else
+#include <cstdint>
+#endif
+
 #include <map>
+#include <tr1/functional>
 
 /** Exception that is thrown by the OpcodeFactory class. Client code
  *	using the opcode handler should check to see if this exception is
@@ -32,6 +39,9 @@ struct OpcodeHandlerException
 // Forward declaration of GalaxySession needed b the opcode handlers.
 class GalaxySession;
 class ByteBuffer;
+
+typedef std::tr1::function<void (GalaxySession&, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+typedef std::map<uint32_t, MessageHandler> MessageHandlers;
 
 /** Define our handler function type.
  */
@@ -47,6 +57,9 @@ typedef std::map<unsigned int, handlerFunc> OpcodeHandlers;
 class OpcodeFactory
 {
 public:
+	static MessageHandler getOpcodeHandler(std::tr1::shared_ptr<ByteBuffer> packet);
+	static MessageHandler getOpcodeHandler(uint32_t opcode);
+
 	/** Get Opcode Handler
 	 *	Returns the opcode handler by parsing the raw packet. This returns the
 	 *	handler for the first opcode found in the packet.
@@ -59,6 +72,8 @@ public:
 	static handlerFunc GetOpcodeHandler(unsigned int* opcode);
 
 private:
+	static MessageHandlers _buildMessageHandlerMap();
+
 	static OpcodeHandlers _buildOpcodeHandlerMap();
 };
 
