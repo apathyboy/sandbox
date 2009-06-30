@@ -23,6 +23,28 @@
 #include "Logger.h"
 #include "PacketTools.h"
 
+void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{	
+    uint32_t opcode = message->peekAt<uint32_t>(30);
+    //unsigned int *opcode = (unsigned int*)(data+30);
+	// Try to handle the incoming packet.
+	try
+	{
+		// Search for the opcode handler function and pass it the packet data.
+		MessageHandler handler = OpcodeFactory::getOpcodeHandler(opcode);
+		handler(session, message);
+	}
+	catch(...)
+	{
+		// Log any unknown opcodes.
+        Logger().log(ERR) << "Unknown Spatial Opcode Found: " << opcode << std::endl << message;	
+		session.sendHeartbeat();
+	}
+}
+
+
+
+
 void HandleSpatial(GalaxySession *session, const unsigned char * data, unsigned short length)
 {	
     unsigned int *opcode = (unsigned int*)(data+30);
