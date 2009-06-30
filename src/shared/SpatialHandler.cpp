@@ -108,15 +108,15 @@ void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message
 {
 	session.sendHeartbeat();
 
-    uint32_t size = message->peekAt<uint32_t>(42);
+    int32_t size = message->peekAt<uint32_t>(42);
     message->readPosition(46);
 
     std::vector<int8_t> mood(size);
 
-    for (uint32_t i = 0; i < size; ++i) {
+    for (int32_t i = 0; i < size; ++i) {
         if (message->peek<int8_t>() == 0 || message->peek<int8_t>() == 32) break;
 
-        mood[i] = message->read<int8_t>();
+        mood[i] = static_cast<int8_t>(message->read<int16_t>());
     }
 
     session.player()->mood(atoi(&mood[0]));
