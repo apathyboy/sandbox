@@ -20,8 +20,12 @@
 #ifndef OPENSWG_LOGIN_HANDLER_H
 #define OPENSWG_LOGIN_HANDLER_H
 
+#include <tr1/memory>
+
 class GalaxySession;
+class ByteBuffer;
 
 void HandleAuthentication(GalaxySession *session, const unsigned char *data, unsigned short length);
+void HandleAuthentication(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 #endif // OPENSWG_LOGIN_HANDLER_H
