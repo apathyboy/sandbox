@@ -86,6 +86,33 @@ void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 }
 
 
+void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+    session.sendHeartbeat();
+
+    uint32_t textsize = message->peekAt<uint32_t>(42);
+    message->readPosition(46);
+
+    std::vector<uint64_t> mood;
+
+    for (int8_t i = 0; i < 5; ++i) {
+        mood[i] = message->read<uint16_t>();
+        message->read<uint16_t>();
+    }
+
+	if (mood[2] == 0)
+		mood[2] = (uint64_t)session.player()->mood();
+
+    std::vector<uint8_t>& packet_data = message->raw();  
+
+    std::wstring text(
+        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition()]), 
+        reinterpret_cast<const wchar_t*>(&packet_data[message->readPosition() + (textsize - 10)]));
+    session.sendText(text, &mood[0]);
+}
+
+
+
 
 
 void HandleSpatial(GalaxySession *session, const unsigned char * data, unsigned short length)
