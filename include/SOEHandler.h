@@ -20,7 +20,12 @@
 #ifndef OPENSWG_SOE_HANDLER_H
 #define OPENSWG_SOE_HANDLER_H
 
+#include <tr1/memory>
+
 class GalaxySession;
+class ByteBuffer;
+
+void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length);

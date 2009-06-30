@@ -21,6 +21,25 @@
 #include "GalaxySession.h"
 #include "PacketTools.h"
 
+void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{ 	
+    session.connectionId(message->peekAt<uint32_t>(6));
+
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
+
+    packet->writeAt<uint32_t>(2, session.connectionId());
+    packet->writeAt<uint32_t>(6, htonl(session.crcSeed()));
+
+    session.sendToRemote(packet, false, false, false);
+
+	// Send the connection packet.
+	if (session.server()->port() == 44453) 
+		session.sendHardcodedPacket("packets\\SOE\\LoginServer.txt", false);		
+	else
+		session.sendHardcodedPacket("packets\\SOE\\ConnectionServer.txt", false);
+}
+
+
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length)
 { 	
 	// Store the connection id.
