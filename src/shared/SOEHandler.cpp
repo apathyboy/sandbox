@@ -51,6 +51,36 @@ void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> me
     session.sendToRemote(packet, true, true, false);
 }
 
+void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{       
+    //"Multi-SOE Packet: "
+    message->read<uint16_t>();
+
+
+    // Loop through the message until the compression bit is reached.
+    while (message->readPosition() < message->size() - 3)
+    {
+        uint8_t segment_size = message->read<uint8_t>();
+        
+        // If the segment size is 255+ check the next bit, a 0x01 indicates
+        // over 255 and that the next bit should be added to the total
+        // size. If 0x00 then the next bit should be skipped.
+        if (segment_size == 0xFF) {
+            if (message->read<uint8_t>() == 0x01) {
+                segment_size += message->read<uint8_t>();
+            } else {
+                message->read<uint8_t>();
+            }
+        }
+
+    
+        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
+		session->handlePacket(buffer);
+
+        message->readPosition(message->readPosition() + segment_size);
+    }
+}
+
 
 
 
