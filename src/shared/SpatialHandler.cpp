@@ -119,7 +119,7 @@ void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message
     uint32_t size = message->peekAt<uint32_t>(42);
     message->readPosition(46);
 
-    std::vector<int8_t> mood;
+    std::vector<int8_t> mood(size);
 
     for (uint32_t i = 0; i < size; ++i) {
         if (message->peek<int8_t>() == 0 || message->peek<int8_t>() == 32) break;
