@@ -83,31 +83,31 @@ MessageHandlers OpcodeFactory::_buildMessageHandlerMap()
 	if (map.size() == 0)
 	{
         map[1]	= std::tr1::bind(&HandleSessionRequest, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
-		/*map[3]	= &HandleMultiPacket;
-		map[5]  = &HandleDisconnect;
-		map[6]  = &HandlePing;
-		map[7]	= &HandleNetStatus;
-		map[9]  = &HandleDataChannel;
-		map[21] = &HandleAcknowledge;
+		map[3]	= std::tr1::bind(&HandleMultiPacket, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[5]  = std::tr1::bind(&HandleDisconnect, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[6]  = std::tr1::bind(&HandlePing, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[7]	= std::tr1::bind(&HandleNetStatus, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[9]  = std::tr1::bind(&HandleDataChannel, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[21] = std::tr1::bind(&HandleAcknowledge, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
 
-		map[0x41131F96] = &HandleAuthentication;
+		map[0x41131F96] = std::tr1::bind(&HandleAuthentication, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
 	
-		map[0xD5899226] = &HandleSession;
-		map[0xB5098D76] = &HandleZoneInsertionRequest;
-		map[0x4C3D2CFA] = &HandleLoadTerrain;
-		map[0x43FD1C22] = &HandleLoadDone;
-		map[0xCA88FBAD] = &HandleClientReady;
-		map[0x48f493c5] = &HandleClientReady;
+		map[0xD5899226] = std::tr1::bind(&HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0xB5098D76] = std::tr1::bind(&HandleZoneInsertionRequest, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x4C3D2CFA] = std::tr1::bind(&HandleLoadTerrain, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x43FD1C22] = std::tr1::bind(&HandleLoadDone, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0xCA88FBAD] = std::tr1::bind(&HandleClientReady, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x48f493c5] = std::tr1::bind(&HandleClientReady, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
 
 		// Spatial
-		map[0x80ce5e46] = &HandleSpatial;
-		map[0xb719fa26] = &HandleSit;
-		map[0xa8a25c79] = &HandleStand;
-		map[0x7c8d63d4] = &HandleSpatialChat;
-		map[0xbd8d02af] = &HandleProne;
-		map[0x01b48b26] = &HandleKneel;
-		map[0x7759F35E] = &HandleMood;
-		map[0x32CF1BEE] = &HandleEmote;*/
+		map[0x80ce5e46] = std::tr1::bind(&HandleSpatial, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0xb719fa26] = std::tr1::bind(&HandleSit, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0xa8a25c79] = std::tr1::bind(&HandleStand, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x7c8d63d4] = std::tr1::bind(&HandleSpatialChat, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0xbd8d02af] = std::tr1::bind(&HandleProne, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x01b48b26] = std::tr1::bind(&HandleKneel, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x7759F35E] = std::tr1::bind(&HandleMood, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
+		map[0x32CF1BEE] = std::tr1::bind(&HandleEmote, std::tr1::placeholders::_1, std::tr1::placeholders::_2);
 	}
 
 	return map;
