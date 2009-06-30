@@ -26,6 +26,7 @@ class GalaxySession;
 class ByteBuffer;
 
 void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length);
 void HandleNetStatus(GalaxySession *session, const unsigned char *data, unsigned short length);

@@ -40,6 +40,20 @@ void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffe
 }
 
 
+void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{     
+    uint32_t tick = message->peekAt<uint32_t>(2);
+    
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
+
+    packet->writeAt<uint16_t>(2, tick);
+
+    session.sendToRemote(packet, true, true, false);
+}
+
+
+
+
 void HandleSessionRequest(GalaxySession *session, const unsigned char *data, unsigned short length)
 { 	
 	// Store the connection id.
