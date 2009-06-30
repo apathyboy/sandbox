@@ -75,10 +75,19 @@ void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 
     
         std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
-		session->handlePacket(buffer);
+		session.handlePacket(segment);
 
         message->readPosition(message->readPosition() + segment_size);
     }
+}
+
+
+void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{	
+    message->read<uint16_t>();
+
+    session.receivedSequence(message->read<uint16_t>());
+    session.clientSequence(message->read<uint16_t>());
 }
 
 
