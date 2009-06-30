@@ -51,6 +51,7 @@ void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> me
     session.sendToRemote(packet, true, true, false);
 }
 
+
 void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {       
     //"Multi-SOE Packet: "
@@ -128,11 +129,19 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
     }
 }
 
+
 void HandleDisconnect(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.serverSequence(0);
 	session.clientSequence(0);
 	session.receivedSequence(0);
+}
+
+
+void HandlePing(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+{     
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
+    session.sendToRemote(packet, true, false, true);
 }
 
 
