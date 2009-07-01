@@ -1,9 +1,10 @@
 /*
- * Legacy Sandbox Project - ByteBuffer.h
+ * OpenSWG Combat Upgrade Sandbox - ByteBuffer.h
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
+
 #ifndef BYTEBUFFER_H_
 #define BYTEBUFFER_H_
 

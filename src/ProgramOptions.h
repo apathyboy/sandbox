@@ -1,5 +1,5 @@
-/**
- * Legacy Sandbox Project - ProgramOptions.h
+/*
+ * OpenSWG Combat Upgrade Sandbox - ProgramOptions.h
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>

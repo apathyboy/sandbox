@@ -1,9 +1,10 @@
 /*
- * Legacy Sandbox Project - Protocol.h
+ * OpenSWG Combat Upgrade Sandbox - Protocol.h
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
+
 #ifndef PROTOCOL_H_
 #define PROTOCOL_H_
 

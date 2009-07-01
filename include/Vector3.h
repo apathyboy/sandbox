@@ -1,5 +1,5 @@
-/**
- * Legacy Sandbox Project - Vector3.h
+/*
+ * OpenSWG Combat Upgrade Sandbox - Vector3.h
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>

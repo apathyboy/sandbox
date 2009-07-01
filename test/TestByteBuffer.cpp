@@ -1,5 +1,5 @@
-/**
- * Legacy Sandbox Project - TestByteBuffer.cpp
+/*
+ * OpenSWG Combat Upgrade Sandbox - TestByteBuffer.cpp
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>

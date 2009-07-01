@@ -1,9 +1,9 @@
 /*
- * Legacy Sandbox Project - main.cpp
+ * OpenSWG Combat Upgrade Sandbox - main.cpp
  *
  * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
- */
+**/
 
 #include <iostream>
 #include <gtest/gtest.h>

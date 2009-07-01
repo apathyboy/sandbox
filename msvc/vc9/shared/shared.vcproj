@@ -156,6 +156,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\include\GalaxyServer.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\shared\Logger.cpp"
 			>
 		</File>
