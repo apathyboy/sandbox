@@ -32,30 +32,14 @@ public:
     explicit SocketServer(uint16_t port);
     virtual ~SocketServer();
 
-	/** Run Server function
-	 *	Begins listening on the port specified in the configuration until
-	 *	the server status is no longer set to running.
-	 */
 	void run();
 
-	/** Handle Incoming Data function
-	 *	Whenever information is received via the socket this function is
-	 *	called to handle the data.
-	 */
     void handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
 
-	/** Updates the server state.
-	 */
 	void update();
 
-	/** Send Packet function
-	 *	Sends a packet to the specified to the specified client.
-	 */
     void sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
 
-	/** Add New SWG Client function
-	 *	Adds a new swg client to the client map.
-	 */
     std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
 
     time_t currentTime() const;
@@ -70,9 +54,8 @@ private:
     SocketServer(const SocketServer&);
     SocketServer& operator=(const SocketServer&);
 
-	/** Updates the zone state.
-	 */
 	virtual void onUpdate() = 0;
+    virtual void initializeProtocol() = 0;
 
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
 
