@@ -209,3 +209,10 @@ void SocketServer::update()
 
     onUpdate();
 }
+    
+
+time_t SocketServer::currentTime() const
+{
+    return current_time_;
+}
+

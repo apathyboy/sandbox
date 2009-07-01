@@ -70,7 +70,12 @@ public:
 	 */
     std::tr1::shared_ptr<GalaxySession> addGalaxySession(const NetworkAddress& address);
 
+    time_t currentTime() const;
+
 	uint16_t port() const;
+protected:
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
+	GalaxySessionMap sessions_;	
 
 private:	
 	SocketServer();
@@ -82,9 +87,6 @@ private:
 	virtual void onUpdate() = 0;
 
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
-
-    typedef std::map<NetworkAddress, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
-	GalaxySessionMap sessions_;	
 
 	time_t current_time_;
     time_t last_cleanup_time_;
