@@ -32,7 +32,7 @@
 #include "ByteBuffer.h"
 #include "NetworkAddress.h"
 
-class GalaxySession;
+class Session;
 class SocketServerImpl;
 
 /** SocketServer class
@@ -68,14 +68,14 @@ public:
 	/** Add New SWG Client function
 	 *	Adds a new swg client to the client map.
 	 */
-    std::tr1::shared_ptr<GalaxySession> addGalaxySession(const NetworkAddress& address);
+    std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
 
     time_t currentTime() const;
 
 	uint16_t port() const;
 protected:
-    typedef std::map<NetworkAddress, std::tr1::shared_ptr<GalaxySession>> GalaxySessionMap;
-	GalaxySessionMap sessions_;	
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
+	SessionMap sessions_;	
 
 private:	
 	SocketServer();

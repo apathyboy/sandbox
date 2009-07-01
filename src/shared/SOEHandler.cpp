@@ -18,11 +18,11 @@
  */
 
 #include "SOEHandler.h"
-#include "GalaxySession.h"
+#include "Session.h"
 #include "PacketTools.h"
 #include "Logger.h"
 
-void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSessionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 { 	
     session.connectionId(message->peekAt<uint32_t>(6));
 
@@ -41,7 +41,7 @@ void HandleSessionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffe
 }
 
 
-void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleNetStatus(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {     
     uint32_t tick = message->peekAt<uint32_t>(2);
     
@@ -53,7 +53,7 @@ void HandleNetStatus(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> me
 }
 
 
-void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleMultiPacket(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {       
     message->read<uint16_t>();
 
@@ -81,7 +81,7 @@ void HandleMultiPacket(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 }
 
 
-void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleAcknowledge(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {	
     message->read<uint16_t>();
 
@@ -90,7 +90,7 @@ void HandleAcknowledge(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 }
 
 
-void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleDataChannel(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {	
     message->read<uint16_t>();
 
@@ -129,7 +129,7 @@ void HandleDataChannel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 }
 
 
-void HandleDisconnect(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleDisconnect(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.serverSequence(0);
 	session.clientSequence(0);
@@ -137,7 +137,7 @@ void HandleDisconnect(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> m
 }
 
 
-void HandlePing(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandlePing(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {     
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
     session.sendToRemote(packet, true, false, true);

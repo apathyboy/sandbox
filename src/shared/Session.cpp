@@ -17,15 +17,15 @@
  * *********************************************************************
  */
 
-#include "GalaxySession.h"
+#include "Session.h"
 #include "OpcodeFactory.h"
 #include "Logger.h"
 #include "PacketTools.h"
 
 /**	Galaxy Session constructor
- *	Takes the data necessary for the GalaxySession class to function.
+ *	Takes the data necessary for the Session class to function.
  */
-GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAddress& address)
+Session::Session(const SocketServer * const server, const NetworkAddress& address)
     : socket_address_(address)
     , socket_server_(server)
     , player_(new Player())
@@ -44,89 +44,89 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
 }
 
 
-const SocketServer * const GalaxySession::server() const
+const SocketServer * const Session::server() const
 {
     return socket_server_;
 }
 
 
-std::tr1::shared_ptr<Player> GalaxySession::player()
+std::tr1::shared_ptr<Player> Session::player()
 {
 	return player_;
 }
 
 
-uint16_t GalaxySession::serverSequence() const
+uint16_t Session::serverSequence() const
 {
     return server_sequence_;
 }
 
 
-uint16_t GalaxySession::serverSequence(uint16_t sequence)
+uint16_t Session::serverSequence(uint16_t sequence)
 {
     server_sequence_ = sequence;
     return server_sequence_;
 }
 
 
-uint16_t GalaxySession::clientSequence() const
+uint16_t Session::clientSequence() const
 {
     return client_sequence_;
 }
 
 
-uint16_t GalaxySession::clientSequence(uint16_t sequence)
+uint16_t Session::clientSequence(uint16_t sequence)
 {
     client_sequence_ = sequence;
     return client_sequence_;
 }
 
 
-uint16_t GalaxySession::receivedSequence() const
+uint16_t Session::receivedSequence() const
 {
     return received_sequence_;
 }
 
 
-uint16_t GalaxySession::receivedSequence(uint16_t sequence)
+uint16_t Session::receivedSequence(uint16_t sequence)
 {
     received_sequence_ = sequence;
     return received_sequence_;
 }
 
 
-uint32_t GalaxySession::connectionId() const
+uint32_t Session::connectionId() const
 {
     return connection_id_;
 }
 
 
-uint32_t GalaxySession::connectionId(uint32_t id)
+uint32_t Session::connectionId(uint32_t id)
 {
     connection_id_ = id;
     return connection_id_;
 }
 
 
-uint32_t GalaxySession::crcSeed() const
+uint32_t Session::crcSeed() const
 {
     return crc_seed_;
 }
 
 
-uint32_t GalaxySession::crcSeed(uint32_t seed)
+uint32_t Session::crcSeed(uint32_t seed)
 {
     crc_seed_ = seed;
     return crc_seed_;
 }	
 
-void GalaxySession::sendHardcodedPacket(const std::string& name, bool compressed)
+void Session::sendHardcodedPacket(const std::string& name, bool compressed)
 {        
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
     sendHardcodedPacket(packet, compressed);
 }
 
-void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
+void Session::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed)
 {	
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
     sendToRemote(packet, true, compressed, true);
@@ -134,7 +134,7 @@ void GalaxySession::sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet,
     ++server_sequence_;;	
 }
 
-void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
+void Session::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt, bool compress, bool crc) const
 {
     //Logger().log(INFO) << "Outgoing Packet" << std::endl << *packet << std::endl;
 
@@ -153,14 +153,14 @@ void GalaxySession::sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool e
     socket_server_->sendPacket(socket_address_, packet);
 }
 
-void GalaxySession::sendHeartbeat() const
+void Session::sendHeartbeat() const
 {
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
 
     sendToRemote(packet, true);
 }
 
-void GalaxySession::sendAcknowledge() const
+void Session::sendAcknowledge() const
 {
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
@@ -168,7 +168,7 @@ void GalaxySession::sendAcknowledge() const
     sendToRemote(packet, true);
 }
 
-void GalaxySession::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
+void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 {
     std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
     message->write<std::wstring>(text);
@@ -181,7 +181,7 @@ void GalaxySession::sendText(const std::wstring& text, std::vector<uint64_t> moo
     sendHardcodedPacket(message, true);
 }
 
-void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
+void Session::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 {
     // Decrypt and decompress the incoming data as needed.
     if(CrcTest(packet, crc_seed_)) {
@@ -207,6 +207,6 @@ void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 }
 
 
-void GalaxySession::update(time_t currentTime)
+void Session::update(time_t currentTime)
 {}
 

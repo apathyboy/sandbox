@@ -22,13 +22,13 @@
 
 #include <tr1/memory>
 
-class GalaxySession;
+class Session;
 class ByteBuffer;
 
-void HandleClientReady(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleLoadDone(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleLoadTerrain(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSession(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleZoneInsertionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleClientReady(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleLoadDone(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleLoadTerrain(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSession(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleZoneInsertionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 #endif // OPENSWG_ZONE_INSERTION_HANDLER_H

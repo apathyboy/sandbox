@@ -19,10 +19,10 @@
 
 #include <string>
 #include "LoginHandler.h"
-#include "GalaxySession.h"
+#include "Session.h"
 #include "PacketTools.h"
 
-void HandleAuthentication(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleAuthentication(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	// Send the station identifier
 	session.sendHardcodedPacket("packets\\Login\\StationIdentifier.txt", false);

@@ -19,7 +19,7 @@
 
 #include "ZoneServer.h"
 #include "Logger.h"
-#include "GalaxySession.h"
+#include "Session.h"
 
 enum ShuttleStates
 {
@@ -59,9 +59,9 @@ void ZoneServer::sendShuttleUpdate()
 		shuttle_state_ = SHUTTLE_LANDED;
 	}
 
-    GalaxySessionMap::iterator end = sessions_.end();
-    for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
-        std::tr1::shared_ptr<GalaxySession> session = (*i).second;
+    SessionMap::iterator end = sessions_.end();
+    for (SessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
+        std::tr1::shared_ptr<Session> session = (*i).second;
         session->sendHardcodedPacket(packet_name, false);
 	}
 }

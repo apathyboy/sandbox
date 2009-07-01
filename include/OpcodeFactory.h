@@ -36,11 +36,11 @@
 struct OpcodeHandlerException
 {};
 
-// Forward declaration of GalaxySession needed b the opcode handlers.
-class GalaxySession;
+// Forward declaration of Session needed b the opcode handlers.
+class Session;
 class ByteBuffer;
 
-typedef std::tr1::function<void (GalaxySession&, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+typedef std::tr1::function<void (Session&, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
 typedef std::map<uint32_t, MessageHandler> MessageHandlers;
 
 

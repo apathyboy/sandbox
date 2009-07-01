@@ -22,9 +22,9 @@
 
 #include <tr1/memory>
 
-class GalaxySession;
+class Session;
 class ByteBuffer;
 
-void HandleAuthentication(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleAuthentication(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 #endif // OPENSWG_LOGIN_HANDLER_H

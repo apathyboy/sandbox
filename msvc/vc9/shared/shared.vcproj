@@ -156,14 +156,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\shared\GalaxySession.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\GalaxySession.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\shared\Logger.cpp"
 			>
 		</File>
@@ -213,6 +205,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\Protocol.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\shared\Session.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\Session.h"
 			>
 		</File>
 		<File

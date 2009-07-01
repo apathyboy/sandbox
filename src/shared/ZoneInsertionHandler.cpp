@@ -18,29 +18,29 @@
  */
 
 #include "ZoneInsertionHandler.h"
-#include "GalaxySession.h"
+#include "Session.h"
 #include "PacketTools.h"
 
 
-void HandleClientReady(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleClientReady(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleLoadDone(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleLoadDone(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHardcodedPacket("packets\\ZoneInsertion\\LoadDone.txt", true);
 }
 
 
-void HandleLoadTerrain(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleLoadTerrain(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleSession(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSession(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 
@@ -49,7 +49,7 @@ void HandleSession(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> mess
 }
 
 
-void HandleZoneInsertionRequest(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleZoneInsertionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 

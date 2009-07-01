@@ -18,12 +18,12 @@
  */
 
 #include "SpatialHandler.h"
-#include "GalaxySession.h"
+#include "Session.h"
 #include "OpcodeFactory.h"
 #include "Logger.h"
 #include "PacketTools.h"
 
-void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSpatial(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {	
     uint32_t opcode = message->peekAt<uint32_t>(30);
     //unsigned int *opcode = (unsigned int*)(data+30);
@@ -43,13 +43,13 @@ void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> mess
 }
 
 
-void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandlePositionUpdate(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
     // @TODO: Write this.
 }
 
 
-void HandleSit(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSit(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 
@@ -58,7 +58,7 @@ void HandleSit(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
 }
 
 
-void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleStand(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 
@@ -67,7 +67,7 @@ void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 }
 
 
-void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleProne(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 
@@ -76,7 +76,7 @@ void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 }
 
 
-void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleKneel(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
 
@@ -86,7 +86,7 @@ void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> messag
 }
 
 
-void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSpatialChat(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
     Logger().log(INFO) << "Spatial Chat Packet" << std::endl << *message;
     session.sendHeartbeat();
@@ -138,7 +138,7 @@ void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> 
 }
 
 
-void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleMood(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
     Logger().log(INFO) << "Mood Packet" << std::endl << *message;
 	session.sendHeartbeat();
@@ -165,7 +165,7 @@ void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message
 }
 
 
-void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleEmote(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
     Logger().log(INFO) << "Emote Packet" << std::endl << *message;
 	session.sendHeartbeat();

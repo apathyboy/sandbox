@@ -12,9 +12,9 @@
 #include <tr1/memory>
 
 #include "ByteBuffer.h"
-#include "GalaxySession.h"
+#include "Session.h"
 
-typedef std::tr1::function<void (std::tr1::shared_ptr<GalaxySession>, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+typedef std::tr1::function<void (std::tr1::shared_ptr<Session>, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
 
 class Protocol
 {

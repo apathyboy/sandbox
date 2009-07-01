@@ -28,17 +28,17 @@
 
 #include <tr1/memory>
 
-class GalaxySession;
+class Session;
 class ByteBuffer;
 
-void HandleSpatial(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandlePositionUpdate(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSit(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleStand(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleProne(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleKneel(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSpatialChat(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleMood(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleEmote(GalaxySession& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSpatial(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandlePositionUpdate(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSit(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleStand(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleProne(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleKneel(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSpatialChat(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleMood(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleEmote(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
 
 #endif // OPENSWG_SPATIAL_HANDLER_H

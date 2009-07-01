@@ -35,13 +35,13 @@
 /** Galaxy Session class
  *	Manages the client -> server and server <- client session.
  */
-class GalaxySession
+class Session
 {
 public:
 	/**	Galaxy Session constructor
-	 *	Takes the data necessary for the GalaxySession class to function.
+	 *	Takes the data necessary for the Session class to function.
 	 */
-	GalaxySession(const SocketServer * const server, const NetworkAddress& address);
+	Session(const SocketServer * const server, const NetworkAddress& address);
 
     const SocketServer * const server() const;
     std::tr1::shared_ptr<Player> player();
@@ -77,9 +77,9 @@ public:
 
 private:
     /* Disable unused compiler generated methods */
-    GalaxySession();
-    GalaxySession(const GalaxySession&);
-    GalaxySession& operator=(const GalaxySession&);    
+    Session();
+    Session(const Session&);
+    Session& operator=(const Session&);    
 
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;

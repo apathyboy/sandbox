@@ -25,7 +25,7 @@
 
 #include "SocketServer.h"
 #include "Logger.h"
-#include "GalaxySession.h"
+#include "Session.h"
 #include "ByteBuffer.h"
 
 using boost::asio::ip::udp;
@@ -139,15 +139,15 @@ void SocketServer::run()
 	}
 }
 
-/** Add GalaxySession function
+/** Add Session function
  *	Adds a new swg client to the client map.
  */
-std::tr1::shared_ptr<GalaxySession> SocketServer::addGalaxySession(const NetworkAddress& address)
+std::tr1::shared_ptr<Session> SocketServer::addSession(const NetworkAddress& address)
 {
     Logger().log(INFO) << "Adding session for [" << address << "]";
 
 	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<GalaxySession> session(new GalaxySession(this, address));
+    std::tr1::shared_ptr<Session> session(new Session(this, address));
 	sessions_[address] = session;
 
 	// Return the new session.
@@ -161,15 +161,15 @@ std::tr1::shared_ptr<GalaxySession> SocketServer::addGalaxySession(const Network
 void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
 {    
 	// Attempt to find the client in the session map.
-	GalaxySessionMap::iterator i = sessions_.find(address);
+	SessionMap::iterator i = sessions_.find(address);
 
 	// If a session exists retrieve it from the session map otherwise verify
     // the message is a session request and create a new one.
-    std::tr1::shared_ptr<GalaxySession> session;
+    std::tr1::shared_ptr<Session> session;
 	if (i != sessions_.end()) {
         session = (*i).second;
 	} else if (message->peek<uint16_t>(true) == 0x0001) {        
-        session = addGalaxySession(address);
+        session = addSession(address);
 	} else {
         Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;	
         return;
@@ -198,9 +198,9 @@ void SocketServer::update()
     // Check to see if enough time has passed then update the session map.
 	if ((current_time_ - last_cleanup_time_) >= 1) {
 
-        GalaxySessionMap::iterator end = sessions_.end();
-        for (GalaxySessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
-            std::tr1::shared_ptr<GalaxySession> session = (*i).second;
+        SessionMap::iterator end = sessions_.end();
+        for (SessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
+            std::tr1::shared_ptr<Session> session = (*i).second;
 			session->update(current_time_);
 		}
 
