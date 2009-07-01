@@ -32,12 +32,6 @@
 #include "Player.h"
 #include "SocketServer.h"
 
-enum ShuttleStates
-{
-	SHUTTLE_LANDED		= 0,
-	SHUTTLE_DEPARTED	= 2
-};
-
 /** Galaxy Session class
  *	Manages the client -> server and server <- client session.
  */
@@ -87,13 +81,10 @@ private:
     GalaxySession(const GalaxySession&);
     GalaxySession& operator=(const GalaxySession&);    
 
-	void sendShuttleUpdate();
-
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;
     std::tr1::shared_ptr<Player> player_;
 
-	uint8_t  shuttle_state_;
 	uint16_t server_sequence_;
 	uint16_t client_sequence_;
 	uint16_t received_sequence_;

@@ -29,7 +29,6 @@ GalaxySession::GalaxySession(const SocketServer * const server, const NetworkAdd
     : socket_address_(address)
     , socket_server_(server)
     , player_(new Player())
-    , shuttle_state_(0)
     , server_sequence_(0)
     , client_sequence_(0)
     , received_sequence_(0)
@@ -209,24 +208,5 @@ void GalaxySession::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 
 
 void GalaxySession::update(time_t currentTime)
-{
-	static time_t lastShuttleTime = currentTime;
+{}
 
-	if ((currentTime - lastShuttleTime) >= (1*60)) // Replace the 1 with a call to configuration.
-	{
-		lastShuttleTime = currentTime;
-		sendShuttleUpdate();
-	}
-}
-
-
-void GalaxySession::sendShuttleUpdate()
-{
-	if (shuttle_state_ == SHUTTLE_LANDED) {
-		sendHardcodedPacket("packets\\Actions\\KerenStarshipTakeoff.txt", false);
-		shuttle_state_ = SHUTTLE_DEPARTED;
-	} else {
-		sendHardcodedPacket("packets\\Actions\\KerenStarshipLand.txt", false);
-		shuttle_state_ = SHUTTLE_LANDED;
-	}
-}

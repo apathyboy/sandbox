@@ -31,4 +31,7 @@ private:
     ZoneServer& operator=(const ZoneServer&);
 
     virtual void onUpdate();
+    void sendShuttleUpdate();
+    
+	uint8_t  shuttle_state_;
 };
