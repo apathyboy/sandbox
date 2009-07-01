@@ -115,6 +115,8 @@ SocketServer::~SocketServer()
  */
 void SocketServer::run()
 {	
+    initializeProtocol();
+
     pimpl_->listen();
 	Logger().log(INFO) << "Server listening on port [" << pimpl_->port() << "]";
 
