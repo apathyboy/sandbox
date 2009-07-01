@@ -13,13 +13,17 @@ public:
     explicit ZoneServer(uint16_t port);
     virtual ~ZoneServer();
 
+    uint8_t shuttleState() const;
+    void    shuttleState(uint8_t state);
+    void    sendShuttleUpdate();
+
 private:
 	ZoneServer();
     ZoneServer(const ZoneServer&);
     ZoneServer& operator=(const ZoneServer&);
 
     virtual void onUpdate();
-    void sendShuttleUpdate();
-    
+    virtual void initializeProtocol();
+        
 	uint8_t  shuttle_state_;
 };
