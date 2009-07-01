@@ -19,4 +19,5 @@ private:
     LoginServer& operator=(const LoginServer&);
 
 	virtual void onUpdate();
+    virtual void initializeProtocol();
 };

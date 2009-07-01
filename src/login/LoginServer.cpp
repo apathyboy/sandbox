@@ -17,3 +17,6 @@ LoginServer::~LoginServer()
 
 void LoginServer::onUpdate()
 {}
+
+void LoginServer::initializeProtocol()
+{}
