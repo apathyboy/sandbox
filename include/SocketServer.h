@@ -19,6 +19,7 @@
 
 #include "ByteBuffer.h"
 #include "NetworkAddress.h"
+#include "Protocol.h"
 
 class Session;
 class SocketServerImpl;
@@ -58,6 +59,8 @@ private:
     virtual void initializeProtocol() = 0;
 
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
+
+    Protocol protocol_;
 
 	time_t current_time_;
     time_t last_cleanup_time_;

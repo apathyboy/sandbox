@@ -15,17 +15,17 @@ Protocol::~Protocol()
 {}
 
 
-void Protocol::addHandler(uint32_t id, MessageHandler handler)
+void Protocol::addHandler(uint32_t id, Protocol::PacketHandler handler)
 {
-    message_handlers_.insert(std::make_pair<uint32_t, MessageHandler>(id, handler));
+    message_handlers_.insert(std::make_pair<uint32_t, PacketHandler>(id, handler));
 }
 
 
-MessageHandler Protocol::find(uint32_t id)
+Protocol::PacketHandler Protocol::find(uint32_t id)
 {
-    MessageHandler handler = NULL;
+    PacketHandler handler = NULL;
 
-    MessageHandlerMap::iterator i = message_handlers_.find(id);
+    PacketHandlerMap::iterator i = message_handlers_.find(id);
     if (i != message_handlers_.end()) {
         handler = (*i).second;
     }

@@ -5,8 +5,8 @@
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
 
-#ifndef OPENSWG_GALAXY_SESSION_H
-#define OPENSWG_GALAXY_SESSION_H
+#ifndef SESSION_H_
+#define SESSION_H_
 
 #ifdef _MSC_VER
 #include "stdint.h"
@@ -17,6 +17,7 @@
 #include <tr1/memory>
 
 #include "ByteBuffer.h"
+#include "NetworkAddress.h"
 #include "Player.h"
 #include "SocketServer.h"
 
@@ -80,4 +81,4 @@ private:
     uint32_t crc_seed_;
 };
 
-#endif // OPENSWG_GALAXY_SESSION_H
+#endif // SESSION_H_

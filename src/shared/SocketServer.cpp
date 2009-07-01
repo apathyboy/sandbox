@@ -104,6 +104,7 @@ private:
  */
 SocketServer::SocketServer(uint16_t port)
     : pimpl_(new SocketServerImpl(this, port))
+    , protocol_()
 {}
 
 SocketServer::~SocketServer()

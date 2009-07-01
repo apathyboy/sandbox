@@ -8,30 +8,38 @@
 #ifndef PROTOCOL_H_
 #define PROTOCOL_H_
 
+#ifdef _MSC_VER
+#include "stdint.h"
+#else
+#include <cstdint>
+#endif
+
 #include <map>
 #include <tr1/functional>
 #include <tr1/memory>
 
-#include "ByteBuffer.h"
-#include "Session.h"
-
-typedef std::tr1::function<void (std::tr1::shared_ptr<Session>, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+class ByteBuffer;
+class Session;
 
 class Protocol
 {
+public:
+    typedef std::tr1::function<void (std::tr1::shared_ptr<Session>, std::tr1::shared_ptr<ByteBuffer>)> PacketHandler;
+
+public:
     Protocol();
     ~Protocol();
 
-    void addHandler(uint32_t id, MessageHandler handler);
+    void addHandler(uint32_t id, PacketHandler handler);
     
-    MessageHandler find(uint32_t id);
+    PacketHandler find(uint32_t id);
 
 private:
     Protocol(const Protocol&);
     Protocol& operator=(const Protocol&);
 
-    typedef std::map<uint32_t, MessageHandler> MessageHandlerMap;
-    MessageHandlerMap message_handlers_;
+    typedef std::map<uint32_t, PacketHandler> PacketHandlerMap;
+    PacketHandlerMap message_handlers_;
 };
 
 
