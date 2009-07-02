@@ -24,7 +24,7 @@ class Session;
 class Protocol
 {
 public:
-    typedef std::tr1::function<void (std::tr1::shared_ptr<Session>, std::tr1::shared_ptr<ByteBuffer>)> PacketHandler;
+    typedef std::tr1::function<void (Session& session, std::tr1::shared_ptr<ByteBuffer>)> PacketHandler;
 
 public:
     Protocol();
@@ -33,6 +33,7 @@ public:
     void addHandler(uint32_t id, PacketHandler handler);
     
     PacketHandler find(uint32_t id);
+    PacketHandler find(std::tr1::shared_ptr<ByteBuffer> message);
 
 private:
     Protocol(const Protocol&);
