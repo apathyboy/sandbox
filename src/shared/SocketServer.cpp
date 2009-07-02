@@ -138,7 +138,7 @@ std::tr1::shared_ptr<Session> SocketServer::addSession(const NetworkAddress& add
     Logger().log(INFO) << "Adding session for [" << address << "]";
 
 	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<Session> session(new Session(this, address));
+    std::tr1::shared_ptr<Session> session(new Session(this, address, protocol_));
 	sessions_[address] = session;
 
 	// Return the new session.

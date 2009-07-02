@@ -20,6 +20,7 @@
 #include "NetworkAddress.h"
 #include "Player.h"
 #include "SocketServer.h"
+#include "Protocol.h"
 
 /** Galaxy Session class
  *	Manages the client -> server and server <- client session.
@@ -30,7 +31,7 @@ public:
 	/**	Galaxy Session constructor
 	 *	Takes the data necessary for the Session class to function.
 	 */
-	Session(const SocketServer * const server, const NetworkAddress& address);
+	Session(const SocketServer * const server, const NetworkAddress& address, Protocol& protocol);
 
     const SocketServer * const server() const;
     std::tr1::shared_ptr<Player> player();
@@ -73,6 +74,7 @@ private:
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;
     std::tr1::shared_ptr<Player> player_;
+    Protocol& protocol_;
 
 	uint16_t server_sequence_;
 	uint16_t client_sequence_;

@@ -50,6 +50,8 @@ protected:
     typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
 	SessionMap sessions_;	
 
+    Protocol protocol_;
+
 private:	
 	SocketServer();
     SocketServer(const SocketServer&);
@@ -59,8 +61,6 @@ private:
     virtual void initializeProtocol() = 0;
 
     std::tr1::shared_ptr<SocketServerImpl> pimpl_;
-
-    Protocol protocol_;
 
 	time_t current_time_;
     time_t last_cleanup_time_;

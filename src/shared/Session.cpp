@@ -5,6 +5,8 @@
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
 
+#include <exception>
+
 #include "Session.h"
 #include "OpcodeFactory.h"
 #include "Logger.h"
@@ -13,10 +15,11 @@
 /**	Galaxy Session constructor
  *	Takes the data necessary for the Session class to function.
  */
-Session::Session(const SocketServer * const server, const NetworkAddress& address)
+Session::Session(const SocketServer * const server, const NetworkAddress& address, Protocol& protocol)
     : socket_address_(address)
     , socket_server_(server)
     , player_(new Player())
+    , protocol_(protocol)
     , server_sequence_(0)
     , client_sequence_(0)
     , received_sequence_(0)
@@ -182,14 +185,11 @@ void Session::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
 
     Logger().log(INFO) << "Incoming Message" << std::endl << *packet;
 
-	// Try to handle the incoming packet.
-	try	{
-		// Search for the opcode handler function and pass it the packet data.
-        MessageHandler handler = OpcodeFactory::getOpcodeHandler(packet);
-		handler(*this, packet);
-	} catch(...) {
-		// Log any unknown opcodes.
-        Logger().log(ERR) << "Unidentified packet:" << std::endl << *packet;
+    try {
+	    Protocol::PacketHandler handler = protocol_.find(packet);
+        handler(*this, packet);
+    } catch (std::exception& e) {
+        Logger().log(ERR) << e.what() << std::endl << *packet;
 		sendHeartbeat();
 	}
 }
