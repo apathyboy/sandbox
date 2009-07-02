@@ -232,27 +232,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\shared\SpatialHandler.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\SpatialHandler.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\include\msvc\stdint.h"
 			>
 		</File>
 		<File
 			RelativePath="..\..\..\include\Vector3.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\shared\ZoneInsertionHandler.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\ZoneInsertionHandler.h"
 			>
 		</File>
 	</Files>

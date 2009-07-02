@@ -148,6 +148,22 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\src\zone\SpatialHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\SpatialHandler.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\zone\ZoneInsertionHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\ZoneInsertionHandler.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\zone\ZoneServer.cpp"
 			>
 		</File>
