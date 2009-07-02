@@ -35,3 +35,11 @@ void HandleAuthentication(Session& session, std::tr1::shared_ptr<ByteBuffer> mes
 	session.sendHardcodedPacket("packets\\Login\\ServerCharacterList.txt", false);
 }
 
+void HandleSession(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+{
+	session.sendHeartbeat();
+
+	// Send the character options to the client.
+	session.sendHardcodedPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
+}
+

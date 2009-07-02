@@ -28,15 +28,6 @@ void HandleLoadTerrain(Session& session, std::tr1::shared_ptr<ByteBuffer> messag
 }
 
 
-void HandleSession(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
-{
-	session.sendHeartbeat();
-
-	// Send the character options to the client.
-	session.sendHardcodedPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
-}
-
-
 void HandleZoneInsertionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 {
 	session.sendHeartbeat();
