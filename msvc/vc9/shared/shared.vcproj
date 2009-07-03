@@ -176,14 +176,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\shared\OpcodeFactory.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\OpcodeFactory.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\shared\PacketTools.cpp"
 			>
 		</File>

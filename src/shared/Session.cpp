@@ -8,7 +8,6 @@
 #include <exception>
 
 #include "Session.h"
-#include "OpcodeFactory.h"
 #include "Logger.h"
 #include "PacketTools.h"
 

@@ -7,7 +7,6 @@
 
 #include "SpatialHandler.h"
 #include "Session.h"
-#include "OpcodeFactory.h"
 #include "Logger.h"
 #include "PacketTools.h"
 
@@ -19,8 +18,8 @@ void HandleSpatial(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
 	try
 	{
 		// Search for the opcode handler function and pass it the packet data.
-		MessageHandler handler = OpcodeFactory::getOpcodeHandler(opcode);
-		handler(session, message);
+	//	MessageHandler handler = OpcodeFactory::getOpcodeHandler(opcode);
+	//	handler(session, message);
 	}
 	catch(...)
 	{
