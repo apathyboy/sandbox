@@ -62,6 +62,11 @@ void ZoneServer::sendShuttleUpdate()
 }
 
 
+void ZoneServer::onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+{
+}
+
+
 void ZoneServer::onUpdate()
 {
     time_t current_time = currentTime();

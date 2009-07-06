@@ -14,11 +14,19 @@ LoginServer::LoginServer(uint16_t port)
 : SocketServer(port)
 {}
 
+
 LoginServer::~LoginServer()
 {}
 
+
+void LoginServer::onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+{
+}
+
+
 void LoginServer::onUpdate()
 {}
+
 
 void LoginServer::initializeProtocol()
 {
@@ -34,3 +42,4 @@ void LoginServer::initializeProtocol()
 
     protocol_.addHandler(0xD5899226, std::tr1::bind(&HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
+

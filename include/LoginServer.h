@@ -18,6 +18,7 @@ private:
     LoginServer(const LoginServer&);
     LoginServer& operator=(const LoginServer&);
 
+    virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
 	virtual void onUpdate();
     virtual void initializeProtocol();
 };

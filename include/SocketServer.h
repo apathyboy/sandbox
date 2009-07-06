@@ -57,6 +57,7 @@ private:
     SocketServer(const SocketServer&);
     SocketServer& operator=(const SocketServer&);
 
+    virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) = 0;
 	virtual void onUpdate() = 0;
     virtual void initializeProtocol() = 0;
 
