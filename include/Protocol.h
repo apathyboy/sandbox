@@ -21,26 +21,26 @@
 class ByteBuffer;
 class Session;
 
+typedef std::tr1::function<void (Session& session, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+
+//template<typename Identifier, class Handler = MessageHandler>
 class Protocol
 {
-public:
-    typedef std::tr1::function<void (Session& session, std::tr1::shared_ptr<ByteBuffer>)> PacketHandler;
-
 public:
     Protocol();
     ~Protocol();
 
-    void addHandler(uint32_t id, PacketHandler handler);
+    void addHandler(uint32_t id, MessageHandler handler);
     
-    PacketHandler find(uint32_t id);
-    PacketHandler find(std::tr1::shared_ptr<ByteBuffer> message);
+    MessageHandler find(uint32_t id);
+    MessageHandler find(std::tr1::shared_ptr<ByteBuffer> message);
 
 private:
     Protocol(const Protocol&);
     Protocol& operator=(const Protocol&);
 
-    typedef std::map<uint32_t, PacketHandler> PacketHandlerMap;
-    PacketHandlerMap message_handlers_;
+    typedef std::map<uint32_t, MessageHandler> MessageHandlerMap;
+    MessageHandlerMap message_handlers_;
 };
 
 

@@ -185,7 +185,7 @@ void Session::handlePacket(std::tr1::shared_ptr<ByteBuffer> packet)
     Logger().log(INFO) << "Incoming Message" << std::endl << *packet;
 
     try {
-	    Protocol::PacketHandler handler = protocol_.find(packet);
+	    MessageHandler handler = protocol_.find(packet);
         handler(*this, packet);
     } catch (std::exception& e) {
         Logger().log(ERR) << e.what() << std::endl << *packet;

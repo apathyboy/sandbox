@@ -18,17 +18,17 @@ Protocol::~Protocol()
 {}
 
 
-void Protocol::addHandler(uint32_t id, Protocol::PacketHandler handler)
+void Protocol::addHandler(uint32_t id, MessageHandler handler)
 {
-    message_handlers_.insert(std::make_pair<uint32_t, PacketHandler>(id, handler));
+    message_handlers_.insert(std::make_pair<uint32_t, MessageHandler>(id, handler));
 }
 
 
-Protocol::PacketHandler Protocol::find(uint32_t id)
+MessageHandler Protocol::find(uint32_t id)
 {
-    PacketHandler handler = NULL;
+    MessageHandler handler = NULL;
 
-    PacketHandlerMap::iterator i = message_handlers_.find(id);
+    MessageHandlerMap::iterator i = message_handlers_.find(id);
     if (i != message_handlers_.end()) {
         handler = (*i).second;
     }
@@ -36,11 +36,11 @@ Protocol::PacketHandler Protocol::find(uint32_t id)
     return handler;
 }
 
-Protocol::PacketHandler Protocol::find(std::tr1::shared_ptr<ByteBuffer> packet)
+MessageHandler Protocol::find(std::tr1::shared_ptr<ByteBuffer> packet)
 {
-	PacketHandler handler = NULL;
+	MessageHandler handler = NULL;
 
-	PacketHandlerMap::iterator i = message_handlers_.find(packet->peekAt<uint8_t>(1));
+	MessageHandlerMap::iterator i = message_handlers_.find(packet->peekAt<uint8_t>(1));
 
 	if (i != message_handlers_.end())
 	{
