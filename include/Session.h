@@ -31,7 +31,7 @@ public:
 	/**	Galaxy Session constructor
 	 *	Takes the data necessary for the Session class to function.
 	 */
-	Session(const SocketServer * const server, const NetworkAddress& address, Protocol& protocol);
+	Session(const SocketServer * const server, const NetworkAddress& address, Protocol<uint32_t>& protocol);
 
     const SocketServer * const server() const;
     std::tr1::shared_ptr<Player> player();
@@ -73,7 +73,7 @@ private:
 	NetworkAddress socket_address_;
 	const SocketServer* socket_server_;
     std::tr1::shared_ptr<Player> player_;
-    Protocol& protocol_;
+    Protocol<uint32_t>& protocol_;
 
 	uint16_t server_sequence_;
 	uint16_t client_sequence_;

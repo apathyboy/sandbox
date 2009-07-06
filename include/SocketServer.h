@@ -50,7 +50,7 @@ protected:
     typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
 	SessionMap sessions_;	
 
-    Protocol protocol_;
+    Protocol<uint32_t> protocol_;
 
 private:	
 	SocketServer();

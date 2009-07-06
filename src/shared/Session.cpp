@@ -14,7 +14,7 @@
 /**	Galaxy Session constructor
  *	Takes the data necessary for the Session class to function.
  */
-Session::Session(const SocketServer * const server, const NetworkAddress& address, Protocol& protocol)
+Session::Session(const SocketServer * const server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
     : socket_address_(address)
     , socket_server_(server)
     , player_(new Player())
