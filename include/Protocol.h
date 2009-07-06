@@ -34,7 +34,7 @@ public:
     {
         handlers_.insert(std::make_pair<Identifier, Handler>(id, handler));
     }
-    
+
     Handler find(Identifier id)
     {
         Handler handler = NULL;
