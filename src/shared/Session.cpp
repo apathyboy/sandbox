@@ -11,12 +11,33 @@
 #include "Logger.h"
 #include "PacketTools.h"
 
+
 /**	Galaxy Session constructor
  *	Takes the data necessary for the Session class to function.
- */
+ *
 Session::Session(const SocketServer * const server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
     : socket_address_(address)
     , socket_server_(server)
+    , player_(new Player())
+    , protocol_(protocol)
+    , server_sequence_(0)
+    , client_sequence_(0)
+    , received_sequence_(0)
+    , connection_id_(0)
+    , crc_seed_(0xDEADBABE)
+{
+    // Initialize the player to a default location and state. 
+    // @todo: This information should be pulled from storage
+    player_->position(Vector3<int>(-1443, 9, 2771));
+    player_->stationId(653564567);
+    player_->locationName("naboo");
+    player_->mood(0);
+}
+*/
+
+Session::Session(const GalaxyServer& server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
+    : socket_address_(address)
+    , server_(server)
     , player_(new Player())
     , protocol_(protocol)
     , server_sequence_(0)
