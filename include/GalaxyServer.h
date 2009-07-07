@@ -9,11 +9,16 @@
 #define GALAXY_SERVER_H_
 
 #include "UdpSocketListener.h"
+#include "Protocol.h"
+#include "NetworkAddress.h"
+
+class Session;
 
 class GalaxyServer
 {
 public:
     explicit GalaxyServer(uint16_t port);
+    virtual ~GalaxyServer();
 
     uint16_t port();
     void     port(uint16_t);
@@ -23,7 +28,11 @@ public:
     void handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
     void sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
 
-    void tick(uint32_t delta);
+    std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
+    std::tr1::shared_ptr<Session> findSession(const NetworkAddress& address);
+    std::tr1::shared_ptr<Session> removeSession(const NetworkAddress& address);
+    uint32_t sessionCount() const;
+
 
 private:
     /* Disable compiler generated methods */
@@ -32,9 +41,23 @@ private:
     GalaxyServer(const GalaxyServer&);
     GalaxyServer& operator=(const GalaxyServer&);
 
+    /* SOE level handlers */
+    void handleSessionRequest(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleNetStatus(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleMultiPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleAcknowledge(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleDataChannel(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleDisconnect(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handlePing(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+
     UdpSocketListener   network_listener_;
-    Protocol            soe_protocol_;
-    Protocol            swg_protocol_;
+
+    typedef std::tr1::function<void (const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer>)> SoeMessageHandler;
+    Protocol<uint16_t, SoeMessageHandler>  soe_protocol_;
+    Protocol<uint32_t>  swg_protocol_;
+
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
+	SessionMap sessions_;	
     
     virtual void initializeProtocol() = 0;
 
