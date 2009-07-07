@@ -18,7 +18,9 @@ public:
         : io_service_()
         , socket_(io_service_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
         , port_(port)
-    {}
+    {
+  	    asyncRecieve();
+    }
 
     uint16_t port()
     {
@@ -44,6 +46,26 @@ public:
     void poll()
     {
         io_service_.poll();
+    }
+
+    void sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+    {
+        socket_.async_send_to(
+            boost::asio::buffer(message->data(), message->size()), 
+            address,
+            std::tr1::bind(
+                &UdpSocketListenerImpl::handleSend, 
+                this, 
+                message, 
+                std::tr1::placeholders::_1, 
+                std::tr1::placeholders::_2
+            )
+        );
+    }
+           
+    void handleSend(std::tr1::shared_ptr<ByteBuffer> message, const boost::system::error_code& error, size_t bytes_sent)
+    {
+        /* @todo: Handle send issues here */
     }
 
 private:
@@ -121,5 +143,11 @@ void UdpSocketListener::callback(UdpSocketListener::Callback callback)
 void UdpSocketListener::poll()
 {
     impl_->poll();
+}
+
+
+void UdpSocketListener::sendToRemote(const NetworkAddress &address, std::tr1::shared_ptr<ByteBuffer> message) const
+{
+    impl_->sendToRemote(address, message);
 }
 

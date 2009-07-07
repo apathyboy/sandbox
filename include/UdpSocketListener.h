@@ -36,6 +36,7 @@ public:
     void     callback(Callback callback);
 
     void poll();
+    void sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
 
 private:
     UdpSocketListener();
