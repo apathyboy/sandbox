@@ -156,6 +156,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\shared\GalaxyServer.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\GalaxyServer.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\src\shared\Logger.cpp"
 			>
 		</File>
@@ -221,6 +229,14 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\msvc\stdint.h"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\src\shared\UdpSocketListener.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\UdpSocketListener.h"
 			>
 		</File>
 		<File
