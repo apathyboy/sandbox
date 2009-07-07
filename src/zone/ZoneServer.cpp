@@ -54,67 +54,18 @@ void ZoneServer::sendShuttleUpdate()
         packet_name = "packets\\Actions\\KerenStarshipLand.txt";
 		shuttleState(SHUTTLE_LANDED);
 	}
-
-    SessionMap::iterator end = sessions_.end();
-    for (SessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
-        std::tr1::shared_ptr<Session> session = (*i).second;
-        session->sendHardcodedPacket(packet_name, false);
-	}
-}
-
-
-std::tr1::shared_ptr<Session> ZoneServer::addSession(const NetworkAddress& address)
-{
-    Logger().log(INFO) << "Adding session for [" << address << "]";
-
-	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<Session> session(new Session(this, address, protocol_));
-	sessions_[address] = session;
-
-	// Return the new session.
-	return session;
 }
 
 
 void ZoneServer::onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
-{
-	// Attempt to find the client in the session map.
-	SessionMap::iterator i = sessions_.find(address);
-
-	// If a session exists retrieve it from the session map otherwise verify
-    // the message is a session request and create a new one.
-    std::tr1::shared_ptr<Session> session;
-	if (i != sessions_.end()) {
-        session = (*i).second;
-	} else if (message->peek<uint16_t>(true) == 0x0001) {        
-        session = addSession(address);
-	} else {
-        Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;	
-        return;
-	}
-
-	session->handlePacket(message);
-}
+{}
 
 
 void ZoneServer::onUpdate()
 {
     time_t current_time = currentTime();    
 
-	static time_t last_cleanup_time = current_time;
 	static time_t last_shuttle_time = current_time;
-
-    // Check to see if enough time has passed then update the session map.
-	if ((current_time - last_cleanup_time) >= 1) {
-
-        SessionMap::iterator end = sessions_.end();
-        for (SessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
-            std::tr1::shared_ptr<Session> session = (*i).second;
-			session->update(current_time);
-		}
-
-	    last_cleanup_time = current_time;
-	}
 
 	if ((current_time - last_shuttle_time) >= (1*60)) // Replace the 1 with a call to configuration.
 	{
