@@ -16,6 +16,8 @@ public:
     uint8_t shuttleState() const;
     void    shuttleState(uint8_t state);
     void    sendShuttleUpdate();
+    
+    std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
 
 private:
 	ZoneServer();
@@ -25,6 +27,11 @@ private:
     virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
     virtual void onUpdate();
     virtual void initializeProtocol();
+
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
+	SessionMap sessions_;	
+
+    Protocol<uint32_t> protocol_;
         
 	uint8_t  shuttle_state_;
 };

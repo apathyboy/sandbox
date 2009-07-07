@@ -13,12 +13,11 @@
 
 #include "SocketServer.h"
 #include "Logger.h"
-#include "Session.h"
 #include "ByteBuffer.h"
 
 using boost::asio::ip::udp;
 
-class SocketServerImpl
+class SocketServer::SocketServerImpl
 {
 public:
     SocketServerImpl(SocketServer* server, uint16_t port)
@@ -104,7 +103,6 @@ private:
  */
 SocketServer::SocketServer(uint16_t port)
     : pimpl_(new SocketServerImpl(this, port))
-    , protocol_()
 {}
 
 SocketServer::~SocketServer()
@@ -130,43 +128,13 @@ void SocketServer::run()
 	}
 }
 
-/** Add Session function
- *	Adds a new swg client to the client map.
- */
-std::tr1::shared_ptr<Session> SocketServer::addSession(const NetworkAddress& address)
-{
-    Logger().log(INFO) << "Adding session for [" << address << "]";
-
-	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<Session> session(new Session(this, address, protocol_));
-	sessions_[address] = session;
-
-	// Return the new session.
-	return session;
-}
-
 /** On Incoming Data function
  *	Whenever information is received via the socket this function is
  *	called to handle the data.
  */
 void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
 {    
-	// Attempt to find the client in the session map.
-	SessionMap::iterator i = sessions_.find(address);
-
-	// If a session exists retrieve it from the session map otherwise verify
-    // the message is a session request and create a new one.
-    std::tr1::shared_ptr<Session> session;
-	if (i != sessions_.end()) {
-        session = (*i).second;
-	} else if (message->peek<uint16_t>(true) == 0x0001) {        
-        session = addSession(address);
-	} else {
-        Logger().log(ERR) << "Unexpected message from [" << address << ": " << std::endl << message;	
-        return;
-	}
-
-	session->handlePacket(message);
+    onIncoming(address, message);
 }
 
 /** Send Packet function
@@ -185,18 +153,6 @@ uint16_t SocketServer::port() const
 void SocketServer::update()
 {
     current_time_ = time(0);
-
-    // Check to see if enough time has passed then update the session map.
-	if ((current_time_ - last_cleanup_time_) >= 1) {
-
-        SessionMap::iterator end = sessions_.end();
-        for (SessionMap::iterator i = sessions_.begin(); i !=end; ++i) {
-            std::tr1::shared_ptr<Session> session = (*i).second;
-			session->update(current_time_);
-		}
-
-	    last_cleanup_time_ = current_time_;
-	}
 
     onUpdate();
 }
