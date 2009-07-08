@@ -48,7 +48,7 @@ private:
     void handleAcknowledge(const NetworkAddress& address, ByteBuffer& message);
     void handleDataChannel(const NetworkAddress& address, ByteBuffer& message);
     void handleDisconnect(const NetworkAddress& address, ByteBuffer& message);
-    void handlePing(const NetworkAddress& address, ByteBuffer& message);
+    void handleKeepAlive(const NetworkAddress& address, ByteBuffer& message);
 
     UdpSocketListener   network_listener_;
 

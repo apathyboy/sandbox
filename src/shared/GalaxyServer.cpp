@@ -15,12 +15,12 @@ GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)
 {    
     soe_protocol_.addHandler(0x0001, std::tr1::bind(&GalaxyServer::handleSessionRequest, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0003, std::tr1::bind(&GalaxyServer::handleMultiPacket, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0005, std::tr1::bind(&GalaxyServer::handleDisconnect, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0006, std::tr1::bind(&GalaxyServer::handlePing, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0007, std::tr1::bind(&GalaxyServer::handleNetStatus, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0009, std::tr1::bind(&GalaxyServer::handleDataChannel, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0015, std::tr1::bind(&GalaxyServer::handleAcknowledge, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0003, std::tr1::bind(&GalaxyServer::handleMultiPacket,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0005, std::tr1::bind(&GalaxyServer::handleDisconnect,     this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0006, std::tr1::bind(&GalaxyServer::handleKeepAlive,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0007, std::tr1::bind(&GalaxyServer::handleNetStatus,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0009, std::tr1::bind(&GalaxyServer::handleDataChannel,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0015, std::tr1::bind(&GalaxyServer::handleAcknowledge,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
 
 
@@ -150,8 +150,8 @@ void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& me
         return;
     }
 
-    std::tr1::shared_ptr<ByteBuffer> session_response(SoeMessageFactory::buildNetworkStatusResponse(session));
-    sendToRemote(address, *session_response);
+    std::tr1::shared_ptr<ByteBuffer> network_status_response(SoeMessageFactory::buildNetworkStatusResponse(session));
+    sendToRemote(address, *network_status_response);
 }
 
 
@@ -243,9 +243,14 @@ void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& 
 
 
 void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& message)
-{}
+{
+    removeSession(address);
+}
 
 
-void GalaxyServer::handlePing(const NetworkAddress& address, ByteBuffer& message)
-{}
+void GalaxyServer::handleKeepAlive(const NetworkAddress& address, ByteBuffer& message)
+{
+    std::tr1::shared_ptr<ByteBuffer> keep_alive_response(SoeMessageFactory::buildKeepAliveResponse());
+    sendToRemote(address, *keep_alive_response);
+}
 
