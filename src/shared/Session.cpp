@@ -133,8 +133,8 @@ uint32_t Session::crcSeed(uint32_t seed)
 
 void Session::sendHardcodedPacket(const std::string& name, bool compressed)
 {        
-    ByteBuffer packet = LoadPacketFromTextFile(name);
-    sendHardcodedPacket(packet, compressed);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
+    sendHardcodedPacket(*packet, compressed);
 }
 
 void Session::sendHardcodedPacket(ByteBuffer& packet, bool compressed)
@@ -166,30 +166,30 @@ void Session::sendToRemote(ByteBuffer& packet, bool encrypt, bool compress, bool
 
 void Session::sendHeartbeat() const
 {
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
 
-    sendToRemote(packet, true);
+    sendToRemote(*packet, true);
 }
 
 void Session::sendAcknowledge() const
 {
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
-    packet.writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
+    packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
 
-    sendToRemote(packet, true);
+    sendToRemote(*packet, true);
 }
 
 void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 {
-    ByteBuffer message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
-    message.write<std::wstring>(text);
+    std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
+    message->write<std::wstring>(text);
 
-    message.append(LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
+    message->append(*LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
 
-    message.writeAt<uint16_t>(50 + (text.length() * 2) + 2, moodId[1]);
-    message.writeAt<uint16_t>(50 + (text.length() * 2) + 4, moodId[2]);
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 2, moodId[1]);
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 4, moodId[2]);
 
-    sendHardcodedPacket(message, true);
+    sendHardcodedPacket(*message, true);
 }
 
 void Session::handlePacket(ByteBuffer& packet)

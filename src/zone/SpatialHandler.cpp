@@ -144,11 +144,11 @@ void HandleMood(Session& session, ByteBuffer& message)
 
     session.player()->mood(atoi(&mood[0]));
 
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
 
     // Insert the player mood into the packet.
-    packet.writeAt<uint16_t>(99, static_cast<uint16_t>(session.player()->mood()));
-    session.sendHardcodedPacket(packet, true);
+    packet->writeAt<uint16_t>(99, static_cast<uint16_t>(session.player()->mood()));
+    session.sendHardcodedPacket(*packet, true);
 }
 
 
@@ -173,10 +173,10 @@ void HandleEmote(Session& session, ByteBuffer& message)
 
 	uint16_t emoteId = atoi(&emote[0]);
     
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
 
     // Insert the player mood into the packet.
-    packet.writeAt<uint16_t>(46, emoteId);
-    session.sendHardcodedPacket(packet, true);
+    packet->writeAt<uint16_t>(46, emoteId);
+    session.sendHardcodedPacket(*packet, true);
 }
 

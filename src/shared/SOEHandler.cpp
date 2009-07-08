@@ -14,12 +14,12 @@ void HandleSessionRequest(Session& session, ByteBuffer& message)
 { 	
     session.connectionId(message.peekAt<uint32_t>(6));
 
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
 
-    packet.writeAt<uint32_t>(2, session.connectionId());
-    packet.writeAt<uint32_t>(6, htonl(session.crcSeed()));
+    packet->writeAt<uint32_t>(2, session.connectionId());
+    packet->writeAt<uint32_t>(6, htonl(session.crcSeed()));
 
-    session.sendToRemote(packet, false, false, false);
+    session.sendToRemote(*packet, false, false, false);
 
 	// Send the connection packet.
 	if (session.server()->port() == 44453) 
@@ -33,11 +33,11 @@ void HandleNetStatus(Session& session, ByteBuffer& message)
 {     
     uint32_t tick = message.peekAt<uint32_t>(2);
     
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
 
-    packet.writeAt<uint16_t>(2, tick);
+    packet->writeAt<uint16_t>(2, tick);
 
-    session.sendToRemote(packet, true, true, false);
+    session.sendToRemote(*packet, true, true, false);
 }
 
 
@@ -127,7 +127,7 @@ void HandleDisconnect(Session& session, ByteBuffer& message)
 
 void HandlePing(Session& session, ByteBuffer& message)
 {     
-    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
-    session.sendToRemote(packet, true, false, true);
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
+    session.sendToRemote(*packet, true, false, true);
 }
 
