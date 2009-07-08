@@ -38,6 +38,18 @@ public:
     const SocketServer * const server() const;
     std::tr1::shared_ptr<Player> player();
 
+    uint32_t connectionId() const;
+    uint32_t connectionId(uint32_t id);
+
+    uint32_t crcLength() const;
+    uint32_t crcLength(uint32_t length);
+
+    uint32_t crcSeed() const;
+    uint32_t crcSeed(uint32_t seed);
+
+    uint32_t maxUdpSize() const;
+    uint32_t maxUdpSize(uint32_t size);
+
     uint16_t serverSequence() const;
     uint16_t serverSequence(uint16_t sequence);
 
@@ -46,12 +58,6 @@ public:
 
     uint16_t receivedSequence() const;
     uint16_t receivedSequence(uint16_t sequence);
-
-    uint32_t connectionId() const;
-    uint32_t connectionId(uint32_t id);
-
-    uint32_t crcSeed() const;
-    uint32_t crcSeed(uint32_t seed);
     
     void sendHardcodedPacket(const std::string& name, bool compressed);
     void sendHardcodedPacket(ByteBuffer& packet, bool compressed);
@@ -78,11 +84,13 @@ private:
     std::tr1::shared_ptr<Player> player_;
     Protocol<uint32_t>& protocol_;
 
+	uint32_t connection_id_;
+    uint32_t crc_length_;
+    uint32_t crc_seed_;
+    uint32_t max_udp_size_;
 	uint16_t server_sequence_;
 	uint16_t client_sequence_;
 	uint16_t received_sequence_;
-	uint32_t connection_id_;
-    uint32_t crc_seed_;
 };
 
 #endif // SESSION_H_

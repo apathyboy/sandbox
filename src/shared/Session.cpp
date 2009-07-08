@@ -40,11 +40,13 @@ Session::Session(const GalaxyServer& server, const NetworkAddress& address, Prot
     , server_(server)
     , player_(new Player())
     , protocol_(protocol)
+    , connection_id_(0)
+    , crc_length_(0)
+    , crc_seed_(0xDEADBABE)
+    , max_udp_size_(0)
     , server_sequence_(0)
     , client_sequence_(0)
     , received_sequence_(0)
-    , connection_id_(0)
-    , crc_seed_(0xDEADBABE)
 {
     // Initialize the player to a default location and state. 
     // @todo: This information should be pulled from storage
@@ -64,6 +66,58 @@ const SocketServer * const Session::server() const
 std::tr1::shared_ptr<Player> Session::player()
 {
 	return player_;
+}
+
+
+uint32_t Session::connectionId() const
+{
+    return connection_id_;
+}
+
+
+uint32_t Session::connectionId(uint32_t id)
+{
+    connection_id_ = id;
+    return connection_id_;
+}
+
+
+uint32_t Session::crcLength() const
+{
+    return crc_length_;
+}
+
+
+uint32_t Session::crcLength(uint32_t length)
+{
+    crc_length_ = length;
+    return crc_length_;
+}
+
+
+uint32_t Session::crcSeed() const
+{
+    return crc_seed_;
+}
+
+
+uint32_t Session::crcSeed(uint32_t seed)
+{
+    crc_seed_ = seed;
+    return crc_seed_;
+}
+
+
+uint32_t Session::maxUdpSize() const
+{
+    return max_udp_size_;
+}
+
+
+uint32_t Session::maxUdpSize(uint32_t size)
+{
+    max_udp_size_ = size;
+    return max_udp_size_;
 }
 
 
@@ -105,31 +159,6 @@ uint16_t Session::receivedSequence(uint16_t sequence)
     return received_sequence_;
 }
 
-
-uint32_t Session::connectionId() const
-{
-    return connection_id_;
-}
-
-
-uint32_t Session::connectionId(uint32_t id)
-{
-    connection_id_ = id;
-    return connection_id_;
-}
-
-
-uint32_t Session::crcSeed() const
-{
-    return crc_seed_;
-}
-
-
-uint32_t Session::crcSeed(uint32_t seed)
-{
-    crc_seed_ = seed;
-    return crc_seed_;
-}	
 
 void Session::sendHardcodedPacket(const std::string& name, bool compressed)
 {        
