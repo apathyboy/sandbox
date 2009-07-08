@@ -156,7 +156,29 @@ void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& me
 
 
 void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& message)
-{}
+{
+    // Loop through the message until the compression bit is reached.
+    while (message.readPosition() < message.size() - 4)
+    {
+        uint8_t segment_size = message.read<uint8_t>();
+        
+        // If the segment size is 255+ check the next bit, a 0x01 indicates
+        // over 255 and that the next bit should be added to the total
+        // size. If 0x00 then the next bit should be skipped.
+        if (segment_size == 0xFF) {
+            if (message.read<uint8_t>() == 0x01) {
+                segment_size += message.read<uint8_t>();
+            } else {
+                message.read<uint8_t>();
+            }
+        }
+    
+        ByteBuffer segment(message.data()+message.readPosition(), segment_size);
+        message.readPosition(message.readPosition() + segment_size);
+
+		handleIncoming(address, segment);
+    }
+}
 
 
 void GalaxyServer::handleAcknowledge(const NetworkAddress& address, ByteBuffer& message)
