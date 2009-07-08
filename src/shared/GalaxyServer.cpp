@@ -126,7 +126,7 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffe
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (session) {
-        Logger().log(INFO) << "Received session request from an address with an existing session: [" << address << "]";
+        Logger().log(ERR) << "Received session request from an address with an existing session: [" << address << "]";
         return;
     }
 
@@ -142,7 +142,17 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffe
 
 
 void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& message)
-{}
+{
+    std::tr1::shared_ptr<Session> session = findSession(address);
+
+    if (! session) {
+        Logger().log(ERR) << "Received a Network Status message from an address without a sesion: [" << address << "]";
+        return;
+    }
+
+    std::tr1::shared_ptr<ByteBuffer> session_response(SoeMessageFactory::buildNetworkStatusResponse(session));
+    sendToRemote(address, *session_response);
+}
 
 
 void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& message)
