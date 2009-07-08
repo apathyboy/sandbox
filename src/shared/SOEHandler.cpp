@@ -10,14 +10,14 @@
 #include "PacketTools.h"
 #include "Logger.h"
 
-void HandleSessionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleSessionRequest(Session& session, ByteBuffer& message)
 { 	
-    session.connectionId(message->peekAt<uint32_t>(6));
+    session.connectionId(message.peekAt<uint32_t>(6));
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
+    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\SessionResponse.txt");
 
-    packet->writeAt<uint32_t>(2, session.connectionId());
-    packet->writeAt<uint32_t>(6, htonl(session.crcSeed()));
+    packet.writeAt<uint32_t>(2, session.connectionId());
+    packet.writeAt<uint32_t>(6, htonl(session.crcSeed()));
 
     session.sendToRemote(packet, false, false, false);
 
@@ -29,95 +29,95 @@ void HandleSessionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> mes
 }
 
 
-void HandleNetStatus(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleNetStatus(Session& session, ByteBuffer& message)
 {     
-    uint32_t tick = message->peekAt<uint32_t>(2);
+    uint32_t tick = message.peekAt<uint32_t>(2);
     
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
+    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\NetStatus.txt");
 
-    packet->writeAt<uint16_t>(2, tick);
+    packet.writeAt<uint16_t>(2, tick);
 
     session.sendToRemote(packet, true, true, false);
 }
 
 
-void HandleMultiPacket(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleMultiPacket(Session& session, ByteBuffer& message)
 {       
-    message->read<uint16_t>();
+    message.read<uint16_t>();
 
     // Loop through the message until the compression bit is reached.
-    while (message->readPosition() < message->size() - 4)
+    while (message.readPosition() < message.size() - 4)
     {
-        uint8_t segment_size = message->read<uint8_t>();
+        uint8_t segment_size = message.read<uint8_t>();
         
         // If the segment size is 255+ check the next bit, a 0x01 indicates
         // over 255 and that the next bit should be added to the total
         // size. If 0x00 then the next bit should be skipped.
         if (segment_size == 0xFF) {
-            if (message->read<uint8_t>() == 0x01) {
-                segment_size += message->read<uint8_t>();
+            if (message.read<uint8_t>() == 0x01) {
+                segment_size += message.read<uint8_t>();
             } else {
-                message->read<uint8_t>();
+                message.read<uint8_t>();
             }
         }
     
-        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
-        message->readPosition(message->readPosition() + segment_size);
+        ByteBuffer segment(message.data()+message.readPosition(), segment_size);
+        message.readPosition(message.readPosition() + segment_size);
 
 		session.handlePacket(segment);
     }
 }
 
 
-void HandleAcknowledge(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleAcknowledge(Session& session, ByteBuffer& message)
 {	
-    message->read<uint16_t>();
+    message.read<uint16_t>();
 
-    session.receivedSequence(message->read<uint16_t>());
-    session.clientSequence(message->read<uint16_t>());
+    session.receivedSequence(message.read<uint16_t>());
+    session.clientSequence(message.read<uint16_t>());
 }
 
 
-void HandleDataChannel(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleDataChannel(Session& session, ByteBuffer& message)
 {	
-    message->read<uint16_t>();
+    message.read<uint16_t>();
 
-    session.clientSequence(message->read<uint16_t>());
+    session.clientSequence(message.read<uint16_t>());
     session.sendAcknowledge();
 
-    if (ntohs(message->peek<uint16_t>()) == 0x0019) {
-        message->read<uint16_t>();
+    if (ntohs(message.peek<uint16_t>()) == 0x0019) {
+        message.read<uint16_t>();
 
         // Loop through the message until the compression bit is reached.
-        while (message->readPosition() < message->size() - 3)
+        while (message.readPosition() < message.size() - 3)
         {
-            uint8_t segment_size = message->read<uint8_t>();
+            uint8_t segment_size = message.read<uint8_t>();
         
             // If the segment size is 255+ check the next bit, a 0x01 indicates
             // over 255 and that the next bit should be added to the total
             // size. If 0x00 then the next bit should be skipped.
             if (segment_size == 0xFF) {
-                if (message->read<uint8_t>() == 0x01) {
-                    segment_size += message->read<uint8_t>();
+                if (message.read<uint8_t>() == 0x01) {
+                    segment_size += message.read<uint8_t>();
                 } else {
-                    message->read<uint8_t>();
+                    message.read<uint8_t>();
                 }
             }
     
-            std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), segment_size));
+            ByteBuffer segment(message.data()+message.readPosition(), segment_size);
 		    session.handlePacket(segment);
 
-            message->readPosition(message->readPosition() + segment_size);
+            message.readPosition(message.readPosition() + segment_size);
         }        
     } else {
     
-        std::tr1::shared_ptr<ByteBuffer> segment(new ByteBuffer(message->data()+message->readPosition(), message->size()-7));
+        ByteBuffer segment(message.data()+message.readPosition(), message.size()-7);
 		session.handlePacket(segment);
     }
 }
 
 
-void HandleDisconnect(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleDisconnect(Session& session, ByteBuffer& message)
 {
 	session.serverSequence(0);
 	session.clientSequence(0);
@@ -125,9 +125,9 @@ void HandleDisconnect(Session& session, std::tr1::shared_ptr<ByteBuffer> message
 }
 
 
-void HandlePing(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandlePing(Session& session, ByteBuffer& message)
 {     
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
+    ByteBuffer packet = LoadPacketFromTextFile("packets\\SOE\\PingResponse.txt");
     session.sendToRemote(packet, true, false, true);
 }
 

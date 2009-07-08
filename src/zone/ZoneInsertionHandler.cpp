@@ -10,25 +10,25 @@
 #include "PacketTools.h"
 
 
-void HandleClientReady(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleClientReady(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleLoadDone(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleLoadDone(Session& session, ByteBuffer& message)
 {
 	session.sendHardcodedPacket("packets\\ZoneInsertion\\LoadDone.txt", true);
 }
 
 
-void HandleLoadTerrain(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleLoadTerrain(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleZoneInsertionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message)
+void HandleZoneInsertionRequest(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 

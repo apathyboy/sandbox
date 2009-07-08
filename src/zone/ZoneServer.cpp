@@ -57,7 +57,7 @@ void ZoneServer::sendShuttleUpdate()
 }
 
 
-void ZoneServer::onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void ZoneServer::onIncoming(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 

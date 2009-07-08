@@ -13,9 +13,9 @@
 class Session;
 class ByteBuffer;
 
-void HandleClientReady(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleLoadDone(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleLoadTerrain(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleZoneInsertionRequest(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleClientReady(Session& session, ByteBuffer& message);
+void HandleLoadDone(Session& session, ByteBuffer& message);
+void HandleLoadTerrain(Session& session, ByteBuffer& message);
+void HandleZoneInsertionRequest(Session& session, ByteBuffer& message);
 
 #endif // OPENSWG_ZONE_INSERTION_HANDLER_H

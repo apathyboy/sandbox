@@ -32,11 +32,11 @@ public:
 
 	void run();
 
-    void handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleIncoming(const NetworkAddress& address, ByteBuffer& message);
 
 	void update();
 
-    void sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
+    void sendPacket(const NetworkAddress& address, ByteBuffer& message) const;
 
     time_t currentTime() const;
 
@@ -47,7 +47,7 @@ private:
     SocketServer(const SocketServer&);
     SocketServer& operator=(const SocketServer&);
 
-    virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) = 0;
+    virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message) = 0;
 	virtual void onUpdate() = 0;
     virtual void initializeProtocol() = 0;
 

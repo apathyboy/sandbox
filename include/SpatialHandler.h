@@ -19,14 +19,14 @@
 class Session;
 class ByteBuffer;
 
-void HandleSpatial(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandlePositionUpdate(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSit(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleStand(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleProne(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleKneel(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSpatialChat(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleMood(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleEmote(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleSpatial(Session& session, ByteBuffer& message);
+void HandlePositionUpdate(Session& session, ByteBuffer& message);
+void HandleSit(Session& session, ByteBuffer& message);
+void HandleStand(Session& session, ByteBuffer& message);
+void HandleProne(Session& session, ByteBuffer& message);
+void HandleKneel(Session& session, ByteBuffer& message);
+void HandleSpatialChat(Session& session, ByteBuffer& message);
+void HandleMood(Session& session, ByteBuffer& message);
+void HandleEmote(Session& session, ByteBuffer& message);
 
 #endif // OPENSWG_SPATIAL_HANDLER_H

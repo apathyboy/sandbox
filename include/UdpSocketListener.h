@@ -24,7 +24,7 @@ class ByteBuffer;
 class UdpSocketListener
 {
 public:
-    typedef std::tr1::function<void (const NetworkAddress&, std::tr1::shared_ptr<ByteBuffer>)> Callback;
+    typedef std::tr1::function<void (const NetworkAddress&, ByteBuffer&)> Callback;
 
     UdpSocketListener(uint16_t port);
     ~UdpSocketListener();
@@ -36,7 +36,7 @@ public:
     void     callback(Callback callback);
 
     void poll();
-    void sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
+    void sendToRemote(const NetworkAddress& address, ByteBuffer& message) const;
 
 private:
     UdpSocketListener();

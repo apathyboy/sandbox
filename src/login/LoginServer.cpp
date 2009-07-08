@@ -20,7 +20,7 @@ LoginServer::LoginServer(uint16_t port)
 LoginServer::~LoginServer()
 {}
 
-void LoginServer::onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void LoginServer::onIncoming(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 

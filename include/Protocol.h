@@ -21,7 +21,7 @@
 class ByteBuffer;
 class Session;
 
-typedef std::tr1::function<void (Session& session, std::tr1::shared_ptr<ByteBuffer>)> MessageHandler;
+typedef std::tr1::function<void (Session& session, ByteBuffer&)> MessageHandler;
 
 template<typename Identifier, class Handler = MessageHandler>
 class Protocol
@@ -47,11 +47,11 @@ public:
         return handler;
     }
 
-    Handler find(std::tr1::shared_ptr<ByteBuffer> message)
+    Handler find(ByteBuffer& message)
     {
 	    Handler handler = NULL;
 
-	    HandlerMap::iterator i = handlers_.find(message->peekAt<uint8_t>(1));
+	    HandlerMap::iterator i = handlers_.find(message.peekAt<uint8_t>(1));
 
 	    if (i != handlers_.end())
 	    {
@@ -60,7 +60,7 @@ public:
 
 	    if (! handler)
 	    {
-            i = handlers_.find(message->peekAt<uint32_t>(2));
+            i = handlers_.find(message.peekAt<uint32_t>(2));
 
             if (i != handlers_.end()) {
                 handler = (*i).second;

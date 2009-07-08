@@ -53,14 +53,14 @@ void GalaxyServer::run()
 }
 
 
-void GalaxyServer::handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& message)
 {
-    uint16_t opcode = message->read<uint16_t>();
+    uint16_t opcode = message.read<uint16_t>();
     
 	SoeMessageHandler handler = soe_protocol_.find(opcode);
 
     if (! handler) {
-        Logger().log(INFO) << "Unidentified message received" << std::endl << *message;
+        Logger().log(INFO) << "Unidentified message received" << std::endl << message;
         return;
     }
 
@@ -68,7 +68,7 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 }
 
 
-void GalaxyServer::sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const
+void GalaxyServer::sendToRemote(const NetworkAddress& address, ByteBuffer& message) const
 {
     network_listener_.sendToRemote(address, message);
 }
@@ -120,34 +120,48 @@ uint32_t GalaxyServer::sessionCount() const
 }
 
 
-void GalaxyServer::handleSessionRequest(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffer& message)
 {
+    /*
     std::tr1::shared_ptr<Session> session = findSession(address);
 
+    if (session) {
+        Logger().log(INFO) << "Received session request from an address with an existing session: [" << address << "]";
+        return;
+    }
 
+    session = addSession(address);
+
+    session->crcLength(message->read<uint32_t>());
+    session->connectionId(message->read<uint32_t>());
+    session->maxUdpSize(message->read<uint32_t>());
+
+    ByteBuffer session_response(SoeMessageFactory::buildSessionResponse(session));
+    sendToRemote(address, session_response);
+    */
 }
 
 
-void GalaxyServer::handleNetStatus(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 
-void GalaxyServer::handleMultiPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 
-void GalaxyServer::handleAcknowledge(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleAcknowledge(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 
-void GalaxyServer::handleDataChannel(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 
-void GalaxyServer::handleDisconnect(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& message)
 {}
 
 
-void GalaxyServer::handlePing(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void GalaxyServer::handlePing(const NetworkAddress& address, ByteBuffer& message)
 {}
 

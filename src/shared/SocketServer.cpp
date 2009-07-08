@@ -53,10 +53,10 @@ public:
         io_service_.poll();
     }
   
-    void sendResponse(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> buffer)
+    void sendResponse(const NetworkAddress& address, ByteBuffer& buffer)
     {
         socket_.async_send_to(
-            boost::asio::buffer(buffer->data(), buffer->size()), 
+            boost::asio::buffer(buffer.data(), buffer.size()), 
             address,
             std::tr1::bind(
                 &SocketServerImpl::handleSend, 
@@ -71,7 +71,7 @@ public:
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
         if (! error && bytes_received > 0) {
-            std::tr1::shared_ptr<ByteBuffer> message(new ByteBuffer(&buffer_[0], bytes_received));
+            ByteBuffer message(&buffer_[0], bytes_received);
             socket_server_->handleIncoming(remote_endpoint_, message);
         } else {
             Logger().log(ERR) << error.message();
@@ -80,7 +80,7 @@ public:
   	    listen();
     }
            
-    void handleSend(std::tr1::shared_ptr<ByteBuffer> message, const boost::system::error_code& error, size_t bytes_sent)
+    void handleSend(ByteBuffer& message, const boost::system::error_code& error, size_t bytes_sent)
     {}
 
 private:
@@ -132,7 +132,7 @@ void SocketServer::run()
  *	Whenever information is received via the socket this function is
  *	called to handle the data.
  */
-void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message)
+void SocketServer::handleIncoming(const NetworkAddress& address, ByteBuffer& message)
 {    
     onIncoming(address, message);
 }
@@ -140,7 +140,7 @@ void SocketServer::handleIncoming(const NetworkAddress& address, std::tr1::share
 /** Send Packet function
  *	Sends a packet to the specified to the specified client.
  */
-void SocketServer::sendPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const
+void SocketServer::sendPacket(const NetworkAddress& address, ByteBuffer& message) const
 {	
     pimpl_->sendResponse(address, message);
 }

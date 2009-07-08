@@ -20,11 +20,11 @@ namespace {
         outfile << "0x01";
         outfile.close();
 
-        std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("CanFindSingleHexString.txt");
+        ByteBuffer packet = LoadPacketFromTextFile("CanFindSingleHexString.txt");
         remove("CanFindSingleHexString.txt");
 
-        EXPECT_EQ(1, packet->size());
-        EXPECT_EQ(1, packet->read<uint8_t>());
+        EXPECT_EQ(1, packet.size());
+        EXPECT_EQ(1, packet.read<uint8_t>());
     }
 
     TEST(LoadPacketFromTextFileTests, CanFindTwoHexStrings)
@@ -33,12 +33,12 @@ namespace {
         outfile << "0x01 0x02";
         outfile.close();
 
-        std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("CanFindTwoHexStrings.txt");
+        ByteBuffer packet = LoadPacketFromTextFile("CanFindTwoHexStrings.txt");
         remove("CanFindTwoHexStrings.txt");
 
-        EXPECT_EQ(2, packet->size());
-        EXPECT_EQ(1, packet->read<uint8_t>());
-        EXPECT_EQ(2, packet->read<uint8_t>());
+        EXPECT_EQ(2, packet.size());
+        EXPECT_EQ(1, packet.read<uint8_t>());
+        EXPECT_EQ(2, packet.read<uint8_t>());
     }
 
 }

@@ -13,7 +13,7 @@
 class Session;
 class ByteBuffer;
 
-void HandleAuthentication(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
-void HandleSession(Session& session, std::tr1::shared_ptr<ByteBuffer> message);
+void HandleAuthentication(Session& session, ByteBuffer& message);
+void HandleSession(Session& session, ByteBuffer& message);
 
 #endif // OPENSWG_LOGIN_HANDLER_H

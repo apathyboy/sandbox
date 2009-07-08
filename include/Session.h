@@ -54,15 +54,15 @@ public:
     uint32_t crcSeed(uint32_t seed);
     
     void sendHardcodedPacket(const std::string& name, bool compressed);
-    void sendHardcodedPacket(std::tr1::shared_ptr<ByteBuffer> packet, bool compressed);
+    void sendHardcodedPacket(ByteBuffer& packet, bool compressed);
 
-    void sendToRemote(std::tr1::shared_ptr<ByteBuffer> packet, bool encrypt = false, bool compress = false, bool crc = true) const;
+    void sendToRemote(ByteBuffer& packet, bool encrypt = false, bool compress = false, bool crc = true) const;
 
     void sendHeartbeat() const;
     void sendAcknowledge() const;
     void sendText(const std::wstring& text, std::vector<uint64_t> moodId);
 
-	void handlePacket(std::tr1::shared_ptr<ByteBuffer> packet);
+	void handlePacket(ByteBuffer& packet);
 
 	void update(time_t currentTime);
 

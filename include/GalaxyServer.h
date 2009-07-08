@@ -25,8 +25,8 @@ public:
 
 	void run();
 
-    void handleIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void sendToRemote(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) const;
+    void handleIncoming(const NetworkAddress& address, ByteBuffer& message);
+    void sendToRemote(const NetworkAddress& address, ByteBuffer& message) const;
 
     std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
     std::tr1::shared_ptr<Session> findSession(const NetworkAddress& address);
@@ -42,17 +42,17 @@ private:
     GalaxyServer& operator=(const GalaxyServer&);
 
     /* SOE level handlers */
-    void handleSessionRequest(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handleNetStatus(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handleMultiPacket(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handleAcknowledge(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handleDataChannel(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handleDisconnect(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
-    void handlePing(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    void handleSessionRequest(const NetworkAddress& address, ByteBuffer& message);
+    void handleNetStatus(const NetworkAddress& address, ByteBuffer& message);
+    void handleMultiPacket(const NetworkAddress& address, ByteBuffer& message);
+    void handleAcknowledge(const NetworkAddress& address, ByteBuffer& message);
+    void handleDataChannel(const NetworkAddress& address, ByteBuffer& message);
+    void handleDisconnect(const NetworkAddress& address, ByteBuffer& message);
+    void handlePing(const NetworkAddress& address, ByteBuffer& message);
 
     UdpSocketListener   network_listener_;
 
-    typedef std::tr1::function<void (const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer>)> SoeMessageHandler;
+    typedef std::tr1::function<void (const NetworkAddress& address, ByteBuffer&)> SoeMessageHandler;
     Protocol<uint16_t, SoeMessageHandler>  soe_protocol_;
     Protocol<uint32_t>  swg_protocol_;
 
@@ -61,7 +61,7 @@ private:
     
     virtual void initializeProtocol() = 0;
 
-    virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message) = 0;
+    virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message) = 0;
 	virtual void onUpdate() = 0;
 };
 

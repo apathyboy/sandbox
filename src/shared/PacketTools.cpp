@@ -65,10 +65,10 @@ static const unsigned int crc32table[256] = {
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
+ByteBuffer LoadPacketFromTextFile(const std::string& name)
 {
     std::string line_buffer;
-    std::tr1::shared_ptr<ByteBuffer> packet(new ByteBuffer());
+    ByteBuffer packet;
 
     static const std::tr1::regex pattern("0x([0-9a-fA-F]+)");
     const int keep[] = {1}; 
@@ -87,7 +87,7 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
         for (std::tr1::sregex_token_iterator i(
                 line_buffer.begin(), line_buffer.end(), pattern, keep); 
              i != end; ++i) {            
-            *packet << axtoi((*i).str().c_str());
+            packet << axtoi((*i).str().c_str());
         }
     }
 
@@ -97,14 +97,14 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
 }
 
 
-void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
+void Compress(ByteBuffer& packet)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet->raw();  
+    std::vector<uint8_t>& packet_data = packet.raw();  
 
     // Determine the offset to begin compressing data at.
     uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -122,12 +122,12 @@ void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
     deflateInit(&stream, Z_DEFAULT_COMPRESSION); 
  
     // Prepare the stream for compression and then compress the data.
-    std::vector<uint8_t> compression_output(packet->size() + 20);
+    std::vector<uint8_t> compression_output(packet.size() + 20);
  
     stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
-    stream.avail_in  = packet->size() - offset - 3;
+    stream.avail_in  = packet.size() - offset - 3;
     stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
-    stream.avail_out = packet->size() + 20;
+    stream.avail_out = packet.size() + 20;
 
     deflate(&stream, Z_FINISH);
 
@@ -146,14 +146,14 @@ void Compress(std::tr1::shared_ptr<ByteBuffer> packet)
 }
 
 
-void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
+void Decompress(ByteBuffer& packet)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet->raw();  
+    std::vector<uint8_t>& packet_data = packet.raw();  
 
     // Determine the offset to begin compressing data at.
     uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -174,7 +174,7 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
     std::vector<uint8_t> compression_output(800);
  
     stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
-    stream.avail_in  = packet->size() - offset - 3;
+    stream.avail_in  = packet.size() - offset - 3;
     stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
     stream.avail_out = 800;
 
@@ -195,14 +195,14 @@ void Decompress(std::tr1::shared_ptr<ByteBuffer> packet)
 }
 
 
-void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+void Encrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet->raw();  
+    std::vector<uint8_t>& packet_data = packet.raw();  
 
     // Determine the offset to begin decrypting data at.
     uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -227,14 +227,14 @@ void Encrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
 }
 
 
-void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+void Decrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet->raw();  
+    std::vector<uint8_t>& packet_data = packet.raw();  
 
     // Determine the offset to begin decrypting data at.
     uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -260,7 +260,7 @@ void Decrypt(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
 }
 
 
-uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 {
     uint32_t crc = crc32table[(~seed) & 0xFF];
     crc ^= 0x00FFFFFF;
@@ -282,9 +282,9 @@ uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uin
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet->raw();  
+    std::vector<uint8_t>& packet_data = packet.raw();  
 
-    uint16_t packet_crc_length = packet->size() - seedLength;
+    uint16_t packet_crc_length = packet.size() - seedLength;
     for(uint16_t i = 0; i < packet_crc_length; i++ ) {
         index = (packet_data[i]) ^ crc;
         crc = (crc >> 8) & 0x00FFFFFF;
@@ -295,7 +295,7 @@ uint32_t GenerateCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uin
 }
 
 
-bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+bool CrcTest(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 {
     if(seedLength > 0) {
         uint32_t packetCrc = GenerateCrc(packet, seed, seedLength);
@@ -308,7 +308,7 @@ bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
         // the raw() was implemented for. This allows us to work on
         // the raw data with a non-standard library and minimize the amount
         // of copying.
-        std::vector<uint8_t>& packet_data = packet->raw();  
+        std::vector<uint8_t>& packet_data = packet.raw();  
 
         for (int16_t i = 0; i < seedLength; ++i) {
             pullbyte = packet_data[(packet_data.size() - seedLength) + i];
@@ -328,7 +328,7 @@ bool CrcTest(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t se
 }
 
 
-void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t seedLength)
+void AppendCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 {
     if (seedLength > 0) {
         // Grab a reference to the internals of the packet. Generally
@@ -336,7 +336,7 @@ void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t 
         // the raw() was implemented for. This allows us to work on
         // the raw data with a non-standard library and minimize the amount
         // of copying.
-        std::vector<uint8_t>& packet_data = packet->raw();  
+        std::vector<uint8_t>& packet_data = packet.raw();  
 
         // Generate the CRC and append it to the packet.
         unsigned int crc = GenerateCrc(packet, seed);
@@ -347,65 +347,6 @@ void AppendCrc(std::tr1::shared_ptr<ByteBuffer> packet, uint32_t seed, uint16_t 
     }
 }
 
-
-char* loadPacket(const std::string& name, unsigned short* length = NULL) 
-{
-	// Create a container for the packet data and a buffer
-	// to use when reading in the file data.
- 	std::string data;
-	std::string buffer;
-		
-	// Remove leading and trailing whitespace
-	static const char whitespace[] = " \n\t\v\r\f";
-
-	// Read in the file a line at a time.
-    std::ifstream ifs(name.c_str());
-	while (std::getline(ifs, buffer)) {
-		// Remove any comments.
-		buffer = buffer.substr( 0, buffer.find('#'));	
-		
-		// Remove any whitespace from the beginning/end of the line.
-		buffer.erase(0, buffer.find_first_not_of(whitespace));
-		buffer.erase(buffer.find_last_not_of(whitespace) + 1U);
-
-		// Append the buffer to the packet data.
-		data.append(buffer);
-	}
-
-	char* packet;				// Container for the final packet data.
-	char* tokenPtr;				// Tokenizer for breaking up the string.
-	char tmp[MAX_PACKET_SIZE]; // Buffer 
-	*length = 0;				// Initialize the packet size.
-
-	// This for loop breaks apart the packet data string and converts
-	// each string value to is hexidecimal value and stores the
-	// resulting data in the buffer. Also, at the end of the for loop
-	// the next token pointer is found and the length is increased.
-	for (tokenPtr = strtok(const_cast<char*>(data.c_str()), " ,\n");
-		 tokenPtr;
-		 tokenPtr = strtok(NULL, " ,\n"), *length += 1)
-	{		
-		*(unsigned char*)(tmp+*length) = (unsigned char)axtoi(tokenPtr+2);
-	}
-
-	// Copy the packet data from the buffer to the packet container.
-	packet = new char[*length];
-	for (int j = 0; j < *length; j++)
-	{
-		*(unsigned char*)(packet+j) = (unsigned char)*(tmp+j);
-	}
-	
-	/* Uncomment this to display an output of each packet as it's loaded.
-	printf("LOADED PACKET\nPacket Size: %d \nPacket Data: \n", *length);
-	for(int k = 0; k < *length; k++)
-	{
-		printf("0x%02x ",(unsigned char)*(packet+k));
-	}
-	printf("\n");
-	*/
-
-	return packet;
-}
 
 uint8_t axtoi(const char * const hexString) {
 	uint8_t n = 0;         // position in string

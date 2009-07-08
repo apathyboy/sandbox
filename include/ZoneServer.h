@@ -22,7 +22,7 @@ private:
     ZoneServer(const ZoneServer&);
     ZoneServer& operator=(const ZoneServer&);
 
-    virtual void onIncoming(const NetworkAddress& address, std::tr1::shared_ptr<ByteBuffer> message);
+    virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message);
     virtual void onUpdate();
     virtual void initializeProtocol();
 
