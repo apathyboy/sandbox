@@ -5,9 +5,9 @@
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
 
-#include "SocketServer.h"
+#include "GalaxyServer.h"
 
-class LoginServer : public SocketServer
+class LoginServer : public GalaxyServer
 {
 public:
     explicit LoginServer(uint16_t port);
@@ -21,6 +21,4 @@ private:
     virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message);
 	virtual void onUpdate();
     virtual void initializeProtocol();
-
-    Protocol<uint32_t> protocol_;
 };

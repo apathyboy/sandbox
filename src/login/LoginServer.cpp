@@ -12,9 +12,10 @@
 #include "Session.h"
 
 LoginServer::LoginServer(uint16_t port)
-    : SocketServer(port)
-    , protocol_()
-{}
+    : GalaxyServer(port)
+{
+    Logger().log(INFO) << "Login Server listening on port: [" << port << "]";
+}
 
 
 LoginServer::~LoginServer()
@@ -31,16 +32,7 @@ void LoginServer::onUpdate()
 
 void LoginServer::initializeProtocol()
 {
-    protocol_.addHandler(1, std::tr1::bind(&HandleSessionRequest, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(3, std::tr1::bind(&HandleMultiPacket, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(5,  std::tr1::bind(&HandleDisconnect, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(6,  std::tr1::bind(&HandlePing, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(7, std::tr1::bind(&HandleNetStatus, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(9,  std::tr1::bind(&HandleDataChannel, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    protocol_.addHandler(21, std::tr1::bind(&HandleAcknowledge, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-
-    protocol_.addHandler(0x41131F96, std::tr1::bind(&HandleAuthentication, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-
-    protocol_.addHandler(0xD5899226, std::tr1::bind(&HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    addSwgProtocolHandler(0x41131F96, std::tr1::bind(&HandleAuthentication, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    addSwgProtocolHandler(0xD5899226, std::tr1::bind(&HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
 
