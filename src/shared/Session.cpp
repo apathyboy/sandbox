@@ -11,30 +11,6 @@
 #include "Logger.h"
 #include "PacketTools.h"
 
-
-/**	Galaxy Session constructor
- *	Takes the data necessary for the Session class to function.
- *
-Session::Session(const SocketServer * const server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
-    : socket_address_(address)
-    , socket_server_(server)
-    , player_(new Player())
-    , protocol_(protocol)
-    , server_sequence_(0)
-    , client_sequence_(0)
-    , received_sequence_(0)
-    , connection_id_(0)
-    , crc_seed_(0xDEADBABE)
-{
-    // Initialize the player to a default location and state. 
-    // @todo: This information should be pulled from storage
-    player_->position(Vector3<int>(-1443, 9, 2771));
-    player_->stationId(653564567);
-    player_->locationName("naboo");
-    player_->mood(0);
-}
-*/
-
 Session::Session(const GalaxyServer& server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
     : socket_address_(address)
     , server_(server)
@@ -57,9 +33,9 @@ Session::Session(const GalaxyServer& server, const NetworkAddress& address, Prot
 }
 
 
-const SocketServer * const Session::server() const
+const GalaxyServer& Session::server() const 
 {
-    return socket_server_;
+    return server_;
 }
 
 
@@ -169,14 +145,14 @@ void Session::sendHardcodedPacket(const std::string& name, bool compressed)
 void Session::sendHardcodedPacket(ByteBuffer& packet, bool compressed)
 {	
     packet.writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
-    sendToRemote(packet, true, compressed, true);
+    sendToRemote(packet, compressed);
 
     ++server_sequence_;;	
 }
 
-void Session::sendToRemote(ByteBuffer& packet, bool encrypt, bool compress, bool crc) const
+void Session::sendToRemote(ByteBuffer& packet, bool compress, bool encrypt) const
 {
-    //Logger().log(INFO) << "Outgoing Packet" << std::endl << *packet << std::endl;
+    Logger().log(INFO) << "Outgoing Packet" << std::endl << packet << std::endl;
 
     if (compress) {
         Compress(packet);
@@ -184,20 +160,17 @@ void Session::sendToRemote(ByteBuffer& packet, bool encrypt, bool compress, bool
 
     if (encrypt) {
         Encrypt(packet, crc_seed_);    
-    }
-
-    if (crc) {
         AppendCrc(packet, crc_seed_);
     }
 
-    socket_server_->sendPacket(socket_address_, packet);
+    server_.sendToRemote(socket_address_, packet);
 }
 
 void Session::sendHeartbeat() const
 {
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
 
-    sendToRemote(*packet, true);
+    sendToRemote(*packet);
 }
 
 void Session::sendAcknowledge() const
@@ -205,7 +178,7 @@ void Session::sendAcknowledge() const
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
 
-    sendToRemote(*packet, true);
+    sendToRemote(*packet);
 }
 
 void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
@@ -223,17 +196,6 @@ void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 
 void Session::handlePacket(ByteBuffer& packet)
 {
-    // Decrypt and decompress the incoming data as needed.
-    if(CrcTest(packet, crc_seed_)) {
-        Decrypt(packet, crc_seed_);
-    }
-
-    if (packet.peekAt<uint8_t>(2) == 'x') {
-        Decompress(packet);
-    }
-
-    Logger().log(INFO) << "Incoming Message" << std::endl << packet;
-
     try {
 	    MessageHandler handler = protocol_.find(packet);
         handler(*this, packet);

@@ -32,10 +32,9 @@ public:
 	/**	Galaxy Session constructor
 	 *	Takes the data necessary for the Session class to function.
 	 */
-	//Session(const SocketServer * const server, const NetworkAddress& address, Protocol<uint32_t>& protocol);
     Session(const GalaxyServer& server, const NetworkAddress& address, Protocol<uint32_t>& protocol);
 
-    const SocketServer * const server() const;
+    const GalaxyServer& server() const;
     std::tr1::shared_ptr<Player> player();
 
     uint32_t connectionId() const;
@@ -62,7 +61,7 @@ public:
     void sendHardcodedPacket(const std::string& name, bool compressed);
     void sendHardcodedPacket(ByteBuffer& packet, bool compressed);
 
-    void sendToRemote(ByteBuffer& packet, bool encrypt = false, bool compress = false, bool crc = true) const;
+    void sendToRemote(ByteBuffer& packet, bool compress = false, bool encrypt = true) const;
 
     void sendHeartbeat() const;
     void sendAcknowledge() const;
@@ -79,7 +78,6 @@ private:
     Session& operator=(const Session&);    
 
 	NetworkAddress socket_address_;
-	const SocketServer* socket_server_;
     const GalaxyServer& server_;
     std::tr1::shared_ptr<Player> player_;
     Protocol<uint32_t>& protocol_;
