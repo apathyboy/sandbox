@@ -41,10 +41,12 @@ private:
     GalaxyServer(const GalaxyServer&);
     GalaxyServer& operator=(const GalaxyServer&);
 
+    void handleMessage(const NetworkAddress& address, ByteBuffer& message);
+
     /* SOE level handlers */
     void handleSessionRequest(const NetworkAddress& address, ByteBuffer& message);
     void handleNetStatus(const NetworkAddress& address, ByteBuffer& message);
-    void handleMultiPacket(const NetworkAddress& address, ByteBuffer& message);
+    void handleMultiMessage(const NetworkAddress& address, ByteBuffer& message);
     void handleAcknowledge(const NetworkAddress& address, ByteBuffer& message);
     void handleDataChannel(const NetworkAddress& address, ByteBuffer& message);
     void handleDisconnect(const NetworkAddress& address, ByteBuffer& message);

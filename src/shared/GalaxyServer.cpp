@@ -10,12 +10,13 @@
 #include "Logger.h"
 #include "Session.h"
 #include "SoeMessageFactory.h"
+#include "PacketTools.h"
 
 GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)
 {    
     soe_protocol_.addHandler(0x0001, std::tr1::bind(&GalaxyServer::handleSessionRequest, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(0x0003, std::tr1::bind(&GalaxyServer::handleMultiPacket,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(0x0003, std::tr1::bind(&GalaxyServer::handleMultiMessage,   this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
     soe_protocol_.addHandler(0x0005, std::tr1::bind(&GalaxyServer::handleDisconnect,     this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
     soe_protocol_.addHandler(0x0006, std::tr1::bind(&GalaxyServer::handleKeepAlive,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
     soe_protocol_.addHandler(0x0007, std::tr1::bind(&GalaxyServer::handleNetStatus,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
@@ -56,16 +57,19 @@ void GalaxyServer::run()
 
 void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& message)
 {
-    uint16_t opcode = message.read<uint16_t>();
-    
-	SoeMessageHandler handler = soe_protocol_.find(opcode);
+    std::tr1::shared_ptr<Session> session = findSession(address);
 
-    if (! handler) {
-        Logger().log(INFO) << "Unidentified message received" << std::endl << message;
-        return;
+    if (session) {    
+        if(CrcTest(message, session->crcSeed(), session->crcLength())) {
+            Decrypt(message, session->crcSeed(), session->crcLength());
+        }
+
+        if (message.peekAt<uint8_t>(2) == 'x') {
+            Decompress(message);
+        }
     }
 
-    handler(address, message);
+    handleMessage(address, message);
 }
 
 
@@ -121,6 +125,21 @@ uint32_t GalaxyServer::sessionCount() const
 }
 
 
+void GalaxyServer::handleMessage(const NetworkAddress& address, ByteBuffer& message)
+{
+    uint16_t opcode = message.read<uint16_t>();
+    
+	SoeMessageHandler handler = soe_protocol_.find(opcode);
+
+    if (! handler) {
+        Logger().log(INFO) << "Unidentified message received" << std::endl << message;
+        return;
+    }
+
+    handler(address, message);
+}
+
+
 void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffer& message)
 {
     std::tr1::shared_ptr<Session> session = findSession(address);
@@ -155,7 +174,7 @@ void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& me
 }
 
 
-void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& message)
+void GalaxyServer::handleMultiMessage(const NetworkAddress& address, ByteBuffer& message)
 {
     // Loop through the message until the compression bit is reached.
     while (message.readPosition() < message.size() - 4)
@@ -176,7 +195,7 @@ void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& 
         ByteBuffer segment(message.data()+message.readPosition(), segment_size);
         message.readPosition(message.readPosition() + segment_size);
 
-		handleIncoming(address, segment);
+		handleMessage(address, segment);
     }
 }
 
