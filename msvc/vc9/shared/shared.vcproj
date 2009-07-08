@@ -228,6 +228,14 @@
 			>
 		</File>
 		<File
+			RelativePath="..\..\..\src\shared\SoeMessageFactory.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\include\SoeMessageFactory.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\include\msvc\stdint.h"
 			>
 		</File>
