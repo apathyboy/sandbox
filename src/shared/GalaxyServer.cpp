@@ -146,7 +146,7 @@ void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& me
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (! session) {
-        Logger().log(ERR) << "Received a Network Status message from an address without a sesion: [" << address << "]";
+        Logger().log(ERR) << "Received a Network Status message from an address without a session: [" << address << "]";
         return;
     }
 
@@ -186,17 +186,60 @@ void GalaxyServer::handleAcknowledge(const NetworkAddress& address, ByteBuffer& 
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (! session) {
-        Logger().log(ERR) << "Received an Acknowledge message from an address without a sesion: [" << address << "]";
+        Logger().log(ERR) << "Received an Acknowledge message from an address without a session: [" << address << "]";
         return;
     }
 
-    session->receivedSequence(message.read<uint16_t>());
-    session->clientSequence(message.read<uint16_t>());
+    // @TODO: Complete this implementation correctly.
+    uint16_t sequence = message.read<uint16_t>();
+    
+    session->receivedSequence(sequence);
+    session->clientSequence(sequence);
 }
 
 
 void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& message)
-{}
+{
+    std::tr1::shared_ptr<Session> session = findSession(address);
+
+    if (! session) {
+        Logger().log(ERR) << "Received a Data Channel message from an address without a session: [" << address << "]";
+        return;
+    }
+
+    session->clientSequence(message.read<uint16_t>());
+    session->sendAcknowledge();
+
+    if (ntohs(message.peek<uint16_t>()) == 0x0019) {
+        message.read<uint16_t>();
+
+        // Loop through the message until the compression bit is reached.
+        while (message.readPosition() < message.size() - 3)
+        {
+            uint8_t segment_size = message.read<uint8_t>();
+        
+            // If the segment size is 255+ check the next bit, a 0x01 indicates
+            // over 255 and that the next bit should be added to the total
+            // size. If 0x00 then the next bit should be skipped.
+            if (segment_size == 0xFF) {
+                if (message.read<uint8_t>() == 0x01) {
+                    segment_size += message.read<uint8_t>();
+                } else {
+                    message.read<uint8_t>();
+                }
+            }
+    
+            ByteBuffer segment(message.data()+message.readPosition(), segment_size);
+		    session->handlePacket(segment);
+
+            message.readPosition(message.readPosition() + segment_size);
+        }        
+    } else {
+    
+        ByteBuffer segment(message.data()+message.readPosition(), message.size()-7);
+		session->handlePacket(segment);
+    }
+}
 
 
 void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& message)
