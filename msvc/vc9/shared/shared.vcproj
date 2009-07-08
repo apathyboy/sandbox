@@ -212,22 +212,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\shared\SocketServer.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\SocketServer.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\shared\SOEHandler.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\SOEHandler.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\shared\SoeMessageFactory.cpp"
 			>
 		</File>

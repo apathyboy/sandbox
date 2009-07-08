@@ -8,7 +8,6 @@
 #include "ZoneServer.h"
 #include "Logger.h"
 #include "Session.h"
-#include "SOEHandler.h"
 #include "LoginHandler.h"
 #include "SpatialHandler.h"
 #include "ZoneInsertionHandler.h"

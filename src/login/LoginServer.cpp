@@ -7,7 +7,6 @@
 
 #include "LoginServer.h"
 #include "Logger.h"
-#include "SOEHandler.h"
 #include "LoginHandler.h"
 #include "Session.h"
 

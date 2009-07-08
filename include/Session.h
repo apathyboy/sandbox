@@ -19,7 +19,6 @@
 #include "ByteBuffer.h"
 #include "NetworkAddress.h"
 #include "Player.h"
-#include "SocketServer.h"
 #include "GalaxyServer.h"
 #include "Protocol.h"
 
