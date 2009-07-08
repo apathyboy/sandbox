@@ -5,10 +5,11 @@
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
 
+#include "boost/thread.hpp"
 #include "GalaxyServer.h"
 #include "Logger.h"
 #include "Session.h"
-#include "boost/thread.hpp"
+#include "SoeMessageFactory.h"
 
 GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)
@@ -122,7 +123,6 @@ uint32_t GalaxyServer::sessionCount() const
 
 void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffer& message)
 {
-    /*
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (session) {
@@ -132,13 +132,12 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffe
 
     session = addSession(address);
 
-    session->crcLength(message->read<uint32_t>());
-    session->connectionId(message->read<uint32_t>());
-    session->maxUdpSize(message->read<uint32_t>());
+    session->crcLength(message.read<uint32_t>());
+    session->connectionId(message.read<uint32_t>());
+    session->maxUdpSize(message.read<uint32_t>());
 
-    ByteBuffer session_response(SoeMessageFactory::buildSessionResponse(session));
-    sendToRemote(address, session_response);
-    */
+    std::tr1::shared_ptr<ByteBuffer> session_response(SoeMessageFactory::buildSessionResponse(session));
+    sendToRemote(address, *session_response);
 }
 
 
