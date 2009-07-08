@@ -8,16 +8,23 @@
 #ifndef SOE_MESSAGE_FACTORY_H_
 #define SOE_MESSAGE_FACTORY_H_
 
+#ifdef _MSC_VER
+#include "stdint.h"
+#else
+#include <cstdint>
+#endif
+
 #include <tr1/memory>
 
 class ByteBuffer;
 class Session;
+class GalaxyServer;
 
 class SoeMessageFactory
 {
 public:
-    static std::tr1::shared_ptr<ByteBuffer> buildSessionResponse(std::tr1::shared_ptr<Session>);
-    static std::tr1::shared_ptr<ByteBuffer> buildNetworkStatusResponse(std::tr1::shared_ptr<Session>);
+    static std::tr1::shared_ptr<ByteBuffer> buildSessionResponse(const GalaxyServer& server, std::tr1::shared_ptr<Session> session);
+    static std::tr1::shared_ptr<ByteBuffer> buildNetworkStatusResponse(std::tr1::shared_ptr<Session> session, uint16_t tick);
     static std::tr1::shared_ptr<ByteBuffer> buildKeepAliveResponse();
 
 private:
