@@ -13,7 +13,7 @@
 
 #include "ByteBuffer.h"
 
-ByteBuffer LoadPacketFromTextFile(const std::string& name);
+std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name);
 
 void Compress(ByteBuffer& packet);
 void Decompress(ByteBuffer& packet);

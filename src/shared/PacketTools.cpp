@@ -65,10 +65,10 @@ static const unsigned int crc32table[256] = {
     0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-ByteBuffer LoadPacketFromTextFile(const std::string& name)
+std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name)
 {
     std::string line_buffer;
-    ByteBuffer packet;
+    std::tr1::shared_ptr<ByteBuffer> packet(new ByteBuffer());
 
     static const std::tr1::regex pattern("0x([0-9a-fA-F]+)");
     const int keep[] = {1}; 
@@ -87,7 +87,7 @@ ByteBuffer LoadPacketFromTextFile(const std::string& name)
         for (std::tr1::sregex_token_iterator i(
                 line_buffer.begin(), line_buffer.end(), pattern, keep); 
              i != end; ++i) {            
-            packet << axtoi((*i).str().c_str());
+            *packet << axtoi((*i).str().c_str());
         }
     }
 
