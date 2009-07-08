@@ -182,7 +182,17 @@ void GalaxyServer::handleMultiPacket(const NetworkAddress& address, ByteBuffer& 
 
 
 void GalaxyServer::handleAcknowledge(const NetworkAddress& address, ByteBuffer& message)
-{}
+{
+    std::tr1::shared_ptr<Session> session = findSession(address);
+
+    if (! session) {
+        Logger().log(ERR) << "Received an Acknowledge message from an address without a sesion: [" << address << "]";
+        return;
+    }
+
+    session->receivedSequence(message.read<uint16_t>());
+    session->clientSequence(message.read<uint16_t>());
+}
 
 
 void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& message)
