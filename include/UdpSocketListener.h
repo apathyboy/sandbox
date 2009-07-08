@@ -29,7 +29,7 @@ public:
     UdpSocketListener(uint16_t port);
     ~UdpSocketListener();
 
-    uint16_t port();
+    uint16_t port() const;
     void     port(uint16_t port);
 
     Callback callback();

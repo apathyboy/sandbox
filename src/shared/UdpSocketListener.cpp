@@ -8,6 +8,7 @@
 #include "boost/asio.hpp"
 #include "UdpSocketListener.h"
 #include "ByteBuffer.h"
+#include "Logger.h"
 
 
 /** UdpSocketListener::UdpSocketListenerImpl **/ 
@@ -17,12 +18,13 @@ public:
     UdpSocketListenerImpl(uint16_t port)
         : io_service_()
         , socket_(io_service_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), port))
+        , buffer_(496)
         , port_(port)
     {
   	    asyncRecieve();
     }
 
-    uint16_t port()
+    uint16_t port() const
     {
         return port_;
     }
@@ -74,6 +76,7 @@ private:
   
     void handleReceive(const boost::system::error_code& error, size_t bytes_received)
     {  	
+
         ByteBuffer message(&buffer_[0], bytes_received);
         callback_(remote_endpoint_, message);
 
@@ -117,7 +120,7 @@ UdpSocketListener::~UdpSocketListener()
 {}
     
 
-uint16_t UdpSocketListener::port()
+uint16_t UdpSocketListener::port() const
 {
     return impl_->port();
 }
