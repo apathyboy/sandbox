@@ -20,8 +20,14 @@ public:
     explicit GalaxyServer(uint16_t port);
     virtual ~GalaxyServer();
 
-    uint16_t port();
+    uint16_t port() const;
     void     port(uint16_t);
+
+    int16_t  encryptionMethod() const;
+    void     encryptionMethod(int16_t encryptionType);
+
+    uint32_t maxUdpSize() const;
+    void     maxUdpSize(uint32_t size);
 
 	void run();
 
@@ -33,6 +39,7 @@ public:
     std::tr1::shared_ptr<Session> removeSession(const NetworkAddress& address);
     uint32_t sessionCount() const;
 
+    void addSwgProtocolHandler(uint32_t identifier, MessageHandler handler);
 
 private:
     /* Disable compiler generated methods */
@@ -52,14 +59,17 @@ private:
     void handleDisconnect(const NetworkAddress& address, ByteBuffer& message);
     void handleKeepAlive(const NetworkAddress& address, ByteBuffer& message);
 
+    typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
+	SessionMap sessions_;	
+
     UdpSocketListener   network_listener_;
 
     typedef std::tr1::function<void (const NetworkAddress& address, ByteBuffer&)> SoeMessageHandler;
     Protocol<uint16_t, SoeMessageHandler>  soe_protocol_;
     Protocol<uint32_t>  swg_protocol_;
 
-    typedef std::map<NetworkAddress, std::tr1::shared_ptr<Session>> SessionMap;
-	SessionMap sessions_;	
+    uint32_t max_udp_size_;
+    int16_t  encryption_method_;
     
     virtual void initializeProtocol() = 0;
 
