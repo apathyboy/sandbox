@@ -5,17 +5,13 @@
  * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
 **/
 
-#include "SocketServer.h"
+#include "GalaxyServer.h"
 
-class ZoneServer : public SocketServer
+class ZoneServer : public GalaxyServer
 {
 public:
     explicit ZoneServer(uint16_t port);
     virtual ~ZoneServer();
-
-    uint8_t shuttleState() const;
-    void    shuttleState(uint8_t state);
-    void    sendShuttleUpdate();
     
 private:
 	ZoneServer();
@@ -25,8 +21,4 @@ private:
     virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message);
     virtual void onUpdate();
     virtual void initializeProtocol();
-
-    Protocol<uint32_t> protocol_;
-        
-	uint8_t  shuttle_state_;
 };
