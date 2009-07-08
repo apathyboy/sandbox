@@ -21,3 +21,10 @@ std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildNetworkStatusResponse(s
     return buffer;
 }
 
+
+std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildKeepAliveResponse()
+{
+    std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer());
+    return buffer;
+}
+
