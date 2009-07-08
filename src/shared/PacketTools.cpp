@@ -284,7 +284,7 @@ uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
     // of copying.
     std::vector<uint8_t>& packet_data = packet.raw();  
 
-    uint16_t packet_crc_length = packet.size() - seedLength;
+    uint16_t packet_crc_length = packet_data.size() - seedLength;
     for(uint16_t i = 0; i < packet_crc_length; i++ ) {
         index = (packet_data[i]) ^ crc;
         crc = (crc >> 8) & 0x00FFFFFF;
@@ -322,9 +322,11 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
         if (packetCrc != testCrc) {
             return false;
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 
