@@ -13,3 +13,11 @@ std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildSessionResponse(std::tr
     std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer());
     return buffer;
 }
+
+
+std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildNetworkStatusResponse(std::tr1::shared_ptr<Session>)
+{
+    std::tr1::shared_ptr<ByteBuffer> buffer(new ByteBuffer());
+    return buffer;
+}
+

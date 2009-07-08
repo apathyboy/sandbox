@@ -17,6 +17,7 @@ class SoeMessageFactory
 {
 public:
     static std::tr1::shared_ptr<ByteBuffer> buildSessionResponse(std::tr1::shared_ptr<Session>);
+    static std::tr1::shared_ptr<ByteBuffer> buildNetworkStatusResponse(std::tr1::shared_ptr<Session>);
 
 private:
 	SoeMessageFactory();
