@@ -152,7 +152,7 @@ void Session::sendHardcodedPacket(ByteBuffer& packet, bool compressed)
 
 void Session::sendToRemote(ByteBuffer& packet, bool compress, bool encrypt) const
 {
-    Logger().log(INFO) << "Outgoing Packet" << std::endl << packet << std::endl;
+    // Logger().log(INFO) << "Outgoing Packet" << std::endl << packet << std::endl;
 
     if (compress) {
         Compress(packet);

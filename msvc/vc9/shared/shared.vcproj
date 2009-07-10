@@ -147,14 +147,46 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\src\shared\ByteBuffer.cpp"
+		<Filter
+			Name="network"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\ByteBuffer.h"
+			<File
+				RelativePath="..\..\..\include\NetworkAddress.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\shared\UdpSocketListener.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\UdpSocketListener.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="utilities"
 			>
-		</File>
+			<File
+				RelativePath="..\..\..\src\shared\ByteBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ByteBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\shared\Logger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Logger.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Vector3.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath="..\..\..\src\shared\GalaxyServer.cpp"
 			>
@@ -164,23 +196,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\shared\Logger.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\Logger.h"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\src\shared\LoginHandler.cpp"
 			>
 		</File>
 		<File
 			RelativePath="..\..\..\include\LoginHandler.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\NetworkAddress.h"
 			>
 		</File>
 		<File
@@ -217,22 +237,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\include\SoeMessageFactory.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\msvc\stdint.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\shared\UdpSocketListener.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\UdpSocketListener.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\include\Vector3.h"
 			>
 		</File>
 	</Files>

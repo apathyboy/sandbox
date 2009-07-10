@@ -90,8 +90,8 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& mes
    // Logger().log(INFO) << "Unprocessed Incoming Message" << std::endl << message;
 
     if (session) {    
-        if(CrcTest(message, session->crcSeed())) {
-            Decrypt(message, session->crcSeed());
+        if(CrcTest(message, session->crcSeed(), session->crcLength())) {
+            Decrypt(message, session->crcSeed(), session->crcLength());
         }
 
         if (message.peekAt<uint8_t>(2) == 'x') {
@@ -99,7 +99,7 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& mes
         }
     }
 
-    Logger().log(INFO) << "Incoming Message" << std::endl << message;
+    // Logger().log(INFO) << "Incoming Message" << std::endl << message;
 
     handleMessage(address, message);
 }
