@@ -209,10 +209,12 @@ template<> const std::wstring ByteBuffer::read<std::wstring>(bool do_swap_endian
 		throw std::out_of_range("Read past end of buffer");
 	}
 
-    wchar_t* string_data = reinterpret_cast<wchar_t*>(&data_[read_position_]);
-
-	std::wstring data(string_data, string_data+length);
-	read_position_ += length * 2;
+	std::wstring data;
+	
+	for (size_t i = 0; i < length; ++i) {
+		data += *reinterpret_cast<char *>(&data_[read_position_]);
+		read_position_ += 2;
+	}
 
 	return data;
 }

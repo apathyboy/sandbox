@@ -94,7 +94,7 @@ void HandleSpatialChat(Session& session, ByteBuffer& message)
             ++moodLength;
             message.read<int8_t>();
 
-            mood[moodPosition] = atoi(&moodString[0]);
+            mood[moodPosition] = atoi(reinterpret_cast<char *>(&moodString[0]));
             moodString.empty();
             ++moodPosition;
 	        j = 0;
@@ -142,7 +142,7 @@ void HandleMood(Session& session, ByteBuffer& message)
         message.read<int8_t>();
     }
 
-    session.player()->mood(atoi(&mood[0]));
+    session.player()->mood(atoi(reinterpret_cast<char *>(&mood[0])));
 
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
 
@@ -171,7 +171,7 @@ void HandleEmote(Session& session, ByteBuffer& message)
         message.read<int8_t>();
     }
 
-	uint16_t emoteId = atoi(&emote[0]);
+	uint16_t emoteId = atoi(reinterpret_cast<char *>(&emote[0]));
     
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
 

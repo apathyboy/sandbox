@@ -18,7 +18,8 @@
 #include <tr1/functional>
 #include <tr1/memory>
 
-class ByteBuffer;
+#include "ByteBuffer.h"
+
 class Session;
 
 typedef std::tr1::function<void (Session& session, ByteBuffer&)> MessageHandler;
@@ -39,7 +40,7 @@ public:
     {
         Handler handler = NULL;
 
-        HandlerMap::iterator i = handlers_.find(id);
+        typename std::map<Identifier, Handler>::iterator i = handlers_.find(id);
         if (i != handlers_.end()) {
             handler = (*i).second;
         }
@@ -51,7 +52,7 @@ public:
     {
 	    Handler handler = NULL;
 
-	    HandlerMap::iterator i = handlers_.find(message.peekAt<uint8_t>(1));
+	    typename std::map<Identifier, Handler>::iterator i = handlers_.find(message.peekAt<uint8_t>(1));
 
 	    if (i != handlers_.end())
 	    {
@@ -65,7 +66,7 @@ public:
             if (i != handlers_.end()) {
                 handler = (*i).second;
             } else {
-                throw std::exception("Unidentified Packet");
+                throw std::exception();
             }
 	    }
 
@@ -76,8 +77,7 @@ private:
     Protocol(const Protocol&);
     Protocol& operator=(const Protocol&);
 
-    typedef std::map<Identifier, Handler> HandlerMap;
-    HandlerMap handlers_;
+    std::map<Identifier, Handler> handlers_;
 };
 
 
