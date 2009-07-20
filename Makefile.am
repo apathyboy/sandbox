@@ -51,8 +51,8 @@ cu_sandbox_LDADD = libshared.la \
   $(BOOST_PROGRAM_OPTIONS_LIB) \
   $(BOOST_REGEX_LIB)
 
-
-check_PROGRAMS = cu_sandbox_tests
+TESTS=cu_sandbox_tests
+check_PROGRAMS = $(TESTS)
 cu_sandbox_tests_SOURCES = test/main.cpp \
   test/TestByteBuffer.cpp \
   test/TestLoadPacketFromTextFile.cpp
