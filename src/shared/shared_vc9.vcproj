@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="tests"
-	ProjectGUID="{AB8FD9C3-2708-4F3B-9ECF-625EC20D2D12}"
-	RootNamespace="tests"
+	Name="shared"
+	ProjectGUID="{76C53732-C83E-4E7B-8E79-169D5D09AE1B}"
+	RootNamespace="shared"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
 			IntermediateDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\zone&quot;;&quot;$(SolutionDir)..\..\src\login&quot;;&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\gtest\include&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,19 +59,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlibd.lib gtestd.lib"
-				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(SolutionName)-$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
-				GenerateManifest="false"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -83,18 +76,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(SolutionName)-$(ProjectName).exe&quot;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
 			IntermediateDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -117,12 +106,11 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\zone&quot;;&quot;$(SolutionDir)..\..\src\login&quot;;&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\gtest\include&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				WarningLevel="3"
-				WarnAsError="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -135,21 +123,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlib.lib gtest.lib"
-				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(SolutionName)-$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
-				GenerateManifest="false"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -161,11 +140,7 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(SolutionName)-$(ProjectName).exe&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -173,15 +148,87 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\test\main.cpp"
+			RelativePath=".\ByteBuffer.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\test\TestByteBuffer.cpp"
+			RelativePath=".\ByteBuffer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\test\TestLoadPacketFromTextFile.cpp"
+			RelativePath=".\GalaxyServer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\GalaxyServer.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Logger.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Logger.h"
+			>
+		</File>
+		<File
+			RelativePath=".\LoginHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\LoginHandler.h"
+			>
+		</File>
+		<File
+			RelativePath=".\NetworkAddress.h"
+			>
+		</File>
+		<File
+			RelativePath=".\PacketTools.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\PacketTools.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Player.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Player.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Protocol.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Session.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Session.h"
+			>
+		</File>
+		<File
+			RelativePath=".\SoeMessageFactory.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SoeMessageFactory.h"
+			>
+		</File>
+		<File
+			RelativePath=".\UdpSocketListener.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\UdpSocketListener.h"
+			>
+		</File>
+		<File
+			RelativePath=".\Vector3.h"
 			>
 		</File>
 	</Files>

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="zone_server"
-	ProjectGUID="{8CE0B028-6ED1-42CC-88C0-AE5FA05A2902}"
-	RootNamespace="zone_server"
+	Name="login_server"
+	ProjectGUID="{00403CBB-29F4-4D6E-BA6E-D57336A38BB9}"
+	RootNamespace="login_server"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\shared&quot;;&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,8 +60,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="&quot;$(SolutionDir)\lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -106,7 +106,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\shared&quot;;&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -124,8 +124,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="&quot;$(SolutionDir)\lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -148,27 +148,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\zone\SpatialHandler.cpp"
+			RelativePath=".\LoginServer.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\zone\SpatialHandler.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\zone\ZoneInsertionHandler.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\zone\ZoneInsertionHandler.h"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\zone\ZoneServer.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\src\zone\ZoneServer.h"
+			RelativePath=".\LoginServer.h"
 			>
 		</File>
 	</Files>

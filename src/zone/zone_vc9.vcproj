@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="sandbox"
-	ProjectGUID="{6F5C7329-F76A-4F88-A7C7-AD624737BF73}"
-	RootNamespace="sandbox"
+	Name="zone_server"
+	ProjectGUID="{8CE0B028-6ED1-42CC-88C0-AE5FA05A2902}"
+	RootNamespace="zone_server"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -19,7 +19,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
 			IntermediateDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			>
 			<Tool
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\zone&quot;;&quot;$(SolutionDir)..\..\src\login&quot;;&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\shared&quot;;&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -59,19 +59,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlibd.lib"
-				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
-				GenerateManifest="false"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -83,18 +76,14 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
 			IntermediateDirectory="&quot;$(ProjectDir)\obj\$(ConfigurationName)&quot;"
-			ConfigurationType="1"
+			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
@@ -117,7 +106,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\zone&quot;;&quot;$(SolutionDir)..\..\src\login&quot;;&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)src\shared&quot;;&quot;$(SolutionDir)include\msvc&quot;;&quot;$(SolutionDir)boost\boost\tr1&quot;;&quot;$(SolutionDir)boost&quot;;&quot;$(SolutionDir)zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -134,21 +123,12 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shared.lib login_server.lib zone_server.lib zlib.lib"
-				OutputFile="&quot;$(SolutionDir)\bin\$(ConfigurationName)\$(ProjectName).exe&quot;"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)\lib\$(ConfigurationName)&quot;;&quot;$(SolutionDir)\lib&quot;"
-				GenerateManifest="false"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
+				Name="VCLibrarianTool"
+				OutputFile="&quot;$(SolutionDir)lib\$(ConfigurationName)\$(ProjectName).lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)lib\$(ConfigurationName)&quot;"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -160,11 +140,7 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy &quot;$(SolutionDir)..\..\data\packets\*.txt&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)\packets&quot; /I /Y /s&#x0D;&#x0A;xcopy &quot;$(SolutionDir)..\..\data\openswg.conf.dist&quot; &quot;$(SolutionDir)\bin\$(ConfigurationName)&quot; /I /Y&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -172,15 +148,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\src\main.cpp"
+			RelativePath=".\SpatialHandler.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\ProgramOptions.cpp"
+			RelativePath=".\SpatialHandler.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\src\ProgramOptions.h"
+			RelativePath=".\ZoneInsertionHandler.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ZoneInsertionHandler.h"
+			>
+		</File>
+		<File
+			RelativePath=".\ZoneServer.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\ZoneServer.h"
 			>
 		</File>
 	</Files>
