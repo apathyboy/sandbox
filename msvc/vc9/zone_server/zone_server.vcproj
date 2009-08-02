@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_DEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\include&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\src\shared&quot;;&quot;$(SolutionDir)..\..\include\msvc&quot;;&quot;$(SolutionDir)..\..\boost\boost\tr1&quot;;&quot;$(SolutionDir)..\..\boost&quot;;&quot;$(SolutionDir)..\..\zlib&quot;"
 				PreprocessorDefinitions="_WIN32_WINNT=0x501;_NDEBUG;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -152,7 +152,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\SpatialHandler.h"
+			RelativePath="..\..\..\src\zone\SpatialHandler.h"
 			>
 		</File>
 		<File
@@ -160,7 +160,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\ZoneInsertionHandler.h"
+			RelativePath="..\..\..\src\zone\ZoneInsertionHandler.h"
 			>
 		</File>
 		<File
@@ -168,7 +168,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\ZoneServer.h"
+			RelativePath="..\..\..\src\zone\ZoneServer.h"
 			>
 		</File>
 	</Files>

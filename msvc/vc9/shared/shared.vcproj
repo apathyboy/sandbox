@@ -148,22 +148,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="network"
-			>
-			<File
-				RelativePath="..\..\..\include\NetworkAddress.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\shared\UdpSocketListener.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\UdpSocketListener.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="utilities"
 			>
 			<File
@@ -171,7 +155,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ByteBuffer.h"
+				RelativePath="..\..\..\src\shared\ByteBuffer.h"
 				>
 			</File>
 			<File
@@ -179,11 +163,27 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\Logger.h"
+				RelativePath="..\..\..\src\shared\Logger.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\Vector3.h"
+				RelativePath="..\..\..\src\shared\Vector3.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="network"
+			>
+			<File
+				RelativePath="..\..\..\src\shared\NetworkAddress.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\shared\UdpSocketListener.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\shared\UdpSocketListener.h"
 				>
 			</File>
 		</Filter>
@@ -192,7 +192,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\GalaxyServer.h"
+			RelativePath="..\..\..\src\shared\GalaxyServer.h"
 			>
 		</File>
 		<File
@@ -200,7 +200,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\LoginHandler.h"
+			RelativePath="..\..\..\src\shared\LoginHandler.h"
 			>
 		</File>
 		<File
@@ -208,7 +208,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\PacketTools.h"
+			RelativePath="..\..\..\src\shared\PacketTools.h"
 			>
 		</File>
 		<File
@@ -216,11 +216,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\Player.h"
+			RelativePath="..\..\..\src\shared\Player.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\Protocol.h"
+			RelativePath="..\..\..\src\shared\Protocol.h"
 			>
 		</File>
 		<File
@@ -228,7 +228,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\Session.h"
+			RelativePath="..\..\..\src\shared\Session.h"
 			>
 		</File>
 		<File
@@ -236,7 +236,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\include\SoeMessageFactory.h"
+			RelativePath="..\..\..\src\shared\SoeMessageFactory.h"
 			>
 		</File>
 	</Files>
