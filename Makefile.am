@@ -43,8 +43,8 @@ libzone_la_LIBADD = libshared.la \
 
 
 bin_PROGRAMS = cu_sandbox
-cu_sandbox_SOURCES = src/main.cpp \
-  src/ProgramOptions.cpp
+cu_sandbox_SOURCES = src/sandbox/main.cpp \
+  src/sandbox/ProgramOptions.cpp
     
 cu_sandbox_LDADD = libshared.la \
   liblogin.la \
