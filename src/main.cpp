@@ -27,7 +27,9 @@ int main(int argc, char *argv[])
     std::cout << "Copyright (c) 2009 Spira Studios LLC" << std::endl << std::endl;
 
     // Load program options and print program info (if requested).
-    boost::program_options::variables_map sandbox_options = buildProgramOptions(argc, argv, config_filename);    
+    boost::program_options::variables_map sandbox_options;
+    buildProgramOptions(sandbox_options, argc, argv, config_filename);
+    
     Logger().log(INFO) << "Server starting with configuration file: " << config_filename;
 
 	// Begin the main execution phase. This begins by starting the server

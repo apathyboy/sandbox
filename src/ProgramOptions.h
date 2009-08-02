@@ -20,6 +20,6 @@
  *
  * @return Returns a variables_map containing the program options.
  */
-boost::program_options::variables_map buildProgramOptions(int argc, char *argv[], const std::string& configure);
+void buildProgramOptions(boost::program_options::variables_map&, int argc, char *argv[], const std::string& configure);
 
 #endif // PROGRAM_OPTIONS_H_
