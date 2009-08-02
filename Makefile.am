@@ -1,5 +1,9 @@
 ACLOCAL_AMFLAGS = -I m4 --install
-AM_CXXFLAGS     = -I$(top_srcdir)/include $(SANDBOX_CXXFLAGS) $(BOOST_CPPFLAGS)
+AM_CXXFLAGS     = -I$(top_srcdir)/src/shared \
+  -I$(top_srcdir)/src/login \
+  -I$(top_srcdir)/src/zone \
+  $(SANDBOX_CXXFLAGS) \
+  $(BOOST_CPPFLAGS)
 
 
 noinst_LTLIBRARIES = libshared.la
