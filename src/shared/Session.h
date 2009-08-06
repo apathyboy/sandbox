@@ -14,7 +14,10 @@
 #include <cstdint>
 #endif
 
+#include <queue>
 #include <tr1/memory>
+
+#include <boost/thread.hpp>
 
 #include "ByteBuffer.h"
 #include "NetworkAddress.h"
@@ -56,6 +59,8 @@ public:
 
     uint16_t receivedSequence() const;
     uint16_t receivedSequence(uint16_t sequence);
+
+	void queueIncomingMessage(ByteBuffer& message);
     
     void sendHardcodedPacket(const std::string& name, bool compressed);
     void sendHardcodedPacket(ByteBuffer& packet, bool compressed);
@@ -80,6 +85,10 @@ private:
     const GalaxyServer& server_;
     std::tr1::shared_ptr<Player> player_;
     Protocol<uint32_t>& protocol_;
+
+	std::deque<ByteBuffer> incoming_queue_;
+
+	boost::mutex mutex_;
 
 	uint32_t connection_id_;
     uint32_t crc_length_;

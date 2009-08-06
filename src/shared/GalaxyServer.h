@@ -48,7 +48,7 @@ private:
     GalaxyServer(const GalaxyServer&);
     GalaxyServer& operator=(const GalaxyServer&);
 
-    void handleMessage(const NetworkAddress& address, ByteBuffer& message);
+    bool handleMessage(const NetworkAddress& address, ByteBuffer& message);
 
     /* SOE level handlers */
     void handleSessionRequest(const NetworkAddress& address, ByteBuffer& message);

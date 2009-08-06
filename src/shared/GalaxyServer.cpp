@@ -163,18 +163,19 @@ void GalaxyServer::addSwgProtocolHandler(uint32_t identifier, MessageHandler han
 }
 
 
-void GalaxyServer::handleMessage(const NetworkAddress& address, ByteBuffer& message)
+bool GalaxyServer::handleMessage(const NetworkAddress& address, ByteBuffer& message)
 {
     uint16_t opcode = message.read<uint16_t>();
     
 	SoeMessageHandler handler = soe_protocol_.find(opcode);
 
     if (! handler) {
-        Logger().log(INFO) << "Unidentified message received" << std::endl << message;
-        return;
+        return false;
     }
 
     handler(address, message);
+
+	return true;
 }
 
 

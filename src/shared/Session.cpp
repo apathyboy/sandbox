@@ -136,6 +136,13 @@ uint16_t Session::receivedSequence(uint16_t sequence)
 }
 
 
+void Session::queueIncomingMessage(ByteBuffer& message)
+{
+	boost::mutex::scoped_lock lock(mutex_);
+	incoming_queue_.push_back(message);
+}
+
+
 void Session::sendHardcodedPacket(const std::string& name, bool compressed)
 {        
     std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
