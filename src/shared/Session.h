@@ -10,12 +10,13 @@
 
 #ifdef _MSC_VER
 #include "stdint.h"
+#include <memory>
 #else
 #include <cstdint>
+#include <tr1/memory>
 #endif
 
 #include <queue>
-#include <tr1/memory>
 
 #include <boost/thread.hpp>
 

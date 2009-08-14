@@ -195,8 +195,8 @@ void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 
     message->append(*LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
 
-    message->writeAt<uint16_t>(50 + (text.length() * 2) + 2, moodId[1]);
-    message->writeAt<uint16_t>(50 + (text.length() * 2) + 4, moodId[2]);
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 2, static_cast<uint16_t>(moodId[1]));
+    message->writeAt<uint16_t>(50 + (text.length() * 2) + 4, static_cast<uint16_t>(moodId[2]));
 
     sendHardcodedPacket(*message, true);
 }

@@ -10,11 +10,11 @@
 
 #ifdef _MSC_VER
 #include "stdint.h"
+#include <memory>
 #else
 #include <cstdint>
-#endif
-
 #include <tr1/memory>
+#endif
 
 class ByteBuffer;
 class Session;

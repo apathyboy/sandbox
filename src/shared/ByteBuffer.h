@@ -77,7 +77,7 @@ private:
 }; // ByteBuffer
 
 template<typename T> void ByteBuffer::swapEndian(T& data)
-{ /* Only template specializations of swapEndian should be used */ }
+{ data; /* Only template specializations of swapEndian should be used */ }
 
 template<typename T> ByteBuffer& ByteBuffer::write(T data)
 {

@@ -8,14 +8,6 @@
 #ifndef OPENSWG_SPATIAL_HANDLER_H
 #define OPENSWG_SPATIAL_HANDLER_H
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
-#include <cstdint>
-#endif
-
-#include <tr1/memory>
-
 class Session;
 class ByteBuffer;
 

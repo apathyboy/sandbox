@@ -8,8 +8,6 @@
 #ifndef OPENSWG_ZONE_INSERTION_HANDLER_H
 #define OPENSWG_ZONE_INSERTION_HANDLER_H
 
-#include <tr1/memory>
-
 class Session;
 class ByteBuffer;
 

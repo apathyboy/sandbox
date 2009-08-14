@@ -10,18 +10,14 @@
 
 #include <zlib.h>
 
-#ifdef WIN32		
-#include <tchar.h>
+#ifdef _MSC_VER
+#include <regex>
+#else
+#include <tr1/regex>
 #endif
 		
 #include <fstream>
 #include <string>
-
-#ifdef WIN32
-#include <tr1/regex>
-#else 
-#include <boost/regex.hpp>
-#endif
 
 static const unsigned int crc32table[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -235,7 +231,7 @@ void Decompress(ByteBuffer& packet)
 }
 
 
-void Encrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
+void Encrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
@@ -267,7 +263,7 @@ void Encrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 }
 
 
-void Decrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
+void Decrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength)
 {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
@@ -300,7 +296,7 @@ void Decrypt(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 }
 
 
-uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
+uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength)
 {
     uint32_t crc = crc32table[(~seed) & 0xFF];
     crc ^= 0x00FFFFFF;
@@ -335,7 +331,7 @@ uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 }
 
 
-bool CrcTest(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
+bool CrcTest(ByteBuffer& packet, uint32_t seed, uint32_t seedLength)
 {
     if(seedLength > 0) {
         uint32_t packetCrc = GenerateCrc(packet, seed, seedLength);
@@ -350,7 +346,7 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
         // of copying.
         std::vector<uint8_t>& packet_data = packet.raw();  
 
-        for (int16_t i = 0; i < seedLength; ++i) {
+        for (uint32_t i = 0; i < seedLength; ++i) {
             pullbyte = packet_data[(packet_data.size() - seedLength) + i];
             testCrc |= (pullbyte << (((seedLength - 1) - i) * 8));
             mask <<= 8;
@@ -370,7 +366,7 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
 }
 
 
-void AppendCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
+void AppendCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength)
 {
     if (seedLength > 0) {
         // Grab a reference to the internals of the packet. Generally
@@ -383,7 +379,7 @@ void AppendCrc(ByteBuffer& packet, uint32_t seed, uint16_t seedLength)
         // Generate the CRC and append it to the packet.
         unsigned int crc = GenerateCrc(packet, seed);
 
-        for (int16_t i = 0; i < seedLength; ++i) {
+        for (uint32_t i = 0; i < seedLength; ++i) {
             packet_data[(packet_data.size() - 1) - i] = ((crc >> (8 * i)) & 0xFF);
         }
     }

@@ -304,6 +304,7 @@ void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& 
 
 void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& message)
 {
+    message;
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (! session) {
@@ -317,6 +318,7 @@ void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& m
 
 void GalaxyServer::handleKeepAlive(const NetworkAddress& address, ByteBuffer& message)
 {
+    message;
     std::tr1::shared_ptr<Session> session = findSession(address);
 
     if (! session) {

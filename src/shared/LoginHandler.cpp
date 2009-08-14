@@ -12,6 +12,7 @@
 
 void HandleAuthentication(Session& session, ByteBuffer& message)
 {
+    message;
 	// Send the station identifier
 	session.sendHardcodedPacket("packets\\Login\\StationIdentifier.txt", false);
 
@@ -37,6 +38,7 @@ void HandleAuthentication(Session& session, ByteBuffer& message)
 
 void HandleSession(Session& session, ByteBuffer& message)
 {
+    message;
 	session.sendHeartbeat();
 
 	// Send the character options to the client.

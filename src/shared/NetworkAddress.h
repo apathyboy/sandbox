@@ -8,7 +8,6 @@
  #ifndef NETWORKADDRESS_H_
  #define NETWORKADDRESS_H_
 
- #include <tr1/utility>
  #include <boost/asio.hpp>
 
 typedef boost::asio::ip::udp::endpoint NetworkAddress;

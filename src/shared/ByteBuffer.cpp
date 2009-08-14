@@ -171,7 +171,7 @@ template<> ByteBuffer& ByteBuffer::write<std::string>(std::string data)
 
 template<> const std::string ByteBuffer::read<std::string>(bool do_swap_endian)
 {
-	uint16_t length = read<uint16_t>();
+	uint16_t length = read<uint16_t>(do_swap_endian);
 
 	if (data_.size() < read_position_ + length) {
 		throw std::out_of_range("Read past end of buffer");
@@ -203,7 +203,7 @@ template<> ByteBuffer& ByteBuffer::write<std::wstring>(std::wstring data)
 
 template<> const std::wstring ByteBuffer::read<std::wstring>(bool do_swap_endian)
 {
-	uint32_t length = read<uint32_t>();
+	uint32_t length = read<uint32_t>(do_swap_endian);
 
 	if (data_.size() < read_position_ + (length * 2)) {
 		throw std::out_of_range("Read past end of buffer");

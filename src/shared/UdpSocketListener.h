@@ -10,12 +10,13 @@
 
 #ifdef _MSC_VER
 #include "stdint.h"
+#include <functional>
+#include <memory>
 #else
 #include <cstdint>
-#endif
-
 #include <tr1/functional>
 #include <tr1/memory>
+#endif
 
 #include "NetworkAddress.h"
 
