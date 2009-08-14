@@ -208,7 +208,7 @@ if not exist "%PROJECT_BASE%\%DEPENDENCIES_FILE%" (
 )
 
 if exist "%PROJECT_BASE%\%DEPENDENCIES_FILE%" (
-    "%PROJECT_BASE%\tools\unzip.exe" %PROJECT_BASE%\%DEPENDENCIES_FILE% -d %PROJECT_BASE%
+    "%PROJECT_BASE%\tools\unzip.exe" %PROJECT_BASE%\%DEPENDENCIES_FILE% -d %PROJECT_BASE% >NULL
 )
                                                       
 goto :eof
@@ -253,7 +253,7 @@ if "%BUILD_TYPE%" == "all" (
 rem Build BJAM which is needed to build boost.
 if not exist "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam.exe" (
     cd "%PROJECT_BASE%\deps\boost\tools\jam\src"
-    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\build"
+    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\build" >NULL
 )
 
 rem Build the boost libraries we need.
@@ -261,15 +261,15 @@ cd "%PROJECT_BASE%\deps\boost"
 
 
 if "%BUILD_TYPE%" == "debug" (
-	  cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=debug link=static runtime-link=static threading=multi
+    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=debug link=static runtime-link=static threading=multi >NULL
 )
 
 if "%BUILD_TYPE%" == "release" (
-    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=release link=static runtime-link=static threading=multi
+    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=release link=static runtime-link=static threading=multi >NULL
 )
 
 if "%BUILD_TYPE%" == "all" (
-    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=debug,release link=static runtime-link=static threading=multi
+    cmd /c "%PROJECT_BASE%\deps\boost\tools\jam\src\bin.ntx86\bjam" --toolset=msvc --with-date_time --with-regex --with-thread --with-system --with-program_options variant=debug,release link=static runtime-link=static threading=multi >NULL
 )
 
 goto :eof
@@ -315,20 +315,20 @@ cd "%PROJECT_BASE%\deps\gtest"
 if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
     
 if "%BUILD_TYPE%" == "debug" (
-    "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+    "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "release" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "all" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv" >NULL
 	  if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 	
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 goto :eof
@@ -374,20 +374,20 @@ cd "%PROJECT_BASE%\deps\gmock"
 if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
     
 if "%BUILD_TYPE%" == "debug" (
-    "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+    "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "release" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "all" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv" >NULL
 	  if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 	
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 goto :eof
@@ -437,20 +437,20 @@ rem Removing it as it's not needed.
 if exist "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache" del /S /Q "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache"
 
 if "%BUILD_TYPE%" == "debug" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Debug",VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Debug",VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache" del /S /Q "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache"
 )
 
 if "%BUILD_TYPE%" == "release" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Release",VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Release",VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache" del /S /Q "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache"
 )
 
 if "%BUILD_TYPE%" == "all" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Debug",VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Debug",VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache" del /S /Q "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache"
 
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Release",VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln" /t:rebuild /p:Configuration="LIB Release",VCBuildAdditionalOptions="/useenv" >NULL
     if exist "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache" del /S /Q "%PROJECT_BASE%\deps\zlib\projects\visualc6\zlib.sln.cache"
 )
 goto :eof
