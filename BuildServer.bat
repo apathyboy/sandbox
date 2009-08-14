@@ -315,20 +315,20 @@ cd "%PROJECT_BASE%\deps\gtest"
 if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
     
 if "%BUILD_TYPE%" == "debug" (
-    "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.vcproj" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+    "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "release" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.vcproj" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "all" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.vcproj" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
 	  if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 	
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.vcproj" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gtest\msvc\gtest.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gtest\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gtest\msvc\*.cache"
 )
 goto :eof
@@ -374,20 +374,20 @@ cd "%PROJECT_BASE%\deps\gmock"
 if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
     
 if "%BUILD_TYPE%" == "debug" (
-    "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.vcproj" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+    "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "release" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.vcproj" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 
 if "%BUILD_TYPE%" == "all" (
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.vcproj" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Debug,VCBuildAdditionalOptions="/useenv"
 	  if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 	
-	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.vcproj" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
+	  "%MSBUILD%" "%PROJECT_BASE%\deps\gmock\msvc\gmock.sln" /t:rebuild /p:Configuration=Release,VCBuildAdditionalOptions="/useenv"
     if exist "%PROJECT_BASE%\deps\gmock\msvc\*.cache" del /S /Q "%PROJECT_BASE%\deps\gmock\msvc\*.cache"
 )
 goto :eof
