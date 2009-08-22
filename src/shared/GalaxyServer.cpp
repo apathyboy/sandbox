@@ -101,7 +101,9 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& mes
 
     // Logger().log(INFO) << "Incoming Message" << std::endl << message;
 
-    handleMessage(address, message);
+	if (! handleMessage(address, message) && session) {
+		session->queueIncomingMessage(message);
+	}
 }
 
 

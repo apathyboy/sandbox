@@ -14,12 +14,12 @@ void HandleAuthentication(Session& session, ByteBuffer& message)
 {
     message;
 	// Send the station identifier
-	session.sendHardcodedPacket("packets\\Login\\StationIdentifier.txt", false);
+	session.sendHardcodedPacket("packets/Login/StationIdentifier.txt", false);
 
 	// Send the server list.
-	session.sendHardcodedPacket("packets\\Login\\ServerList.txt", false);
+	session.sendHardcodedPacket("packets/Login/ServerList.txt", false);
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Login\\ServerIpList.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/Login/ServerIpList.txt");
     
     std::string galaxy_ip = "127.0.0.1"; // @todo: Replace with a call to configuration.
     
@@ -33,7 +33,7 @@ void HandleAuthentication(Session& session, ByteBuffer& message)
     session.sendHardcodedPacket(*packet, false);
 
 	// Send the character list.
-	session.sendHardcodedPacket("packets\\Login\\ServerCharacterList.txt", false);
+	session.sendHardcodedPacket("packets/Login/ServerCharacterList.txt", false);
 }
 
 void HandleSession(Session& session, ByteBuffer& message)
@@ -42,6 +42,6 @@ void HandleSession(Session& session, ByteBuffer& message)
 	session.sendHeartbeat();
 
 	// Send the character options to the client.
-	session.sendHardcodedPacket("packets\\ZoneInsertion\\CharacterOptions.txt", false);
+	session.sendHardcodedPacket("packets/ZoneInsertion/CharacterOptions.txt", false);
 }
 

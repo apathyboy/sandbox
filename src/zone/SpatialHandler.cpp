@@ -40,8 +40,8 @@ void HandleSit(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
-	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Sit.txt", false);
-	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Sit.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/SelfPostureUpdate_Sit.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/PostureUpdate_Sit.txt", false);
 }
 
 
@@ -49,8 +49,8 @@ void HandleStand(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
-	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Stand.txt", false);
-	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Stand.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/SelfPostureUpdate_Stand.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/PostureUpdate_Stand.txt", false);
 }
 
 
@@ -58,8 +58,8 @@ void HandleProne(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
-	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Prone.txt", false);
-	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Prone.txt",false);
+	session.sendHardcodedPacket("packets/Spatial/SelfPostureUpdate_Prone.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/PostureUpdate_Prone.txt",false);
 }
 
 
@@ -67,8 +67,8 @@ void HandleKneel(Session& session, ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
-	session.sendHardcodedPacket("packets\\Spatial\\SelfPostureUpdate_Kneel.txt", false);
-	session.sendHardcodedPacket("packets\\Spatial\\PostureUpdate_Kneel.txt",false);
+	session.sendHardcodedPacket("packets/Spatial/SelfPostureUpdate_Kneel.txt", false);
+	session.sendHardcodedPacket("packets/Spatial/PostureUpdate_Kneel.txt",false);
 
 }
 
@@ -144,7 +144,7 @@ void HandleMood(Session& session, ByteBuffer& message)
 
     session.player()->mood(atoi(reinterpret_cast<char *>(&mood[0])));
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\ZoneInsertion\\Creo6.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/ZoneInsertion/Creo6.txt");
 
     // Insert the player mood into the packet.
     packet->writeAt<uint16_t>(99, static_cast<uint16_t>(session.player()->mood()));
@@ -173,7 +173,7 @@ void HandleEmote(Session& session, ByteBuffer& message)
 
 	uint16_t emoteId = atoi(reinterpret_cast<char *>(&emote[0]));
     
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\Spatial\\PlayerEmote.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/Spatial/PlayerEmote.txt");
 
     // Insert the player mood into the packet.
     packet->writeAt<uint16_t>(46, emoteId);

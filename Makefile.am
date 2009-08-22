@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I m4 --install
+ACLOCAL_AMFLAGS = -I tools/m4 --install
 AM_CXXFLAGS     = -I$(top_srcdir)/src/shared \
   -I$(top_srcdir)/src/login \
   -I$(top_srcdir)/src/zone \

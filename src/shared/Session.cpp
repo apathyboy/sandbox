@@ -175,14 +175,14 @@ void Session::sendToRemote(ByteBuffer& packet, bool compress, bool encrypt) cons
 
 void Session::sendHeartbeat() const
 {
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\OkPacket.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/OkPacket.txt");
 
     sendToRemote(*packet);
 }
 
 void Session::sendAcknowledge() const
 {
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets\\SendAcknowledge.txt");
+    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/SendAcknowledge.txt");
     packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
 
     sendToRemote(*packet);
@@ -190,10 +190,10 @@ void Session::sendAcknowledge() const
 
 void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId)
 {
-    std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets\\Spatial\\PlayerChatHeader.txt");
+    std::tr1::shared_ptr<ByteBuffer> message = LoadPacketFromTextFile("packets/Spatial/PlayerChatHeader.txt");
     message->write<std::wstring>(text);
 
-    message->append(*LoadPacketFromTextFile("packets\\Spatial\\PlayerChatFooter.txt"));
+    message->append(*LoadPacketFromTextFile("packets/Spatial/PlayerChatFooter.txt"));
 
     message->writeAt<uint16_t>(50 + (text.length() * 2) + 2, static_cast<uint16_t>(moodId[1]));
     message->writeAt<uint16_t>(50 + (text.length() * 2) + 4, static_cast<uint16_t>(moodId[2]));
