@@ -13,7 +13,7 @@
 #ifdef _MSC_VER
 #include <regex>
 #else
-#include <tr1/regex>
+#include <boost/regex.hpp>
 #endif
 		
 #include <fstream>
