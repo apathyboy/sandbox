@@ -1,0 +1,8 @@
+
+Makefile.in
+aclocal.m4
+autom4te.cache/
+build-aux/
+config.h.in
+configure
+tools/m4/ltversion.m4
