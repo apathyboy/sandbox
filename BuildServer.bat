@@ -56,8 +56,8 @@ rem --- Start of SET_DEFAULTS --------------------------------------------------
 :SET_DEFAULTS
 
 set DEPENDENCIES_VERSION=1.0.0
-set DEPENDENCIES_FILE=cu_sandbox-deps-%DEPENDENCIES_VERSION%.zip
-set DEPENDENCIES_URL=http://www.openswg.com/downloads/%DEPENDENCIES_FILE%
+set DEPENDENCIES_FILE=cu-sandbox-deps-%DEPENDENCIES_VERSION%.zip
+set DEPENDENCIES_URL=http://github.com/downloads/apathyboy/cu-sandbox/%DEPENDENCIES_FILE%
 set PROJECT_BASE=%~dp0
 set BUILD_TYPE=debug
 set MSVC_VERSION=vc9

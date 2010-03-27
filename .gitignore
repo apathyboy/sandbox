@@ -1,4 +1,4 @@
-# Ignore the autotools files
+# Ignore the autotools files and directories
 Makefile.in
 aclocal.m4
 autom4te.cache/
@@ -7,3 +7,8 @@ build-aux/
 config.h.in
 configure
 tools/m4/ltversion.m4
+
+# Ignore windows build files and directories
+bin/
+deps/
+*.zip
