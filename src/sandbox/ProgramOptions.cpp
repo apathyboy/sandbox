@@ -1,8 +1,8 @@
 /*
- * OpenSWG Combat Upgrade Sandbox - ProgramOptions.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
 #include <fstream>
@@ -17,7 +17,7 @@
 #if HAVE_CONFIG_H
 #	include <config.h>
 #else
-const char * PACKAGE_VERSION = "1.1.0";
+const char * PACKAGE_VERSION = "0.1.0";
 #endif
 
 #include "ProgramOptions.h"
@@ -59,8 +59,8 @@ void buildProgramOptions(boost::program_options::variables_map& vm, int argc, ch
     }
 	
     if (vm.count("version")) {
-        std::cout << "OpenSWG Legacy Sandbox (Revisited) " << PACKAGE_VERSION << std::endl;
-        std::cout << "Copyright (c) 2009 Eric S. Barr Jr. <eric.barr@openswg.com>" << std::endl;
+        std::cout << "SWG:ANH Combat Upgrade Sandbox v" << PACKAGE_VERSION << std::endl;
+        std::cout << "Copyright (c) 2010 The SWG:ANH Team" << std::endl;
   
         exit(EXIT_SUCCESS);
     }

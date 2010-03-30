@@ -1,8 +1,8 @@
 /*
- * OpenSWG: GalaxyEngine - UdpSocketListener.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
 #ifndef UDP_SOCKET_LISTENER_H_
