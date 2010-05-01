@@ -5,6 +5,7 @@ autom4te.cache/
 build/
 build-aux/
 config.h.in
+config.h.in~
 configure
 tools/m4/ltversion.m4
 
