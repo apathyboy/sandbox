@@ -1,30 +1,30 @@
 /*
- * OpenSWG Combat Upgrade Sandbox - main.cpp
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
-
-#include <exception>
-#include <iostream>
-#include <string>
-
-#include <boost/thread.hpp>
 
 #include "Logger.h"
 #include "LoginServer.h"
 #include "ZoneServer.h"
 #include "ProgramOptions.h"
 
-/* Program Constants */
-const char* config_filename = "openswg.cfg";
+#include <boost/thread.hpp>
 
-// Run the OpenSWG Sandbox Server.
+#include <exception>
+#include <iostream>
+#include <string>
+
+/* Program Constants */
+const char* config_filename = "cu-sandbox.cfg";
+
+// Run the SWG:ANH Sandbox Server.
 int main(int argc, char *argv[]) 
 {         
 	// Send server header output.
-    std::cout << "OpenSWG Combat Upgrade Sandbox v2.0" << std::endl;
-    std::cout << "Copyright (c) 2009 Spira Studios LLC" << std::endl << std::endl;
+	std::cout << "SWG:ANH Combat Upgrade Sandbox v2.0" << std::endl;
+	std::cout << "Copyright (c) 2010 The SWG:ANH Team" << std::endl << std::endl;
 
     // Load program options and print program info (if requested).
     boost::program_options::variables_map sandbox_options;

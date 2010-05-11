@@ -1,16 +1,17 @@
 /*
- * OpenSWG: GalaxyEngine - GalaxyServer.cpp
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "boost/thread.hpp"
 #include "GalaxyServer.h"
 #include "Logger.h"
 #include "Session.h"
 #include "SoeMessageFactory.h"
 #include "PacketTools.h"
+
+#include "boost/thread.hpp"
 
 GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)

@@ -1,19 +1,14 @@
 /*
- * OpenSWG Combat Upgrade Sandbox - ByteBuffer.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
 #ifndef BYTEBUFFER_H_
 #define BYTEBUFFER_H_
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
 #include <cstdint>
-#endif
-
 #include <vector>
 #include <string>
 #include <stdexcept>

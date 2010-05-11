@@ -1,15 +1,15 @@
 /*
- * OpenSWG: GalaxyEngine - UdpSocketListener.cpp
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "boost/asio.hpp"
 #include "UdpSocketListener.h"
 #include "ByteBuffer.h"
 #include "Logger.h"
 
+#include "boost/asio.hpp"
 
 /** UdpSocketListener::UdpSocketListenerImpl **/ 
 class UdpSocketListener::UdpSocketListenerImpl

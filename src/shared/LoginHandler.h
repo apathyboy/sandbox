@@ -1,12 +1,12 @@
 /*
- * OpenSWG Combat Upgrade Sandbox - LoginHandler.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef OPENSWG_LOGIN_HANDLER_H
-#define OPENSWG_LOGIN_HANDLER_H
+#ifndef SRC_SHARED_LOGIN_HANDLER_H_
+#define SRC_SHARED_LOGIN_HANDLER_H_
 
 class Session;
 class ByteBuffer;
@@ -14,4 +14,4 @@ class ByteBuffer;
 void HandleAuthentication(Session& session, ByteBuffer& message);
 void HandleSession(Session& session, ByteBuffer& message);
 
-#endif // OPENSWG_LOGIN_HANDLER_H
+#endif // SRC_SHARED_LOGIN_HANDLER_H_

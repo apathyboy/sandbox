@@ -1,21 +1,20 @@
 /*
- * OpenSWG Combat Upgrade Sandbox - Session.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
 #ifndef SESSION_H_
 #define SESSION_H_
 
 #ifdef _MSC_VER
-#include "stdint.h"
 #include <memory>
 #else
-#include <cstdint>
 #include <tr1/memory>
 #endif
 
+#include <cstdint>
 #include <queue>
 
 #include <boost/thread.hpp>

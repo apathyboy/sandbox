@@ -1,22 +1,22 @@
 /*
- * OpenSWG: GalaxyEngine - UdpSocketListener.h
+ * SWG:ANH Combat Upgrade Sandbox
  *
- * @copyright   Copyright (c) 2009 Eric S. Barr Jr.
- * @author      Eric S. Barr Jr. <eric.barr@ericscottbarr.com>
+ * @copyright   Copyright (c) 2010 The SWG:ANH Team
+ * @author      Eric Barr <apathy@swganh.org>
 **/
 
 #ifndef UDP_SOCKET_LISTENER_H_
 #define UDP_SOCKET_LISTENER_H_
 
 #ifdef _MSC_VER
-#include "stdint.h"
 #include <functional>
 #include <memory>
 #else
-#include <cstdint>
 #include <tr1/functional>
 #include <tr1/memory>
 #endif
+
+#include <cstdint>
 
 #include "NetworkAddress.h"
 
