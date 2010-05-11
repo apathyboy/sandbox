@@ -64,7 +64,7 @@ rem ----------------------------------------------------------------------------
 rem --- Start of SET_DEFAULTS --------------------------------------------------
 :SET_DEFAULTS
 
-set DEPENDENCIES_VERSION=0.1.1
+set DEPENDENCIES_VERSION=0.1.2
 set DEPENDENCIES_FILE=sandbox-deps-%DEPENDENCIES_VERSION%.7z
 set DEPENDENCIES_URL=http://github.com/downloads/apathyboy/sandbox/%DEPENDENCIES_FILE%
 set PROJECT_BASE=%~dp0
