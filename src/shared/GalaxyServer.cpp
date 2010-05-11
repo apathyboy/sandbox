@@ -5,12 +5,13 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "boost/thread.hpp"
 #include "GalaxyServer.h"
 #include "Logger.h"
 #include "Session.h"
 #include "SoeMessageFactory.h"
 #include "PacketTools.h"
+
+#include "boost/thread.hpp"
 
 GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)

@@ -85,8 +85,10 @@ void ByteBuffer::write(const unsigned char* data, size_t size)
 
 void ByteBuffer::write(size_t offset, const unsigned char* data, size_t size)
 {
+    data_.erase(data_.begin() + offset, data_.begin() + offset + size);
+
 	data_.insert(
-        data_.erase(data_.begin() + offset, data_.begin() + offset + size),
+        data_.begin() + offset,
         data, 
         data + size);
 }
@@ -231,7 +233,7 @@ std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer)
 	// Save the formatting state of the stream.
 	std::ios_base::fmtflags flags = message.flags(message.hex);
 	char fill = message.fill('0');
-	int width = message.width(2);
+	std::streamsize width = message.width(2);
 
 	// The byte buffer should be printed out in lines of 16 characters and display both
 	// hex and ascii values for each character, see most hex editors for reference.

@@ -9,13 +9,12 @@
 #define SESSION_H_
 
 #ifdef _MSC_VER
-#include "stdint.h"
 #include <memory>
 #else
-#include <cstdint>
 #include <tr1/memory>
 #endif
 
+#include <cstdint>
 #include <queue>
 
 #include <boost/thread.hpp>

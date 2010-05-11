@@ -5,11 +5,11 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "boost/asio.hpp"
 #include "UdpSocketListener.h"
 #include "ByteBuffer.h"
 #include "Logger.h"
 
+#include "boost/asio.hpp"
 
 /** UdpSocketListener::UdpSocketListenerImpl **/ 
 class UdpSocketListener::UdpSocketListenerImpl

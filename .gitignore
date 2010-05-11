@@ -3,7 +3,6 @@ Makefile.in
 aclocal.m4
 autom4te.cache/
 build/
-build-aux/
 config.h.in
 config.h.in~
 configure
@@ -11,7 +10,18 @@ tools/m4/ltversion.m4
 
 # Ignore windows build files and directories
 bin/
+build-aux/
 deps/
+data/heightmaps/
+ipch/
+*.cache
 *.zip
+*.7z
+*.tmp_*Win32.vcproj
+*.user
 *.ncb
 *.suo
+*.sdf
+*.opensdf
+*.lnk
+.DS_Store

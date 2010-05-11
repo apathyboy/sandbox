@@ -8,12 +8,7 @@
 #ifndef BYTEBUFFER_H_
 #define BYTEBUFFER_H_
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
 #include <cstdint>
-#endif
-
 #include <vector>
 #include <string>
 #include <stdexcept>

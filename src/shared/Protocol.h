@@ -9,15 +9,14 @@
 #define PROTOCOL_H_
 
 #ifdef _MSC_VER
-#include "stdint.h"
 #include <functional>
 #include <memory>
 #else
-#include <cstdint>
 #include <tr1/functional>
 #include <tr1/memory>
 #endif
 
+#include <cstdint>
 #include <map>
 
 #include "ByteBuffer.h"

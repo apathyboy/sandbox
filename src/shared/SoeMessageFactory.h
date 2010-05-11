@@ -9,12 +9,12 @@
 #define SOE_MESSAGE_FACTORY_H_
 
 #ifdef _MSC_VER
-#include "stdint.h"
 #include <memory>
 #else
-#include <cstdint>
 #include <tr1/memory>
 #endif
+
+#include <cstdint>
 
 class ByteBuffer;
 class Session;

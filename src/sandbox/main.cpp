@@ -5,16 +5,16 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include <exception>
-#include <iostream>
-#include <string>
-
-#include <boost/thread.hpp>
-
 #include "Logger.h"
 #include "LoginServer.h"
 #include "ZoneServer.h"
 #include "ProgramOptions.h"
+
+#include <boost/thread.hpp>
+
+#include <exception>
+#include <iostream>
+#include <string>
 
 /* Program Constants */
 const char* config_filename = "cu-sandbox.cfg";

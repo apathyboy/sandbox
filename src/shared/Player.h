@@ -8,15 +8,11 @@
 #ifndef SRC_SHARED_PLAYER_H_
 #define SRC_SHARED_PLAYER_H_
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
-#include <cstdint>
-#endif
-
-#include <string>
 
 #include "Vector3.h"
+
+#include <cstdint>
+#include <string>
 
 class Player
 {
