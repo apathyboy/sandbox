@@ -1,1 +1,26 @@
-TEST123
+README
+======
+
+SWG:ANH Sandbox Server
+----------------------
+
+The SWG:ANH Sandbox Server is a testbed for exploring ideas for server features
+and for easily testing communication between a client and server to ensure
+features are implemented properly.
+
+Compiling
+---------
+
+For unix based platforms see the INSTALL file for further details on building
+and installing the source. Windows users will need Visual Studio 2010 installed
+in order to build. 
+
+First time compiles must run the build.bat script which downloads and compiles
+all the projects dependencies. From then on the source can be built either by 
+running the build.bat or using the sandbox.sln solution with Visual Studio.
+
+
+External Links
+--------------
+
+[1]: http://www.microsoft.com/visualstudio/
