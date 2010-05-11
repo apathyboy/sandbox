@@ -11,15 +11,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramOptions.cpp">
+    <ClCompile Include="program_options.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProgramOptions.h">
+    <ClInclude Include="program_options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

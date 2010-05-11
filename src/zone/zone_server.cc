@@ -5,18 +5,20 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "ZoneServer.h"
-#include "Logger.h"
-#include "Session.h"
-#include "LoginHandler.h"
-#include "SpatialHandler.h"
-#include "ZoneInsertionHandler.h"
+#include "zone_server.h"
+#include "shared/logger.h"
+#include "shared/session.h"
+#include "shared/login_handler.h"
+#include "spatial_handler.h"
+#include "zone_insertion_handler.h"
 
+namespace sandbox {
+namespace zone {
 
 ZoneServer::ZoneServer(uint16_t port)
-    : GalaxyServer(port)
+    : shared::GalaxyServer(port)
 {
-    Logger().log(INFO) << "Zone Server listening on port: [" << port << "]";
+    shared::Logger().log(shared::INFO) << "Zone Server listening on port: [" << port << "]";
 }
 
 
@@ -24,7 +26,7 @@ ZoneServer::~ZoneServer()
 {}
 
 
-void ZoneServer::onIncoming(const NetworkAddress& address, ByteBuffer& message)
+void ZoneServer::onIncoming(const shared::NetworkAddress& address, shared::ByteBuffer& message)
 {}
 
 
@@ -35,9 +37,9 @@ void ZoneServer::onUpdate()
 
 void ZoneServer::initializeProtocol()
 {
-    addSwgProtocolHandler(0x41131F96, std::tr1::bind(&HandleAuthentication, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    addSwgProtocolHandler(0x41131F96, std::tr1::bind(&shared::HandleAuthentication, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 
-    addSwgProtocolHandler(0xD5899226, std::tr1::bind(&HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    addSwgProtocolHandler(0xD5899226, std::tr1::bind(&shared::HandleSession, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 
     addSwgProtocolHandler(0xB5098D76, std::tr1::bind(&HandleZoneInsertionRequest, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
     addSwgProtocolHandler(0x4C3D2CFA, std::tr1::bind(&HandleLoadTerrain, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
@@ -56,3 +58,5 @@ void ZoneServer::initializeProtocol()
     addSwgProtocolHandler(0x32CF1BEE, std::tr1::bind(&HandleEmote, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
 
+}  // namespace zone
+}  // namespace sandbox

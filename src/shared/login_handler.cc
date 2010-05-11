@@ -6,11 +6,14 @@
 **/
 
 #include <string>
-#include "LoginHandler.h"
-#include "Session.h"
-#include "PacketTools.h"
+#include "login_handler.h"
+#include "session.h"
+#include "packet_tools.h"
 
-void HandleAuthentication(Session& session, ByteBuffer& message)
+namespace sandbox {
+namespace shared {
+
+void HandleAuthentication(Session& session, sandbox::shared::ByteBuffer& message)
 {
     message;
 	// Send the station identifier
@@ -36,7 +39,7 @@ void HandleAuthentication(Session& session, ByteBuffer& message)
 	session.sendHardcodedPacket("packets/Login/ServerCharacterList.txt", false);
 }
 
-void HandleSession(Session& session, ByteBuffer& message)
+void HandleSession(Session& session, sandbox::shared::ByteBuffer& message)
 {
     message;
 	session.sendHeartbeat();
@@ -45,3 +48,5 @@ void HandleSession(Session& session, ByteBuffer& message)
 	session.sendHardcodedPacket("packets/ZoneInsertion/CharacterOptions.txt", false);
 }
 
+}  // namespace sandbox
+}  // namespace shared

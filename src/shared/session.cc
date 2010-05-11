@@ -8,9 +8,12 @@
 
 #include <exception>
 
-#include "Session.h"
-#include "Logger.h"
-#include "PacketTools.h"
+#include "session.h"
+#include "logger.h"
+#include "packet_tools.h"
+
+namespace sandbox {
+namespace shared {
 
 Session::Session(const GalaxyServer& server, const NetworkAddress& address, Protocol<uint32_t>& protocol)
     : socket_address_(address)
@@ -27,7 +30,7 @@ Session::Session(const GalaxyServer& server, const NetworkAddress& address, Prot
 {
     // Initialize the player to a default location and state. 
     // @todo: This information should be pulled from storage
-    player_->position(Vector3<int>(-1443, 9, 2771));
+    player_->position(glm::vec3(-1443, 9, 2771));
     player_->stationId(653564567);
     player_->locationName("naboo");
     player_->mood(0);
@@ -217,3 +220,5 @@ void Session::handlePacket(ByteBuffer& packet)
 void Session::update(time_t currentTime)
 {}
 
+}  // namespace sandbox
+}  // namespace shared

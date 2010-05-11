@@ -5,11 +5,14 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef PROGRAM_OPTIONS_H_
-#define PROGRAM_OPTIONS_H_
+#ifndef SANDBOX_PROGRAM_OPTIONS_H_
+#define SANDBOX_PROGRAM_OPTIONS_H_
 
+#include <cstdint>
 #include <string>
 #include <boost/program_options.hpp>
+
+namespace sandbox {
 
 /** Builds program options from command line and file input sources.
  *
@@ -20,6 +23,8 @@
  *
  * @return Returns a variables_map containing the program options.
  */
-void buildProgramOptions(boost::program_options::variables_map&, int argc, char *argv[], const std::string& configure);
+void BuildProgramOptions(boost::program_options::variables_map&, int argc, char *argv[], const std::string& configure);
 
-#endif // PROGRAM_OPTIONS_H_
+}  // namespace sandbox
+
+#endif  // SANDBOX_PROGRAM_OPTIONS_H_

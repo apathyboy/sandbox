@@ -11,6 +11,9 @@
 #include <sstream> 
 #include <string>
 
+namespace sandbox {
+namespace shared {
+
 enum LogLevel 
 {
     ERR = 0,
@@ -47,5 +50,8 @@ private:
 
     std::ostringstream output_stream_;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // LOGGER_H_

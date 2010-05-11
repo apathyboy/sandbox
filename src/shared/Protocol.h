@@ -19,7 +19,10 @@
 #include <cstdint>
 #include <map>
 
-#include "ByteBuffer.h"
+#include "byte_buffer.h"
+
+namespace sandbox {
+namespace shared {
 
 class Session;
 
@@ -80,6 +83,9 @@ private:
 
     std::map<Identifier, Handler> handlers_;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 
 #endif // PROTOCOL_H_

@@ -5,10 +5,13 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "Logger.h"
+#include "logger.h"
 #include <ctime>
 #include <iomanip>
 #include <iostream> 
+
+namespace sandbox {
+namespace shared {
 
 LogLevel Logger::reporting_level_ = INFO;
 
@@ -72,3 +75,6 @@ LogLevel Logger::getReportingLevel()
 {
     return Logger::reporting_level_;
 }
+
+}  // namespace sandbox
+}  // namespace shared

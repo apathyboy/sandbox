@@ -5,10 +5,13 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "SoeMessageFactory.h"
-#include "ByteBuffer.h"
-#include "GalaxyServer.h"
-#include "Session.h"
+#include "soe_message_factory.h"
+#include "byte_buffer.h"
+#include "galaxy_server.h"
+#include "session.h"
+
+namespace sandbox {
+namespace shared {
 
 std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildSessionResponse(const GalaxyServer& server, std::tr1::shared_ptr<Session> session)
 {
@@ -50,3 +53,5 @@ std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildKeepAliveResponse()
     return keep_alive_response;
 }
 
+}  // namespace sandbox
+}  // namespace shared

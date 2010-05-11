@@ -8,9 +8,12 @@
 #ifndef GALAXY_SERVER_H_
 #define GALAXY_SERVER_H_
 
-#include "UdpSocketListener.h"
-#include "Protocol.h"
-#include "NetworkAddress.h"
+#include "udp_socket_listener.h"
+#include "protocol.h"
+#include "network_address.h"
+
+namespace sandbox {
+namespace shared {
 
 class Session;
 
@@ -76,6 +79,9 @@ private:
     virtual void onIncoming(const NetworkAddress& address, ByteBuffer& message) = 0;
 	virtual void onUpdate() = 0;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // GALAXY_SERVER_H_
 

@@ -9,6 +9,8 @@
 #ifndef PACKET_TOOLS_H
 #define PACKET_TOOLS_H
 
+#include "byte_buffer.h"
+
 #ifdef _MSC_VER
 #include <memory>
 #else
@@ -17,7 +19,8 @@
 
 #include <vector>
 
-#include "ByteBuffer.h"
+namespace sandbox {
+namespace shared {
 
 std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name);
 
@@ -32,6 +35,9 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint32_t seedLength = 2);
 void AppendCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength = 2);
 
 uint8_t axtoi(const char * const hexString);
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif
 

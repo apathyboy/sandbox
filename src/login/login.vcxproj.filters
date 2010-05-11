@@ -11,12 +11,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoginServer.cpp">
+    <ClCompile Include="login_server.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LoginServer.h">
+    <ClInclude Include="login_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

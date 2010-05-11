@@ -7,7 +7,9 @@
 
 #include <gtest/gtest.h>
 
-#include "ByteBuffer.h"
+#include "shared/byte_buffer.h"
+
+using ::sandbox::shared::ByteBuffer;
 
 namespace {
 

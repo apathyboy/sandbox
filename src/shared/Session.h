@@ -8,6 +8,12 @@
 #ifndef SESSION_H_
 #define SESSION_H_
 
+#include "byte_buffer.h"
+#include "galaxy_server.h"
+#include "network_address.h"
+#include "player.h"
+#include "protocol.h"
+
 #ifdef _MSC_VER
 #include <memory>
 #else
@@ -19,11 +25,8 @@
 
 #include <boost/thread.hpp>
 
-#include "ByteBuffer.h"
-#include "NetworkAddress.h"
-#include "Player.h"
-#include "GalaxyServer.h"
-#include "Protocol.h"
+namespace sandbox {
+namespace shared {
 
 /** Galaxy Session class
  *	Manages the client -> server and server <- client session.
@@ -98,5 +101,8 @@ private:
 	uint16_t client_sequence_;
 	uint16_t received_sequence_;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // SESSION_H_

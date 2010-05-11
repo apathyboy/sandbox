@@ -6,7 +6,7 @@
 **/
 
 
-#include "PacketTools.h"
+#include "packet_tools.h"
 #define MAX_PACKET_SIZE 1000
 
 #include <zlib.h>
@@ -19,6 +19,9 @@
 		
 #include <fstream>
 #include <string>
+
+namespace sandbox {
+namespace shared {
 
 static const unsigned int crc32table[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -173,8 +176,10 @@ void Compress(ByteBuffer& packet)
 
     // Replace the section of the packet data copy between the offset and 
     // the crc bits.
+    packet_data.erase(packet_data.begin() + offset, packet_data.end() - 2);
+
     packet_data.insert(
-        packet_data.erase(packet_data.begin() + offset, packet_data.end() - 2),
+        packet_data.begin() + offset,
         compression_output.begin(),
         compression_output.begin() + stream.total_out + 1 // The +1 is for the added SOE bit.
         );
@@ -222,8 +227,9 @@ void Decompress(ByteBuffer& packet)
 
     // Replace the section of the packet data copy between the offset and 
     // the crc bits.
+    packet_data.erase(packet_data.begin() + offset, packet_data.end() - 2);
     packet_data.insert(
-        packet_data.erase(packet_data.begin() + offset, packet_data.end() - 2),
+        packet_data.begin() + offset,
         compression_output.begin(),
         compression_output.begin() + stream.total_out + 1 // The +1 is for the added SOE bit.
         );
@@ -424,3 +430,5 @@ uint8_t axtoi(const char * const hexString) {
 	return (intValue);
 }
 
+}  // namespace sandbox
+}  // namespace shared

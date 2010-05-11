@@ -5,12 +5,15 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "SpatialHandler.h"
-#include "Session.h"
-#include "Logger.h"
-#include "PacketTools.h"
+#include "spatial_handler.h"
+#include "shared/session.h"
+#include "shared/logger.h"
+#include "shared/packet_tools.h"
 
-void HandleSpatial(Session& session, ByteBuffer& message)
+namespace sandbox {
+namespace zone {
+
+void HandleSpatial(shared::Session& session, shared::ByteBuffer& message)
 {	
     uint32_t opcode = message.peekAt<uint32_t>(30);
     //unsigned int *opcode = (unsigned int*)(data+30);
@@ -24,19 +27,19 @@ void HandleSpatial(Session& session, ByteBuffer& message)
 	catch(...)
 	{
 		// Log any unknown opcodes.
-        Logger().log(ERR) << "Unknown Spatial Opcode Found: " << opcode << std::endl << message;	
+    shared::Logger().log(shared::ERR) << "Unknown Spatial Opcode Found: " << opcode << std::endl << message;	
 		session.sendHeartbeat();
 	}
 }
 
 
-void HandlePositionUpdate(Session& session, ByteBuffer& message)
+void HandlePositionUpdate(shared::Session& session, shared::ByteBuffer& message)
 {
     // @TODO: Write this.
 }
 
 
-void HandleSit(Session& session, ByteBuffer& message)
+void HandleSit(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
@@ -45,7 +48,7 @@ void HandleSit(Session& session, ByteBuffer& message)
 }
 
 
-void HandleStand(Session& session, ByteBuffer& message)
+void HandleStand(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
@@ -54,7 +57,7 @@ void HandleStand(Session& session, ByteBuffer& message)
 }
 
 
-void HandleProne(Session& session, ByteBuffer& message)
+void HandleProne(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
@@ -63,7 +66,7 @@ void HandleProne(Session& session, ByteBuffer& message)
 }
 
 
-void HandleKneel(Session& session, ByteBuffer& message)
+void HandleKneel(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
@@ -73,9 +76,9 @@ void HandleKneel(Session& session, ByteBuffer& message)
 }
 
 
-void HandleSpatialChat(Session& session, ByteBuffer& message)
+void HandleSpatialChat(shared::Session& session, shared::ByteBuffer& message)
 {
-    Logger().log(INFO) << "Spatial Chat Packet" << std::endl << message;
+    shared::Logger().log(shared::INFO) << "Spatial Chat Packet" << std::endl << message;
     session.sendHeartbeat();
 
     uint32_t textsize = message.peekAt<uint32_t>(42);
@@ -125,9 +128,9 @@ void HandleSpatialChat(Session& session, ByteBuffer& message)
 }
 
 
-void HandleMood(Session& session, ByteBuffer& message)
+void HandleMood(shared::Session& session, shared::ByteBuffer& message)
 {
-    Logger().log(INFO) << "Mood Packet" << std::endl << message;
+    shared::Logger().log(shared::INFO) << "Mood Packet" << std::endl << message;
 	session.sendHeartbeat();
 
     int32_t size = message.peekAt<uint32_t>(42);
@@ -144,7 +147,7 @@ void HandleMood(Session& session, ByteBuffer& message)
 
     session.player()->mood(atoi(reinterpret_cast<char *>(&mood[0])));
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/ZoneInsertion/Creo6.txt");
+    std::tr1::shared_ptr<shared::ByteBuffer> packet = shared::LoadPacketFromTextFile("packets/ZoneInsertion/Creo6.txt");
 
     // Insert the player mood into the packet.
     packet->writeAt<uint16_t>(99, static_cast<uint16_t>(session.player()->mood()));
@@ -152,9 +155,9 @@ void HandleMood(Session& session, ByteBuffer& message)
 }
 
 
-void HandleEmote(Session& session, ByteBuffer& message)
+void HandleEmote(shared::Session& session, shared::ByteBuffer& message)
 {
-    Logger().log(INFO) << "Emote Packet" << std::endl << message;
+    shared::Logger().log(shared::INFO) << "Emote Packet" << std::endl << message;
 	session.sendHeartbeat();
 
     uint32_t size = message.peekAt<uint32_t>(42);
@@ -173,10 +176,12 @@ void HandleEmote(Session& session, ByteBuffer& message)
 
 	uint16_t emoteId = atoi(reinterpret_cast<char *>(&emote[0]));
     
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("packets/Spatial/PlayerEmote.txt");
+    std::tr1::shared_ptr<shared::ByteBuffer> packet = shared::LoadPacketFromTextFile("packets/Spatial/PlayerEmote.txt");
 
     // Insert the player mood into the packet.
     packet->writeAt<uint16_t>(46, emoteId);
     session.sendHardcodedPacket(*packet, true);
 }
 
+}  // namespace zone
+}  // namespace sandbox

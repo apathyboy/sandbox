@@ -10,6 +10,12 @@
 
  #include <boost/asio.hpp>
 
+namespace sandbox {
+namespace shared {
+
 typedef boost::asio::ip::udp::endpoint NetworkAddress;
+
+}  // namespace sandbox
+}  // namespace shared
 
  #endif // NETWORKADDRESS_H_

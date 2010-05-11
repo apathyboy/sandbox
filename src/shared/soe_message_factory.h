@@ -16,6 +16,9 @@
 
 #include <cstdint>
 
+namespace sandbox {
+namespace shared {
+
 class ByteBuffer;
 class Session;
 class GalaxyServer;
@@ -33,6 +36,9 @@ private:
     SoeMessageFactory(const SoeMessageFactory&);
     SoeMessageFactory& operator=(const SoeMessageFactory&);
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // SOE_MESSAGE_FACTORY_H_
 

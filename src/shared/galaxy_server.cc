@@ -5,13 +5,16 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "GalaxyServer.h"
-#include "Logger.h"
-#include "Session.h"
-#include "SoeMessageFactory.h"
-#include "PacketTools.h"
+#include "galaxy_server.h"
+#include "logger.h"
+#include "session.h"
+#include "soe_message_factory.h"
+#include "packet_tools.h"
 
-#include "boost/thread.hpp"
+#include <boost/thread.hpp>
+
+namespace sandbox {
+namespace shared {
 
 GalaxyServer::GalaxyServer(uint16_t port)
     : network_listener_(port)
@@ -333,3 +336,5 @@ void GalaxyServer::handleKeepAlive(const NetworkAddress& address, ByteBuffer& me
     session->sendToRemote(*keep_alive_response);
 }
 
+}  // namespace sandbox
+}  // namespace shared

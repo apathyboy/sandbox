@@ -9,18 +9,21 @@
 #define SRC_SHARED_PLAYER_H_
 
 
-#include "Vector3.h"
+#include <glm/glm.hpp>
 
 #include <cstdint>
 #include <string>
+
+namespace sandbox {
+namespace shared {
 
 class Player
 {
 public:
 	Player();
 
-    const Vector3<int>& position() const;
-    void position(const Vector3<int>& position);
+    const glm::vec3& position() const;
+    void position(const glm::vec3& position);
 
     const std::string& stationName() const;
     void stationName(const std::string& name);
@@ -38,11 +41,14 @@ private:
     Player(const Player&);
     Player& operator=(const Player&);
 
-    Vector3<int> position_;
+    glm::vec3    position_;
     std::string  station_name_;
     std::string  location_name_;
     uint8_t      mood_id_;
     int          station_id_;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // SRC_SHARED_PLAYER_H_

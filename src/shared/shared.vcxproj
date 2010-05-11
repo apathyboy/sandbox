@@ -11,29 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteBuffer.cpp" />
-    <ClCompile Include="GalaxyServer.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="LoginHandler.cpp" />
-    <ClCompile Include="PacketTools.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Session.cpp" />
-    <ClCompile Include="SoeMessageFactory.cpp" />
-    <ClCompile Include="UdpSocketListener.cpp" />
+    <ClCompile Include="byte_buffer.cc" />
+    <ClCompile Include="galaxy_server.cc" />
+    <ClCompile Include="logger.cc" />
+    <ClCompile Include="login_handler.cc" />
+    <ClCompile Include="packet_tools.cc" />
+    <ClCompile Include="player.cc" />
+    <ClCompile Include="session.cc" />
+    <ClCompile Include="session_manager.cc" />
+    <ClCompile Include="soe_message_factory.cc" />
+    <ClCompile Include="udp_socket_listener.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ByteBuffer.h" />
-    <ClInclude Include="GalaxyServer.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="LoginHandler.h" />
-    <ClInclude Include="NetworkAddress.h" />
-    <ClInclude Include="PacketTools.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Protocol.h" />
-    <ClInclude Include="Session.h" />
-    <ClInclude Include="SoeMessageFactory.h" />
-    <ClInclude Include="UdpSocketListener.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="byte_buffer-inl.h" />
+    <ClInclude Include="byte_buffer.h" />
+    <ClInclude Include="galaxy_server.h" />
+    <ClInclude Include="logger.h" />
+    <ClInclude Include="login_handler.h" />
+    <ClInclude Include="network_address.h" />
+    <ClInclude Include="packet_tools.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="protocol.h" />
+    <ClInclude Include="session.h" />
+    <ClInclude Include="session_manager.h" />
+    <ClInclude Include="soe_message_factory.h" />
+    <ClInclude Include="udp_socket_listener.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4D214C15-C9A6-4350-A398-043FC416458E}</ProjectGuid>
@@ -81,7 +83,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\shared;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -98,7 +100,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\shared;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>

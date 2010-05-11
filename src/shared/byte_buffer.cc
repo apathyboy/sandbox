@@ -9,7 +9,10 @@
 #include <iomanip>
 #include <iostream>
  
-#include "ByteBuffer.h"
+#include "byte_buffer.h"
+
+namespace sandbox {
+namespace shared {
 
 ByteBuffer::ByteBuffer()
 	: read_position_(0)
@@ -85,6 +88,10 @@ void ByteBuffer::write(const unsigned char* data, size_t size)
 
 void ByteBuffer::write(size_t offset, const unsigned char* data, size_t size)
 {
+	if (data_.size() < offset)	{
+		data_.resize(offset * 2);
+	}
+
     data_.erase(data_.begin() + offset, data_.begin() + offset + size);
 
 	data_.insert(
@@ -280,3 +287,5 @@ std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer)
 	return message;
 }
 
+}  // namespace shared
+}  // namespace sandbox

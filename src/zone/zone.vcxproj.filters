@@ -11,24 +11,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SpatialHandler.cpp">
+    <ClCompile Include="spatial_handler.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZoneInsertionHandler.cpp">
+    <ClCompile Include="zone_server.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZoneServer.cpp">
+    <ClCompile Include="zone_insertion_handler.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SpatialHandler.h">
+    <ClInclude Include="spatial_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ZoneInsertionHandler.h">
+    <ClInclude Include="zone_insertion_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ZoneServer.h">
+    <ClInclude Include="zone_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

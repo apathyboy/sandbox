@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\zone;$(SolutionDir)src\login;$(SolutionDir)src\shared;$(SolutionDir)deps\gmock\include;$(SolutionDir)deps\gtest\include;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\gmock\include;$(SolutionDir)deps\gtest\include;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -76,7 +76,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\zone;$(SolutionDir)src\login;$(SolutionDir)src\shared;$(SolutionDir)deps\gmock\include;$(SolutionDir)deps\gtest\include;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\gmock\include;$(SolutionDir)deps\gtest\include;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -92,9 +92,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="TestByteBuffer.cpp" />
-    <ClCompile Include="TestLoadPacketFromTextFile.cpp" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="byte_buffer_tests.cc" />
+    <ClCompile Include="load_packet_from_text_file_tests.cc" />
+    <ClCompile Include="session_manager_tests.cc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\login\login.vcxproj">

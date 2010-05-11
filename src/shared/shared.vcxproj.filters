@@ -11,69 +11,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteBuffer.cpp">
+    <ClCompile Include="session_manager.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GalaxyServer.cpp">
+    <ClCompile Include="byte_buffer.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Logger.cpp">
+    <ClCompile Include="galaxy_server.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoginHandler.cpp">
+    <ClCompile Include="logger.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PacketTools.cpp">
+    <ClCompile Include="login_handler.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="packet_tools.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Session.cpp">
+    <ClCompile Include="player.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoeMessageFactory.cpp">
+    <ClCompile Include="session.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UdpSocketListener.cpp">
+    <ClCompile Include="soe_message_factory.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="udp_socket_listener.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ByteBuffer.h">
+    <ClInclude Include="session_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GalaxyServer.h">
+    <ClInclude Include="byte_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
+    <ClInclude Include="galaxy_server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LoginHandler.h">
+    <ClInclude Include="login_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkAddress.h">
+    <ClInclude Include="network_address.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PacketTools.h">
+    <ClInclude Include="packet_tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="soe_message_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Protocol.h">
+    <ClInclude Include="udp_socket_listener.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Session.h">
+    <ClInclude Include="session.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SoeMessageFactory.h">
+    <ClInclude Include="protocol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UdpSocketListener.h">
+    <ClInclude Include="player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="byte_buffer-inl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

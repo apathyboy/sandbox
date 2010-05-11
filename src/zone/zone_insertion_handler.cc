@@ -5,30 +5,32 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "ZoneInsertionHandler.h"
-#include "Session.h"
-#include "PacketTools.h"
+#include "zone_insertion_handler.h"
+#include "shared/session.h"
+#include "shared/packet_tools.h"
 
+namespace sandbox {
+namespace zone {
 
-void HandleClientReady(Session& session, ByteBuffer& message)
+void HandleClientReady(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleLoadDone(Session& session, ByteBuffer& message)
+void HandleLoadDone(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHardcodedPacket("packets/ZoneInsertion/LoadDone.txt", true);
 }
 
 
-void HandleLoadTerrain(Session& session, ByteBuffer& message)
+void HandleLoadTerrain(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 }
 
 
-void HandleZoneInsertionRequest(Session& session, ByteBuffer& message)
+void HandleZoneInsertionRequest(shared::Session& session, shared::ByteBuffer& message)
 {
 	session.sendHeartbeat();
 
@@ -67,3 +69,5 @@ void HandleZoneInsertionRequest(Session& session, ByteBuffer& message)
 	session.sendHardcodedPacket("packets/Objects/KerenStarshipTicketCollector.txt", false);
 }
 
+}  // namespace zone
+}  // namespace sandbox

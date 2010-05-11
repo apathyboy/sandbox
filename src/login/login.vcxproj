@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LoginServer.cpp" />
+    <ClCompile Include="login_server.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LoginServer.h" />
+    <ClInclude Include="login_server.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E34B60F0-8B08-48F2-95FB-6A0422D05B1A}</ProjectGuid>
@@ -62,7 +62,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\shared;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -79,7 +79,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\shared;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>

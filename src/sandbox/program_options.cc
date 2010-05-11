@@ -5,26 +5,25 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
+
+#include "program_options.h"
+
 #include <fstream>
 #include <iostream>
 
-#ifdef _MSC_VER
-#include "stdint.h"
-#else
 #include <cstdint>
-#endif
 
 #if HAVE_CONFIG_H
-#	include <config.h>
+#	include "config.h"
 #else
-const char * PACKAGE_VERSION = "0.1.0";
+const char * PACKAGE_VERSION = "0.1.1";
 #endif
-
-#include "ProgramOptions.h"
 
 namespace po = boost::program_options;
 
-void buildProgramOptions(boost::program_options::variables_map& vm, int argc, char *argv[], const std::string& filename)
+namespace sandbox {
+
+void BuildProgramOptions(boost::program_options::variables_map& vm, int argc, char *argv[], const std::string& filename)
 {	
     // Declare a group of options that will be allowed only on command line
     po::options_description general("General Options");
@@ -65,3 +64,5 @@ void buildProgramOptions(boost::program_options::variables_map& vm, int argc, ch
         exit(EXIT_SUCCESS);
     }
 }
+
+}  // namespace sandbox

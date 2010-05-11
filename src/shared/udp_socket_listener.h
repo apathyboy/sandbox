@@ -18,7 +18,10 @@
 
 #include <cstdint>
 
-#include "NetworkAddress.h"
+#include "network_address.h"
+
+namespace sandbox {
+namespace shared {
 
 class ByteBuffer;
 
@@ -47,6 +50,9 @@ private:
     class UdpSocketListenerImpl;
     std::tr1::shared_ptr<UdpSocketListenerImpl> impl_;
 };
+
+}  // namespace sandbox
+}  // namespace shared
 
 #endif // UDP_SOCKET_LISTENER_H_
 

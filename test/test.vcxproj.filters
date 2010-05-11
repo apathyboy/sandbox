@@ -11,13 +11,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestByteBuffer.cpp">
+    <ClCompile Include="session_manager_tests.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestLoadPacketFromTextFile.cpp">
+    <ClCompile Include="byte_buffer_tests.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="load_packet_from_text_file_tests.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

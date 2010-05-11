@@ -5,7 +5,10 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "Player.h"
+#include "player.h"
+
+namespace sandbox {
+namespace shared {
 
 Player::Player()
     : position_()
@@ -13,12 +16,12 @@ Player::Player()
     , mood_id_(0)
 {}
 
-const Vector3<int>& Player::position() const
+const glm::vec3& Player::position() const
 {
     return position_;
 }
 
-void Player::position(const Vector3<int>& position)
+void Player::position(const glm::vec3& position)
 {
     position_ = position;
 }
@@ -63,3 +66,5 @@ void Player::stationId(int id)
     station_id_ = id;
 }
 
+}  // namespace sandbox
+}  // namespace shared

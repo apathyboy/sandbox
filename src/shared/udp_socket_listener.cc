@@ -5,11 +5,14 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "UdpSocketListener.h"
-#include "ByteBuffer.h"
-#include "Logger.h"
+#include "udp_socket_listener.h"
+#include "byte_buffer.h"
+#include "logger.h"
 
 #include "boost/asio.hpp"
+
+namespace sandbox {
+namespace shared {
 
 /** UdpSocketListener::UdpSocketListenerImpl **/ 
 class UdpSocketListener::UdpSocketListenerImpl
@@ -154,3 +157,5 @@ void UdpSocketListener::sendToRemote(const NetworkAddress &address, ByteBuffer& 
     impl_->sendToRemote(address, message);
 }
 
+}  // namespace sandbox
+}  // namespace shared

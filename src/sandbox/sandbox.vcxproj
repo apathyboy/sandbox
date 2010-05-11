@@ -54,7 +54,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\login;$(SolutionDir)src\shared;$(SolutionDir)src\zone;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -65,7 +65,7 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)data\packets\*.txt" "$(SolutionDir)bin\$(ConfigurationName)\packets" /I /Y /s
-xcopy "$(SolutionDir)data\openswg.conf.dist" "$(SolutionDir)bin\$(ConfigurationName)" /I /Y
+xcopy "$(SolutionDir)data\sandbox.cfg.dist" "$(SolutionDir)bin\$(ConfigurationName)" /I /Y
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -78,7 +78,7 @@ xcopy "$(SolutionDir)data\openswg.conf.dist" "$(SolutionDir)bin\$(ConfigurationN
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_WIN32_WINNT=0x0501;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\shared;$(SolutionDir)deps\boost;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src;$(SolutionDir)deps\boost;$(SolutionDir)deps\glm;$(SolutionDir)deps\zlib</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -96,11 +96,11 @@ xcopy "$(SolutionDir)data\openswg.conf.dist" "$(SolutionDir)bin\$(ConfigurationN
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ProgramOptions.cpp" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="program_options.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ProgramOptions.h" />
+    <ClInclude Include="program_options.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\login\login.vcxproj">

@@ -38,6 +38,10 @@ if not %ERRORLEVEL% == 0 (
   exit /b %ERRORLEVEL%
 )
 
+if exist "%PROJECT_BASE%build-aux\Debug\test\test.exe" (
+  "%PROJECT_BASE%build-aux\Debug\test\test.exe"
+)
+
 echo.
 echo Project Successfully Built^^!
 echo This window will close shortly.
