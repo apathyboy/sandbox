@@ -38,6 +38,11 @@ if not %ERRORLEVEL% == 0 (
   exit /b %ERRORLEVEL%
 )
 
+echo.
+echo Project Successfully Built^^!
+echo This window will close shortly.
+call :SLEEP 10
+
 goto :eof
 rem --- End of Main Execution --------------------------------------------------
 rem ----------------------------------------------------------------------------
@@ -55,7 +60,7 @@ rem ----------------------------------------------------------------------------
 rem --- Start of SET_DEFAULTS --------------------------------------------------
 :SET_DEFAULTS
 
-set DEPENDENCIES_VERSION=1.1.0
+set DEPENDENCIES_VERSION=0.1.1
 set DEPENDENCIES_FILE=sandbox-deps-%DEPENDENCIES_VERSION%.7z
 set DEPENDENCIES_URL=http://github.com/downloads/apathyboy/cu-sandbox/%DEPENDENCIES_FILE%
 set PROJECT_BASE=%~dp0
@@ -500,6 +505,16 @@ if "%BUILD_TYPE%" == "all" (
 
 goto :eof
 rem --- End of BUILD_PROJECT ---------------------------------------------------
+rem ----------------------------------------------------------------------------
+
+
+rem ----------------------------------------------------------------------------
+rem --- Start of SLEEP ---------------------------------------------------------
+rem --- Waits some seconds before returning.                                 ---
+:SLEEP
+ping -n %1 -w 1 127.0.0.1>NUL
+goto :eof
+rem --- End of SLEEP -----------------------------------------------------------
 rem ----------------------------------------------------------------------------
 
 ENDLOCAL
