@@ -1,14 +1,15 @@
-/*
- * SWG:ANH Combat Upgrade Sandbox
+/**
+ * SWG:ANH Sandbox Server
  *
  * @copyright   Copyright (c) 2010 The SWG:ANH Team
  * @author      Eric Barr <apathy@swganh.org>
-**/
+ */
 
-#include "shared/logger.h"
+#include "program_options.h"
+
 #include "login/login_server.h"
 #include "zone/zone_server.h"
-#include "program_options.h"
+#include "shared/logger.h"
 
 #include <boost/thread.hpp>
 
