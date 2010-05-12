@@ -32,7 +32,7 @@ rem -----------------------------
 rem -------- :CHECK_FILE --------
 :CHECK_FILE
 
-%PROJECT_ROOT%tools\cpplint.py --verbose=0 --output=vs7 %1
+%PROJECT_ROOT%tools\cpplint.py --verbose=0 --output=vs7 --filter=-runtime/references,-readability/streams %1
 
 rem Bail out if any errors are detected
 if errorlevel 1 exit 1

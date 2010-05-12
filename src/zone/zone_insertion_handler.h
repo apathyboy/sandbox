@@ -5,8 +5,8 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef SANDBOX_ZONE_ZONE_INSERTION_HANDLER_H_
-#define SANDBOX_ZONE_ZONE_INSERTION_HANDLER_H_
+#ifndef SRC_ZONE_ZONE_INSERTION_HANDLER_H_
+#define SRC_ZONE_ZONE_INSERTION_HANDLER_H_
 
 namespace sandbox {
 
@@ -22,10 +22,11 @@ namespace zone {
 void HandleClientReady(shared::Session& session, shared::ByteBuffer& message);
 void HandleLoadDone(shared::Session& session, shared::ByteBuffer& message);
 void HandleLoadTerrain(shared::Session& session, shared::ByteBuffer& message);
-void HandleZoneInsertionRequest(shared::Session& session, shared::ByteBuffer& message);
+void HandleZoneInsertionRequest(shared::Session& session,
+                                shared::ByteBuffer& message);
 
 
 }  // namespace zone
 }  // namespace sandbox
 
-#endif  // SANDBOX_ZONE_ZONE_INSERTION_HANDLER_H_
+#endif  // SRC_ZONE_ZONE_INSERTION_HANDLER_H_

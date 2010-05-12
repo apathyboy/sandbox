@@ -5,12 +5,12 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef SANDBOX_PROGRAM_OPTIONS_H_
-#define SANDBOX_PROGRAM_OPTIONS_H_
+#ifndef SRC_SANDBOX_PROGRAM_OPTIONS_H_
+#define SRC_SANDBOX_PROGRAM_OPTIONS_H_
 
 #include <cstdint>
 #include <string>
-#include <boost/program_options.hpp>
+#include <boost/program_options.hpp> // NOLINT
 
 namespace sandbox {
 
@@ -23,8 +23,9 @@ namespace sandbox {
  *
  * @return Returns a variables_map containing the program options.
  */
-void BuildProgramOptions(boost::program_options::variables_map&, int argc, char *argv[], const std::string& configure);
+void BuildProgramOptions(boost::program_options::variables_map&,
+  int argc, char *argv[], const std::string& configure);
 
 }  // namespace sandbox
 
-#endif  // SANDBOX_PROGRAM_OPTIONS_H_
+#endif  // SRC_SANDBOX_PROGRAM_OPTIONS_H_
