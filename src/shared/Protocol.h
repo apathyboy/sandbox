@@ -5,21 +5,22 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef PROTOCOL_H_
-#define PROTOCOL_H_
+#ifndef SRC_SHARED_PROTOCOL_H_
+#define SRC_SHARED_PROTOCOL_H_
+
+#include <cstdint>
 
 #ifdef _MSC_VER
 #include <functional>
 #include <memory>
 #else
-#include <tr1/functional>
-#include <tr1/memory>
+#include <tr1/functional>  // NOLINT
+#include <tr1/memory>      // NOLINT
 #endif
 
-#include <cstdint>
 #include <map>
 
-#include "byte_buffer.h"
+#include "shared/byte_buffer.h"
 
 namespace sandbox {
 namespace shared {
@@ -29,64 +30,59 @@ class Session;
 typedef std::tr1::function<void (Session& session, ByteBuffer&)> MessageHandler;
 
 template<typename Identifier, class Handler = MessageHandler>
-class Protocol
-{
-public:
-    Protocol()  {}
-    ~Protocol() {}
 
-    void addHandler(Identifier id, Handler handler)
-    {
-        handlers_.insert(std::make_pair(id, handler));
+class Protocol {
+ public:
+  Protocol() {}
+  ~Protocol() {}
+
+  void addHandler(Identifier id, Handler handler) {
+    handlers_.insert(std::make_pair(id, handler));
+  }
+
+  Handler find(Identifier id) {
+    Handler handler = NULL;
+
+    typename std::map<Identifier, Handler>::iterator i = handlers_.find(id);
+    if (i != handlers_.end()) {
+      handler = (*i).second;
     }
 
-    Handler find(Identifier id)
-    {
-        Handler handler = NULL;
+    return handler;
+  }
 
-        typename std::map<Identifier, Handler>::iterator i = handlers_.find(id);
-        if (i != handlers_.end()) {
-            handler = (*i).second;
-        }
+  Handler find(ByteBuffer& message) {
+    Handler handler = NULL;
 
-        return handler;
+    typename std::map<Identifier, Handler>::iterator i =
+      handlers_.find(message.peekAt<uint8_t>(1));
+
+    if (i != handlers_.end()) {
+      handler = (*i).second;
     }
 
-    Handler find(ByteBuffer& message)
-    {
-	    Handler handler = NULL;
+    if (!handler) {
+      i = handlers_.find(message.peekAt<uint32_t>(2));
 
-	    typename std::map<Identifier, Handler>::iterator i = handlers_.find(message.peekAt<uint8_t>(1));
-
-	    if (i != handlers_.end())
-	    {
-		    handler = (*i).second;
-	    }
-
-	    if (! handler)
-	    {
-            i = handlers_.find(message.peekAt<uint32_t>(2));
-
-            if (i != handlers_.end()) {
-                handler = (*i).second;
-            } else {
-                throw std::exception();
-            }
-	    }
-
-	    return handler;
+      if (i != handlers_.end()) {
+        handler = (*i).second;
+      } else {
+        throw std::exception();
+      }
     }
 
-private:
-    Protocol(const Protocol&);
-    Protocol& operator=(const Protocol&);
+    return handler;
+  }
 
-    std::map<Identifier, Handler> handlers_;
+ private:
+  Protocol(const Protocol&);
+  Protocol& operator=(const Protocol&);
+
+  std::map<Identifier, Handler> handlers_;
 };
 
 }  // namespace sandbox
 }  // namespace shared
 
 
-#endif // PROTOCOL_H_
-
+#endif  // SRC_SHARED_PROTOCOL_H_

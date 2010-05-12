@@ -5,335 +5,352 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "galaxy_server.h"
-#include "logger.h"
-#include "session.h"
-#include "soe_message_factory.h"
-#include "packet_tools.h"
+#include "shared/galaxy_server.h"
+#include "shared/logger.h"
+#include "shared/packet_tools.h"
+#include "shared/session.h"
+#include "shared/soe_message_factory.h"
 
-#include <boost/thread.hpp>
+#include <boost/thread.hpp> // NOLINT
 
 namespace sandbox {
 namespace shared {
 
 GalaxyServer::GalaxyServer(uint16_t port)
-    : network_listener_(port)
-    , encryption_method_(0x0104)
-    , max_udp_size_(496)
-{    
-    soe_protocol_.addHandler(htons(0x0001), std::bind(&GalaxyServer::handleSessionRequest, this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0003), std::bind(&GalaxyServer::handleMultiMessage,   this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0005), std::bind(&GalaxyServer::handleDisconnect,     this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0006), std::bind(&GalaxyServer::handleKeepAlive,      this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0007), std::bind(&GalaxyServer::handleNetStatus,      this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0009), std::bind(&GalaxyServer::handleDataChannel,    this, std::placeholders::_1, std::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0015), std::bind(&GalaxyServer::handleAcknowledge,    this, std::placeholders::_1, std::placeholders::_2));
+: network_listener_(port)
+, encryption_method_(0x0104)
+, max_udp_size_(496) {
+  soe_protocol_.addHandler(htons(0x0001),
+    std::tr1::bind(&GalaxyServer::handleSessionRequest, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0003),
+    std::tr1::bind(&GalaxyServer::handleMultiMessage, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0005),
+    std::tr1::bind(&GalaxyServer::handleDisconnect, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0006),
+    std::tr1::bind(&GalaxyServer::handleKeepAlive, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0007),
+    std::tr1::bind(&GalaxyServer::handleNetStatus, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0009),
+    std::tr1::bind(&GalaxyServer::handleDataChannel, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+
+  soe_protocol_.addHandler(htons(0x0015),
+    std::tr1::bind(&GalaxyServer::handleAcknowledge, this,
+      std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 }
 
 
-GalaxyServer::~GalaxyServer()
-{}
+GalaxyServer::~GalaxyServer() {}
 
 
-uint16_t GalaxyServer::port() const
-{
-    return network_listener_.port();
+uint16_t GalaxyServer::port() const {
+  return network_listener_.port();
 }
 
 
-void GalaxyServer::port(uint16_t port)
-{
-    network_listener_.port(port);
-}
-
-    
-int16_t GalaxyServer::encryptionMethod() const
-{
-    return encryption_method_;
+void GalaxyServer::port(uint16_t port) {
+  network_listener_.port(port);
 }
 
 
-void GalaxyServer::encryptionMethod(int16_t encryptionMethod)
-{
-    encryption_method_ = encryptionMethod;
+int16_t GalaxyServer::encryptionMethod() const {
+  return encryption_method_;
 }
 
 
-uint32_t GalaxyServer::maxUdpSize() const
-{
-    return max_udp_size_;
+void GalaxyServer::encryptionMethod(int16_t encryptionMethod) {
+  encryption_method_ = encryptionMethod;
 }
 
 
-void GalaxyServer::maxUdpSize(uint32_t size)
-{
-    max_udp_size_ = size;
+uint32_t GalaxyServer::maxUdpSize() const {
+  return max_udp_size_;
 }
 
 
-void GalaxyServer::run()
-{
-    initializeProtocol();
-    
-    network_listener_.callback(std::tr1::bind(&GalaxyServer::handleIncoming, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-        
-    for(;;) {
-        onUpdate();
-
-        network_listener_.poll();
-
-        boost::this_thread::sleep(boost::posix_time::milliseconds(20));
-	}
+void GalaxyServer::maxUdpSize(uint32_t size) {
+  max_udp_size_ = size;
 }
 
 
-void GalaxyServer::handleIncoming(const NetworkAddress& address, ByteBuffer& message)
-{
-    std::tr1::shared_ptr<Session> session = findSession(address);
+void GalaxyServer::run() {
+  initializeProtocol();
 
-   // Logger().log(INFO) << "Unprocessed Incoming Message" << std::endl << message;
+  network_listener_.callback(std::tr1::bind(&GalaxyServer::handleIncoming, this,
+    std::tr1::placeholders::_1, std::tr1::placeholders::_2));
 
-    if (session) {    
-        if(CrcTest(message, session->crcSeed(), session->crcLength())) {
-            Decrypt(message, session->crcSeed(), session->crcLength());
-        }
+  for (;;) {
+    onUpdate();
 
-        if (message.peekAt<uint8_t>(2) == 'x') {
-            Decompress(message);
-        }
+    network_listener_.poll();
+
+    boost::this_thread::sleep(boost::posix_time::milliseconds(20));
+  }
+}
+
+void GalaxyServer::handleIncoming(const NetworkAddress& address,
+                                  ByteBuffer& message) {
+  std::tr1::shared_ptr<Session> session = findSession(address);
+
+  if (session) {
+    if (CrcTest(message, session->crcSeed(), session->crcLength())) {
+      Decrypt(message, session->crcSeed(), session->crcLength());
     }
 
-    // Logger().log(INFO) << "Incoming Message" << std::endl << message;
+    if (message.peekAt<uint8_t>(2) == 'x') {
+      Decompress(message);
+    }
+  }
 
-	if (! handleMessage(address, message) && session) {
-		session->queueIncomingMessage(message);
-	}
+  if (!handleMessage(address, message) && session) {
+    session->queueIncomingMessage(message);
+  }
 }
 
 
-void GalaxyServer::sendToRemote(const NetworkAddress& address, ByteBuffer& message) const
-{
-    network_listener_.sendToRemote(address, message);
+void GalaxyServer::sendToRemote(const NetworkAddress& address,
+                                ByteBuffer& message) const {
+  network_listener_.sendToRemote(address, message);
 }
 
 
-std::tr1::shared_ptr<Session> GalaxyServer::addSession(const NetworkAddress& address)
-{
-    Logger().log(INFO) << "Adding session for [" << address << "]";
+std::tr1::shared_ptr<Session> GalaxyServer::addSession(
+  const NetworkAddress& address) {
+  Logger().log(INFO) << "Adding session for [" << address << "]";
 
-	// Create a new session and store it in the session map. 
-    std::tr1::shared_ptr<Session> session(new Session(*this, address, swg_protocol_));
-	sessions_[address] = session;
+  // Create a new session and store it in the session map.
+  std::tr1::shared_ptr<Session> session(
+    new Session(*this, address, swg_protocol_));
 
-	// Return the new session.
-	return session;
+  sessions_[address] = session;
+
+  // Return the new session.
+  return session;
 }
 
 
-std::tr1::shared_ptr<Session> GalaxyServer::findSession(const NetworkAddress& address)
-{
-    std::tr1::shared_ptr<Session> session;
+std::tr1::shared_ptr<Session> GalaxyServer::findSession(
+  const NetworkAddress& address) {
+  std::tr1::shared_ptr<Session> session;
 
-	SessionMap::iterator i = sessions_.find(address);
-	if (i != sessions_.end()) {
-        session = (*i).second;
-	}
+  SessionMap::iterator i = sessions_.find(address);
+  if (i != sessions_.end()) {
+    session = (*i).second;
+  }
 
-    return session;
+  return session;
 }
 
 
-std::tr1::shared_ptr<Session> GalaxyServer::removeSession(const NetworkAddress& address)
-{
-    std::tr1::shared_ptr<Session> session;
+std::tr1::shared_ptr<Session> GalaxyServer::removeSession(
+  const NetworkAddress& address) {
+  std::tr1::shared_ptr<Session> session;
 
-    SessionMap::iterator i = sessions_.find(address);
-    if (i != sessions_.end()) {
-        session = (*i).second;
-        sessions_.erase(i);
+  SessionMap::iterator i = sessions_.find(address);
+  if (i != sessions_.end()) {
+    session = (*i).second;
+    sessions_.erase(i);
+  }
+
+  return session;
+}
+
+
+uint32_t GalaxyServer::sessionCount() const {
+  return sessions_.size();
+}
+
+
+void GalaxyServer::addSwgProtocolHandler(uint32_t identifier,
+                                         MessageHandler handler) {
+  swg_protocol_.addHandler(identifier, handler);
+}
+
+
+bool GalaxyServer::handleMessage(const NetworkAddress& address,
+                                 ByteBuffer& message) {
+  uint16_t opcode = message.read<uint16_t>();
+
+  SoeMessageHandler handler = soe_protocol_.find(opcode);
+
+  if (!handler) {
+    return false;
+  }
+
+  handler(address, message);
+
+  return true;
+}
+
+
+void GalaxyServer::handleSessionRequest(const NetworkAddress& address,
+                                        ByteBuffer& message) {
+  std::tr1::shared_ptr<Session> session = findSession(address);
+
+  if (session) {
+      Logger().log(ERR) << "Received session request from an address with an"
+        << " existing session: [" << address << "]";
+      return;
+  }
+
+  session = addSession(address);
+
+  session->crcLength(ntohl(message.read<uint32_t>()));
+  session->connectionId(message.read<uint32_t>());
+  session->maxUdpSize(ntohl(message.read<uint32_t>()));
+
+  std::tr1::shared_ptr<ByteBuffer> session_response(
+    SoeMessageFactory::buildSessionResponse(*this, session));
+
+  session->sendToRemote(*session_response, false, false);
+}
+
+
+void GalaxyServer::handleNetStatus(const NetworkAddress& address,
+                                   ByteBuffer& message) {
+  std::tr1::shared_ptr<Session> session = findSession(address);
+
+  if (!session) {
+    Logger().log(ERR) << "Received a Network Status message from an address"
+      << " without a session: [" << address << "]";
+    return;
+  }
+
+  uint16_t tick = message.read<uint16_t>();
+
+  std::tr1::shared_ptr<ByteBuffer> network_status_response(
+    SoeMessageFactory::buildNetworkStatusResponse(session, tick));
+
+  session->sendToRemote(*network_status_response, true, false);
+}
+
+
+void GalaxyServer::handleMultiMessage(const NetworkAddress& address,
+                                      ByteBuffer& message) {
+  // Loop through the message until the compression bit is reached.
+  while (message.readPosition() < message.size() - 4) {
+    uint8_t segment_size = message.read<uint8_t>();
+
+    // If the segment size is 255+ check the next bit, a 0x01 indicates
+    // over 255 and that the next bit should be added to the total
+    // size. If 0x00 then the next bit should be skipped.
+    if (segment_size == 0xFF) {
+      if (message.read<uint8_t>() == 0x01) {
+        segment_size += message.read<uint8_t>();
+      } else {
+        message.read<uint8_t>();
+      }
     }
 
-    return session;
+    ByteBuffer segment(message.data()+message.readPosition(), segment_size);
+    message.readPosition(message.readPosition() + segment_size);
+
+    handleMessage(address, segment);
+  }
 }
 
 
-uint32_t GalaxyServer::sessionCount() const
-{
-    return sessions_.size();
-}
-    
+void GalaxyServer::handleAcknowledge(const NetworkAddress& address,
+                                     ByteBuffer& message) {
+  std::tr1::shared_ptr<Session> session = findSession(address);
 
-void GalaxyServer::addSwgProtocolHandler(uint32_t identifier, MessageHandler handler)
-{
-    swg_protocol_.addHandler(identifier, handler);   
-}
+  if (!session) {
+    Logger().log(ERR) << "Received an Acknowledge message from an address"
+      << " without a session: [" << address << "]";
+    return;
+  }
 
+  // @TODO: Complete this implementation correctly.
+  uint16_t sequence = message.read<uint16_t>();
 
-bool GalaxyServer::handleMessage(const NetworkAddress& address, ByteBuffer& message)
-{
-    uint16_t opcode = message.read<uint16_t>();
-    
-	SoeMessageHandler handler = soe_protocol_.find(opcode);
-
-    if (! handler) {
-        return false;
-    }
-
-    handler(address, message);
-
-	return true;
+  session->receivedSequence(sequence);
+  session->clientSequence(sequence);
 }
 
 
-void GalaxyServer::handleSessionRequest(const NetworkAddress& address, ByteBuffer& message)
-{
-    std::tr1::shared_ptr<Session> session = findSession(address);
+void GalaxyServer::handleDataChannel(const NetworkAddress& address,
+                                     ByteBuffer& message) {
+  std::tr1::shared_ptr<Session> session = findSession(address);
 
-    if (session) {
-        Logger().log(ERR) << "Received session request from an address with an existing session: [" << address << "]";
-        return;
-    }
+  if (!session) {
+    Logger().log(ERR) << "Received a Data Channel message from an address"
+      << " without a session: [" << address << "]";
+    return;
+  }
 
-    session = addSession(address);
+  session->clientSequence(message.read<uint16_t>());
+  session->sendAcknowledge();
 
-    session->crcLength(ntohl(message.read<uint32_t>()));
-    session->connectionId(message.read<uint32_t>());
-    session->maxUdpSize(ntohl(message.read<uint32_t>()));
+  if (ntohs(message.peek<uint16_t>()) == 0x0019) {
+    message.read<uint16_t>();
 
-    std::tr1::shared_ptr<ByteBuffer> session_response(SoeMessageFactory::buildSessionResponse(*this, session));
-    session->sendToRemote(*session_response, false, false);
-}
-
-
-void GalaxyServer::handleNetStatus(const NetworkAddress& address, ByteBuffer& message)
-{
-    std::tr1::shared_ptr<Session> session = findSession(address);
-
-    if (! session) {
-        Logger().log(ERR) << "Received a Network Status message from an address without a session: [" << address << "]";
-        return;
-    }
-    
-    uint16_t tick = message.read<uint16_t>();
-
-    std::tr1::shared_ptr<ByteBuffer> network_status_response(SoeMessageFactory::buildNetworkStatusResponse(session, tick));
-    session->sendToRemote(*network_status_response, true, false);
-}
-
-
-void GalaxyServer::handleMultiMessage(const NetworkAddress& address, ByteBuffer& message)
-{
     // Loop through the message until the compression bit is reached.
-    while (message.readPosition() < message.size() - 4)
-    {
-        uint8_t segment_size = message.read<uint8_t>();
-        
-        // If the segment size is 255+ check the next bit, a 0x01 indicates
-        // over 255 and that the next bit should be added to the total
-        // size. If 0x00 then the next bit should be skipped.
-        if (segment_size == 0xFF) {
-            if (message.read<uint8_t>() == 0x01) {
-                segment_size += message.read<uint8_t>();
-            } else {
-                message.read<uint8_t>();
-            }
+    while (message.readPosition() < message.size() - 3) {
+      uint8_t segment_size = message.read<uint8_t>();
+
+      // If the segment size is 255+ check the next bit, a 0x01 indicates
+      // over 255 and that the next bit should be added to the total
+      // size. If 0x00 then the next bit should be skipped.
+      if (segment_size == 0xFF) {
+        if (message.read<uint8_t>() == 0x01) {
+          segment_size += message.read<uint8_t>();
+        } else {
+          message.read<uint8_t>();
         }
-    
-        ByteBuffer segment(message.data()+message.readPosition(), segment_size);
-        message.readPosition(message.readPosition() + segment_size);
+      }
 
-		handleMessage(address, segment);
+      ByteBuffer segment(message.data()+message.readPosition(), segment_size);
+      session->handlePacket(segment);
+
+      message.readPosition(message.readPosition() + segment_size);
     }
+  } else {
+    ByteBuffer segment(message.data()+message.readPosition(), message.size()-7);
+    session->handlePacket(segment);
+  }
 }
 
 
-void GalaxyServer::handleAcknowledge(const NetworkAddress& address, ByteBuffer& message)
-{
-    std::tr1::shared_ptr<Session> session = findSession(address);
+void GalaxyServer::handleDisconnect(const NetworkAddress& address,
+                                    ByteBuffer& message) {
+  message;
+  std::tr1::shared_ptr<Session> session = findSession(address);
 
-    if (! session) {
-        Logger().log(ERR) << "Received an Acknowledge message from an address without a session: [" << address << "]";
-        return;
-    }
+  if (!session) {
+     Logger().log(ERR) << "Received a Disconnect message from an address"
+       << " without a session: [" << address << "]";
+     return;
+  }
 
-    // @TODO: Complete this implementation correctly.
-    uint16_t sequence = message.read<uint16_t>();
-    
-    session->receivedSequence(sequence);
-    session->clientSequence(sequence);
+  removeSession(address);
 }
 
 
-void GalaxyServer::handleDataChannel(const NetworkAddress& address, ByteBuffer& message)
-{
-    std::tr1::shared_ptr<Session> session = findSession(address);
+void GalaxyServer::handleKeepAlive(const NetworkAddress& address,
+                                   ByteBuffer& message) {
+  message;
+  std::tr1::shared_ptr<Session> session = findSession(address);
 
-    if (! session) {
-        Logger().log(ERR) << "Received a Data Channel message from an address without a session: [" << address << "]";
-        return;
-    }
+  if (!session) {
+    Logger().log(ERR) << "Received a Keep Alive message from an address"
+      << " without a session: [" << address << "]";
+    return;
+  }
 
-    session->clientSequence(message.read<uint16_t>());
-    session->sendAcknowledge();
+  std::tr1::shared_ptr<ByteBuffer> keep_alive_response(
+    SoeMessageFactory::buildKeepAliveResponse());
 
-    if (ntohs(message.peek<uint16_t>()) == 0x0019) {
-        message.read<uint16_t>();
-
-        // Loop through the message until the compression bit is reached.
-        while (message.readPosition() < message.size() - 3)
-        {
-            uint8_t segment_size = message.read<uint8_t>();
-        
-            // If the segment size is 255+ check the next bit, a 0x01 indicates
-            // over 255 and that the next bit should be added to the total
-            // size. If 0x00 then the next bit should be skipped.
-            if (segment_size == 0xFF) {
-                if (message.read<uint8_t>() == 0x01) {
-                    segment_size += message.read<uint8_t>();
-                } else {
-                    message.read<uint8_t>();
-                }
-            }
-    
-            ByteBuffer segment(message.data()+message.readPosition(), segment_size);
-		    session->handlePacket(segment);
-
-            message.readPosition(message.readPosition() + segment_size);
-        }        
-    } else {
-    
-        ByteBuffer segment(message.data()+message.readPosition(), message.size()-7);
-		session->handlePacket(segment);
-    }
-}
-
-
-void GalaxyServer::handleDisconnect(const NetworkAddress& address, ByteBuffer& message)
-{
-    message;
-    std::tr1::shared_ptr<Session> session = findSession(address);
-
-    if (! session) {
-        Logger().log(ERR) << "Received a Disconnect message from an address without a session: [" << address << "]";
-        return;
-    }
-
-    removeSession(address);
-}
-
-
-void GalaxyServer::handleKeepAlive(const NetworkAddress& address, ByteBuffer& message)
-{
-    message;
-    std::tr1::shared_ptr<Session> session = findSession(address);
-
-    if (! session) {
-        Logger().log(ERR) << "Received a Keep Alive message from an address without a session: [" << address << "]";
-        return;
-    }
-
-    std::tr1::shared_ptr<ByteBuffer> keep_alive_response(SoeMessageFactory::buildKeepAliveResponse());
-    session->sendToRemote(*keep_alive_response);
+  session->sendToRemote(*keep_alive_response);
 }
 
 }  // namespace sandbox

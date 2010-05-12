@@ -14,10 +14,12 @@ namespace shared {
 class Session;
 class ByteBuffer;
 
-void HandleAuthentication(Session& session, sandbox::shared::ByteBuffer& message);
+void HandleAuthentication(Session& session,
+                          sandbox::shared::ByteBuffer& message);
+
 void HandleSession(Session& session, sandbox::shared::ByteBuffer& message);
 
 }  // namespace sandbox
 }  // namespace shared
 
-#endif // SRC_SHARED_LOGIN_HANDLER_H_
+#endif  // SRC_SHARED_LOGIN_HANDLER_H_
