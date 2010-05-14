@@ -205,9 +205,9 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address,
 
   session = addSession(address);
 
-  session->crcLength(ntohl(message.read<uint32_t>()));
+  session->crcLength(message.read<uint32_t>(true));
   session->connectionId(message.read<uint32_t>());
-  session->maxUdpSize(ntohl(message.read<uint32_t>()));
+  session->maxUdpSize(message.read<uint32_t>(true));
 
   std::tr1::shared_ptr<ByteBuffer> session_response(
     SoeMessageFactory::buildSessionResponse(*this, session));
