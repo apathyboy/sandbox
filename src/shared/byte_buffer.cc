@@ -86,6 +86,9 @@ void ByteBuffer::write(size_t offset, const unsigned char* data, size_t size) {
 
 void ByteBuffer::clear() {
   data_.clear();
+
+  read_position_ = 0;
+  write_position_ = 0;
 }
 
 size_t ByteBuffer::readPosition() const {
@@ -114,38 +117,32 @@ std::vector<unsigned char>& ByteBuffer::raw() {
 
 template<>
 void ByteBuffer::swapEndian(uint16_t& data) {
-  data = (data >> 8) | (data << 8);
+  swapEndian16(data);
 }
 
 template<>
 void ByteBuffer::swapEndian(uint32_t& data) {
-  data = (data >> 24) |
-         ((data << 8) && 0x00FF0000) |
-         ((data >> 8) && 0x0000FF00) |
-         (data  << 24);
+  swapEndian32(data);
 }
 
 template<>
 void ByteBuffer::swapEndian(uint64_t& data) {
-  data = (data  >> 56) |
+  swapEndian64(data);
+}
 
-#ifdef _WIN32
-    ((data << 40) && 0x00FF000000000000) |
-    ((data << 24) && 0x0000FF0000000000) |
-    ((data << 8)  && 0x000000FF00000000) |
-    ((data >> 8)  && 0x00000000FF000000) |
-    ((data >> 24) && 0x0000000000FF0000) |
-    ((data >> 40) && 0x000000000000FF00) |
-#else
-    ((data << 40) && 0x00FF000000000000LLU) |
-    ((data << 24) && 0x0000FF0000000000LLU) |
-    ((data << 8)  && 0x000000FF00000000LLU) |
-    ((data >> 8)  && 0x00000000FF000000LLU) |
-    ((data >> 24) && 0x0000000000FF0000LLU) |
-    ((data >> 40) && 0x000000000000FF00LLU) |
-#endif
+template<>
+void ByteBuffer::swapEndian(int16_t& data) {
+  swapEndian16(data);
+}
 
-    (data  << 56);
+template<>
+void ByteBuffer::swapEndian(int32_t& data) {
+  swapEndian32(data);
+}
+
+template<>
+void ByteBuffer::swapEndian(int64_t& data) {
+  swapEndian64(data);
 }
 
 template<>

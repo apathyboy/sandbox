@@ -168,6 +168,8 @@ TEST(ByteBufferTests, CanClearBufferData)
 
 	buffer.clear();
 	EXPECT_EQ(0, buffer.size());
+  EXPECT_EQ(0, buffer.readPosition());
+  EXPECT_EQ(0, buffer.writePosition());
 }
 
 TEST(ByteBufferTests, CanStreamData)
@@ -242,6 +244,31 @@ TEST(ByteBufferTests, CanAppendBuffers)
 
     EXPECT_EQ(6 * sizeof(int), buffer1.size());
     EXPECT_EQ(5, buffer1.peekAt<int>(5 * sizeof(int)));
+}
+
+TEST(ByteBufferTests, CanSwapEndian)
+{
+    ByteBuffer buffer;
+    
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(2);
+    
+    EXPECT_EQ(2, buffer.peek<uint32_t>(true));
+
+    // Start a new check with a 64bit value
+    buffer.clear();
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(0);
+    buffer.write<char>(2);
+
+    EXPECT_EQ(2, buffer.peek<uint64_t>(true));
 }
 
 }

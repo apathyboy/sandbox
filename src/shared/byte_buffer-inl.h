@@ -62,9 +62,48 @@ ByteBuffer& operator<<(ByteBuffer& buffer, const T& value) {
   return buffer;
 }
 
+template<typename T>
+void ByteBuffer::swapEndian16(T& data) {
+  data = (data >> 8) | (data << 8);
+}
+
+template<typename T>
+void ByteBuffer::swapEndian32(T& data) {
+  data =  (data >> 24) |
+         ((data & 0x00FF0000) >> 8) |
+         ((data & 0x0000FF00) << 8) |
+          (data << 24);
+}
+
+template<typename T>
+void ByteBuffer::swapEndian64(T& data) {
+  data = (data  >> 56) |
+
+#ifdef _WIN32
+    ((data & 0x00FF000000000000) >> 40) |
+    ((data & 0x0000FF0000000000) >> 24) |
+    ((data & 0x000000FF00000000) >> 8)  |
+    ((data & 0x00000000FF000000) << 8)  |
+    ((data & 0x0000000000FF0000) << 24) |
+    ((data & 0x000000000000FF00) << 40) |
+#else
+    ((data & 0x00FF000000000000LLU) >> 40) |
+    ((data & 0x0000FF0000000000LLU) >> 24) |
+    ((data & 0x000000FF00000000LLU) >> 8)  |
+    ((data & 0x00000000FF000000LLU) << 8)  |
+    ((data & 0x0000000000FF0000LLU) << 24) |
+    ((data & 0x000000000000FF00LLU) << 40) |
+#endif
+
+    (data  << 56);
+}
+
 template<> void ByteBuffer::swapEndian(uint16_t& data);
 template<> void ByteBuffer::swapEndian(uint32_t& data);
 template<> void ByteBuffer::swapEndian(uint64_t& data);
+template<> void ByteBuffer::swapEndian(int16_t& data);
+template<> void ByteBuffer::swapEndian(int32_t& data);
+template<> void ByteBuffer::swapEndian(int64_t& data);
 
 template<> ByteBuffer& ByteBuffer::write<std::string>(std::string data);
 template<> const std::string ByteBuffer::read<std::string>(bool doSwapEndian);
