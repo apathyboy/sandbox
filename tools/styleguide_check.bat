@@ -38,7 +38,7 @@ if %_Newer% == 1 (
 )
 
 rem Bail out if any errors are detected
-if errorlevel 1 exit /b 1
+if errorlevel 1 exit 1
 
 goto :eof
 rem ------------------------------
