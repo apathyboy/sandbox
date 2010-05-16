@@ -21,6 +21,20 @@
 
 #define MAX_PACKET_SIZE 1000
 
+// GCC doesn't fully support regex yet (some methods are unimplemented at this
+// time), so fall back to the boost regex (which is essentially the same
+// interface, different namespace). Once GCC finishes their implementation all
+// boost/regex references can be removed.
+#ifdef WIN32
+using ::std::regex;
+using ::std::smatch;
+using ::std::sregex_token_iterator;
+#else
+using ::boost::regex;
+using ::boost::smatch;
+using ::boost::sregex_token_iterator;
+#endif
+
 namespace sandbox {
 namespace shared {
 
@@ -71,14 +85,12 @@ static const unsigned int crc32table[256] = {
 };
 
 std::unique_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name) {
-// If building on windows we're using at least vc9 which supports tr1/regex
-#ifdef WIN32
   std::string line_buffer;
   std::unique_ptr<ByteBuffer> packet(new ByteBuffer());
 
-  static const std::tr1::regex pattern("0x([0-9a-fA-F]+)");
+  static const regex pattern("0x([0-9a-fA-F]+)");
   const int keep[] = {1};
-  std::tr1::smatch result;
+  smatch result;
 
   std::ifstream file_stream(name.c_str());
   while (std::getline(file_stream, line_buffer)) {
@@ -89,8 +101,8 @@ std::unique_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name) {
     // Loop over the line searching for the pattern. Note the "keep"
     // is used to select the 1st subpattern to keep. Leaving this off
     // matches the 0x as well.
-    const std::tr1::sregex_token_iterator end;
-    for (std::tr1::sregex_token_iterator i(
+    const sregex_token_iterator end;
+    for (sregex_token_iterator i(
       line_buffer.begin(), line_buffer.end(), pattern, keep); i != end; ++i) {
       *packet << axtoi((*i).str().c_str());
     }
@@ -99,40 +111,6 @@ std::unique_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name) {
   file_stream.close();
 
   return packet;
-
-// GCC doesn't fully support regex yet (some methods are unimplemented at this
-// time), so fall back to the boost regex (which is essentially the same
-// interface, different namespace). Once GCC finishes their implementation all
-// boost/regex references can be removed.
-#else
-  std::string line_buffer;
-  std::unique_ptr<ByteBuffer> packet(new ByteBuffer());
-
-  static const boost::regex pattern("0x([0-9a-fA-F]+)");
-  const int keep[] = {1};
-  boost::smatch result;
-
-  std::ifstream file_stream(name.c_str());
-  while (std::getline(file_stream, line_buffer)) {
-    // Remove any comments and/or whitespace from the beginning/end of the line.
-    line_buffer = line_buffer.substr(0, line_buffer.find('#'));
-    line_buffer.erase(0, line_buffer.find_first_not_of(" \n\t\v\r\f"));
-
-    // Loop over the line searching for the pattern. Note the "keep"
-    // is used to select the 1st subpattern to keep. Leaving this off
-    // matches the 0x as well.
-    const boost::sregex_token_iterator end;
-    for (boost::sregex_token_iterator i(
-      line_buffer.begin(), line_buffer.end(), pattern, keep); i != end; ++i) {
-      *packet << axtoi((*i).str().c_str());
-    }
-  }
-
-  file_stream.close();
-
-  return packet;
-
-#endif
 }
 
 
