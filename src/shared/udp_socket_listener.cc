@@ -37,11 +37,11 @@ class UdpSocketListener::UdpSocketListenerImpl {
     port_ = port;
   }
 
-  Callback callback() {
+  UdpSocketListener::Callback callback() {
     return callback_;
   }
 
-  void callback(Callback callback) {
+  void callback(UdpSocketListener::Callback callback) {
     callback_ = callback;
   }
 
@@ -49,18 +49,19 @@ class UdpSocketListener::UdpSocketListenerImpl {
     io_service_.poll();
   }
 
-  void sendToRemote(const NetworkAddress& address, ByteBuffer& message) {
-    socket_.async_send_to(boost::asio::buffer(message.data(), message.size()),
+  void sendToRemote(const NetworkAddress& address,
+                    std::unique_ptr<ByteBuffer> message) {
+    socket_.async_send_to(boost::asio::buffer(message->data(), message->size()),
       address,
       std::tr1::bind(
-        &UdpSocketListenerImpl::handleSend, this, message,
+        &UdpSocketListenerImpl::handleSend, this,
         std::tr1::placeholders::_1,
         std::tr1::placeholders::_2));
   }
 
-  void handleSend(ByteBuffer& message,
-    const boost::system::error_code& error, size_t bytes_sent) {
+  void handleSend(const boost::system::error_code& error, size_t bytes_sent) {
       /* @todo: Handle send issues here */
+      error, bytes_sent;
   }
 
  private:
@@ -68,7 +69,11 @@ class UdpSocketListener::UdpSocketListenerImpl {
   UdpSocketListenerImpl& operator=(const UdpSocketListenerImpl&);
 
   void handleReceive(const boost::system::error_code& error,
-    size_t bytes_received) {
+                     size_t bytes_received) {
+    if (error && error != boost::asio::error::message_size) {
+      return;
+    }
+
     ByteBuffer message(&buffer_[0], bytes_received);
     callback_(remote_endpoint_, message);
 
@@ -126,8 +131,8 @@ void UdpSocketListener::poll() {
 }
 
 void UdpSocketListener::sendToRemote(const NetworkAddress &address,
-  ByteBuffer& message) const {
-  impl_->sendToRemote(address, message);
+  std::unique_ptr<ByteBuffer> message) const {
+  impl_->sendToRemote(address, std::move(message));
 }
 
 }  // namespace sandbox

@@ -24,8 +24,8 @@ void HandleAuthentication(Session& session,
   // Send the server list.
   session.sendHardcodedPacket("packets/Login/ServerList.txt", false);
 
-  std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(
-    "packets/Login/ServerIpList.txt");
+  std::unique_ptr<ByteBuffer> packet(LoadPacketFromTextFile(
+    "packets/Login/ServerIpList.txt"));
 
   // @todo: Replace with a call to configuration.
   std::string galaxy_ip = "127.0.0.1";
@@ -38,7 +38,7 @@ void HandleAuthentication(Session& session,
   packet_data.insert(packet_data.begin() + 20,
     galaxy_ip.begin(), galaxy_ip.end());
 
-  session.sendHardcodedPacket(*packet, false);
+  session.sendHardcodedPacket(std::move(packet), false);
 
   // Send the character list.
   session.sendHardcodedPacket("packets/Login/ServerCharacterList.txt", false);
@@ -50,7 +50,7 @@ void HandleSession(Session& session, sandbox::shared::ByteBuffer& message) {
 
   // Send the character options to the client.
   session.sendHardcodedPacket(
-    "packets/ZoneInsertion/CharacterOptions.txt", false);
+    "packets/Zone/CharacterOptions.txt", false);
 }
 
 }  // namespace sandbox

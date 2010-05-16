@@ -14,21 +14,22 @@
 namespace sandbox {
 namespace shared {
 
-enum LogLevel {
-  ERR = 0,
-  WARNING,
-  INFO,
-  DEBUG,
-  DEBUG1,
-  DEBUG2,
-  DEBUG3,
-  DEBUG4
-};
-
 class Logger {
  public:
+  enum LogLevel {
+    ERR = 0,
+    WARNING,
+    INFO,
+    DEBUG,
+    DEBUG1,
+    DEBUG2,
+    DEBUG3,
+    DEBUG4
+  };
+
+ public:
   Logger();
-  virtual ~Logger();
+  ~Logger();
 
   std::ostringstream& log(LogLevel level);
   std::string getLevelString(LogLevel level);

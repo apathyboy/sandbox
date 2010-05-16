@@ -103,12 +103,12 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (session) {
-    if (CrcTest(message, session->crcSeed(), session->crcLength())) {
-      Decrypt(message, session->crcSeed(), session->crcLength());
+    if (CrcTest(&message, session->crcSeed(), session->crcLength())) {
+      Decrypt(&message, session->crcSeed(), session->crcLength());
     }
 
     if (message.peekAt<uint8_t>(2) == 'x') {
-      Decompress(message);
+      Decompress(&message);
     }
   }
 
@@ -119,14 +119,14 @@ void GalaxyServer::handleIncoming(const NetworkAddress& address,
 
 
 void GalaxyServer::sendToRemote(const NetworkAddress& address,
-                                ByteBuffer& message) const {
-  network_listener_.sendToRemote(address, message);
+                                std::unique_ptr<ByteBuffer> message) const {
+  network_listener_.sendToRemote(address, std::move(message));
 }
 
 
 std::tr1::shared_ptr<Session> GalaxyServer::addSession(
   const NetworkAddress& address) {
-  Logger().log(INFO) << "Adding session for [" << address << "]";
+  Logger().log(Logger::INFO) << "Adding session for [" << address << "]";
 
   // Create a new session and store it in the session map.
   std::tr1::shared_ptr<Session> session(
@@ -198,8 +198,9 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (session) {
-      Logger().log(ERR) << "Received session request from an address with an"
-        << " existing session: [" << address << "]";
+      Logger().log(Logger::ERR)
+        << "Received session request from an address with an "
+        << "existing session: [" << address << "]";
       return;
   }
 
@@ -209,10 +210,8 @@ void GalaxyServer::handleSessionRequest(const NetworkAddress& address,
   session->connectionId(message.read<uint32_t>());
   session->maxUdpSize(message.read<uint32_t>(true));
 
-  std::tr1::shared_ptr<ByteBuffer> session_response(
-    SoeMessageFactory::buildSessionResponse(*this, session));
-
-  session->sendToRemote(*session_response, false, false);
+  session->sendToRemote(SoeMessageFactory::buildSessionResponse(*this, session),
+    false, false);
 }
 
 
@@ -221,17 +220,16 @@ void GalaxyServer::handleNetStatus(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (!session) {
-    Logger().log(ERR) << "Received a Network Status message from an address"
-      << " without a session: [" << address << "]";
+    Logger().log(Logger::ERR)
+      << "Received a Network Status message from an address "
+      << "without a session: [" << address << "]";
     return;
   }
 
   uint16_t tick = message.read<uint16_t>();
 
-  std::tr1::shared_ptr<ByteBuffer> network_status_response(
-    SoeMessageFactory::buildNetworkStatusResponse(session, tick));
-
-  session->sendToRemote(*network_status_response, true, false);
+  session->sendToRemote(
+    SoeMessageFactory::buildNetworkStatusResponse(session, tick), true, false);
 }
 
 
@@ -265,8 +263,9 @@ void GalaxyServer::handleAcknowledge(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (!session) {
-    Logger().log(ERR) << "Received an Acknowledge message from an address"
-      << " without a session: [" << address << "]";
+    Logger().log(Logger::ERR)
+      << "Received an Acknowledge message from an address "
+      << "without a session: [" << address << "]";
     return;
   }
 
@@ -283,8 +282,9 @@ void GalaxyServer::handleDataChannel(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (!session) {
-    Logger().log(ERR) << "Received a Data Channel message from an address"
-      << " without a session: [" << address << "]";
+    Logger().log(Logger::ERR)
+      << "Received a Data Channel message from an address "
+      << "without a session: [" << address << "]";
     return;
   }
 
@@ -327,8 +327,9 @@ void GalaxyServer::handleDisconnect(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (!session) {
-     Logger().log(ERR) << "Received a Disconnect message from an address"
-       << " without a session: [" << address << "]";
+     Logger().log(Logger::ERR)
+       << "Received a Disconnect message from an address "
+       << "without a session: [" << address << "]";
      return;
   }
 
@@ -342,15 +343,12 @@ void GalaxyServer::handleKeepAlive(const NetworkAddress& address,
   std::tr1::shared_ptr<Session> session = findSession(address);
 
   if (!session) {
-    Logger().log(ERR) << "Received a Keep Alive message from an address"
+    Logger().log(Logger::ERR) << "Received a Keep Alive message from an address"
       << " without a session: [" << address << "]";
     return;
   }
 
-  std::tr1::shared_ptr<ByteBuffer> keep_alive_response(
-    SoeMessageFactory::buildKeepAliveResponse());
-
-  session->sendToRemote(*keep_alive_response);
+  session->sendToRemote(SoeMessageFactory::buildKeepAliveResponse());
 }
 
 }  // namespace sandbox

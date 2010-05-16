@@ -14,6 +14,11 @@ namespace sandbox {
 namespace shared {
 
 template<typename T>
+ByteBuffer& operator<<(ByteBuffer& buffer, const T& value);
+
+std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer);
+
+template<typename T>
 void ByteBuffer::swapEndian(T& data) {
   data; /* Only template specializations of swapEndian should be used */
 }

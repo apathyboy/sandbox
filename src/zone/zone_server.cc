@@ -12,12 +12,14 @@
 #include "shared/session.h"
 #include "shared/login_handler.h"
 
+using ::sandbox::shared::Logger;
+
 namespace sandbox {
 namespace zone {
 
 ZoneServer::ZoneServer(uint16_t port)
 : shared::GalaxyServer(port) {
-    shared::Logger().log(shared::INFO)
+    Logger().log(Logger::INFO)
       << "Zone Server listening on port: [" << port << "]";
 }
 

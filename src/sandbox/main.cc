@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
   boost::program_options::variables_map sandbox_options;
   sandbox::BuildProgramOptions(sandbox_options, argc, argv, config_filename);
 
-  Logger().log(sandbox::shared::INFO)
+  Logger().log(Logger::INFO)
     << "Server starting with configuration file: " << config_filename;
 
   // Begin the main execution phase. This begins by starting the server
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
       // Check for the exit command.
       if (strcmp(cmd.c_str(), "exit") == 0
         || strcmp(cmd.c_str(), "quit") == 0) {
-        Logger().log(sandbox::shared::INFO) << "Shutting down the server";
+        Logger().log(Logger::INFO) << "Shutting down the server";
 
         login_thread.interrupt();
         login_thread.join();
@@ -65,10 +65,10 @@ int main(int argc, char *argv[]) {
         break;
       }
 
-      Logger().log(sandbox::shared::ERR) << "Command not found";
+      Logger().log(Logger::ERR) << "Command not found";
     }
   } catch(std::exception& e) {
-    Logger().log(sandbox::shared::ERR) << e.what();
+    Logger().log(Logger::ERR) << e.what();
   }
 
   return 0;

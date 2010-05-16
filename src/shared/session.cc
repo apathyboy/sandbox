@@ -131,50 +131,47 @@ void Session::queueIncomingMessage(ByteBuffer& message) {
 
 
 void Session::sendHardcodedPacket(const std::string& name, bool compressed) {
-  std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile(name);
-  sendHardcodedPacket(*packet, compressed);
+  sendHardcodedPacket(LoadPacketFromTextFile(name), compressed);
 }
 
-void Session::sendHardcodedPacket(ByteBuffer& packet, bool compressed) {
-  packet.writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
-  sendToRemote(packet, compressed);
+void Session::sendHardcodedPacket(std::unique_ptr<ByteBuffer> packet,
+                                  bool compressed) {
+  packet->writeAt<uint16_t>(2, static_cast<uint16_t>(htons(server_sequence_)));
+  sendToRemote(std::move(packet), compressed);
 
   ++server_sequence_;
 }
 
-void Session::sendToRemote(ByteBuffer& packet,
+void Session::sendToRemote(std::unique_ptr<ByteBuffer> packet,
   bool compress, bool encrypt) const {
   if (compress) {
-    Compress(packet);
+    Compress(packet.get());
   }
 
   if (encrypt) {
-    Encrypt(packet, crc_seed_);
-    AppendCrc(packet, crc_seed_);
+    Encrypt(packet.get(), crc_seed_);
+    AppendCrc(packet.get(), crc_seed_);
   }
 
-  server_.sendToRemote(socket_address_, packet);
+  server_.sendToRemote(socket_address_, std::move(packet));
 }
 
 void Session::sendHeartbeat() const {
-  std::tr1::shared_ptr<ByteBuffer> packet =
-    LoadPacketFromTextFile("packets/OkPacket.txt");
-
-  sendToRemote(*packet);
+  sendToRemote(LoadPacketFromTextFile("packets/OkPacket.txt"));
 }
 
 void Session::sendAcknowledge() const {
-  std::tr1::shared_ptr<ByteBuffer> packet =
-    LoadPacketFromTextFile("packets/SendAcknowledge.txt");
+  std::unique_ptr<ByteBuffer> packet(
+    LoadPacketFromTextFile("packets/SendAcknowledge.txt"));
 
   packet->writeAt<uint16_t>(2, static_cast<uint16_t>(client_sequence_));
 
-  sendToRemote(*packet);
+  sendToRemote(std::move(packet));
 }
 
 void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId) {
-  std::tr1::shared_ptr<ByteBuffer> message =
-    LoadPacketFromTextFile("packets/Spatial/PlayerChatHeader.txt");
+  std::unique_ptr<ByteBuffer> message(
+    LoadPacketFromTextFile("packets/Spatial/PlayerChatHeader.txt"));
 
   message->write<std::wstring>(text);
 
@@ -187,7 +184,7 @@ void Session::sendText(const std::wstring& text, std::vector<uint64_t> moodId) {
   message->writeAt<uint16_t>(50 + (text.length() * 2) + 4,
     static_cast<uint16_t>(moodId[2]));
 
-  sendHardcodedPacket(*message, true);
+  sendHardcodedPacket(std::move(message), true);
 }
 
 void Session::handlePacket(ByteBuffer& packet) {
@@ -195,7 +192,7 @@ void Session::handlePacket(ByteBuffer& packet) {
     MessageHandler handler = protocol_.find(packet);
     handler(*this, packet);
   } catch(std::exception& e) {
-    Logger().log(ERR) << e.what() << std::endl << packet;
+    Logger().log(Logger::ERR) << e.what() << std::endl << packet;
     sendHeartbeat();
   }
 }

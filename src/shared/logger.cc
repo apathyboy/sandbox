@@ -14,7 +14,7 @@
 namespace sandbox {
 namespace shared {
 
-LogLevel Logger::reporting_level_ = INFO;
+Logger::LogLevel Logger::reporting_level_ = INFO;
 
 const char * const LOG_LEVEL_STRINGS[] = {
   "ERROR",
@@ -72,7 +72,7 @@ void Logger::setReportingLevel(LogLevel level) {
   Logger::reporting_level_ = level;
 }
 
-LogLevel Logger::getReportingLevel() {
+Logger::LogLevel Logger::getReportingLevel() {
   return Logger::reporting_level_;
 }
 

@@ -70,12 +70,11 @@ static const unsigned int crc32table[256] = {
   0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d
 };
 
-std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(
-  const std::string& name) {
+std::unique_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name) {
 // If building on windows we're using at least vc9 which supports tr1/regex
 #ifdef WIN32
   std::string line_buffer;
-  std::tr1::shared_ptr<ByteBuffer> packet(new ByteBuffer());
+  std::unique_ptr<ByteBuffer> packet(new ByteBuffer());
 
   static const std::tr1::regex pattern("0x([0-9a-fA-F]+)");
   const int keep[] = {1};
@@ -107,7 +106,7 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(
 // boost/regex references can be removed.
 #else
   std::string line_buffer;
-  std::tr1::shared_ptr<ByteBuffer> packet(new ByteBuffer());
+  std::unique_ptr<ByteBuffer> packet(new ByteBuffer());
 
   static const boost::regex pattern("0x([0-9a-fA-F]+)");
   const int keep[] = {1};
@@ -137,13 +136,14 @@ std::tr1::shared_ptr<ByteBuffer> LoadPacketFromTextFile(
 }
 
 
-void Compress(ByteBuffer& packet) {
+void Compress(ByteBuffer* packet) {
   // Grab a reference to the internals of the packet. Generally
   // this should not be done but this is one of the special circumstances
   // the raw() was implemented for. This allows us to work on
   // the raw data with a non-standard library and minimize the amount
   // of copying.
-  std::vector<uint8_t>& packet_data = packet.raw();
+  std::vector<uint8_t>& packet_data = packet->raw();
+  size_t packet_size = packet->size();
 
   // Determine the offset to begin compressing data at.
   uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -161,12 +161,12 @@ void Compress(ByteBuffer& packet) {
   deflateInit(&stream, Z_DEFAULT_COMPRESSION);
 
   // Prepare the stream for compression and then compress the data.
-  std::vector<uint8_t> compression_output(packet.size() + 20);
+  std::vector<uint8_t> compression_output(packet_size + 20);
 
   stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
-  stream.avail_in  = packet.size() - offset - 3;
+  stream.avail_in  = packet_size - offset - 3;
   stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
-  stream.avail_out = packet.size() + 20;
+  stream.avail_out = packet_size + 20;
 
   deflate(&stream, Z_FINISH);
 
@@ -186,13 +186,13 @@ void Compress(ByteBuffer& packet) {
 }
 
 
-void Decompress(ByteBuffer& packet) {
+void Decompress(ByteBuffer* packet) {
   // Grab a reference to the internals of the packet. Generally
   // this should not be done but this is one of the special circumstances
   // the raw() was implemented for. This allows us to work on
   // the raw data with a non-standard library and minimize the amount
   // of copying.
-  std::vector<uint8_t>& packet_data = packet.raw();
+  std::vector<uint8_t>& packet_data = packet->raw();
 
   // Determine the offset to begin compressing data at.
   uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -213,7 +213,7 @@ void Decompress(ByteBuffer& packet) {
   std::vector<uint8_t> compression_output(800);
 
   stream.next_in   = reinterpret_cast<Bytef *>(&packet_data[offset]);
-  stream.avail_in  = packet.size() - offset - 3;
+  stream.avail_in  = packet->size() - offset - 3;
   stream.next_out  = reinterpret_cast<Bytef *>(&compression_output[0]);
   stream.avail_out = 800;
 
@@ -234,13 +234,13 @@ void Decompress(ByteBuffer& packet) {
 }
 
 
-void Encrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
+void Encrypt(ByteBuffer* packet, uint32_t seed, uint32_t seedLength) {
   // Grab a reference to the internals of the packet. Generally
   // this should not be done but this is one of the special circumstances
   // the raw() was implemented for. This allows us to work on
   // the raw data with a non-standard library and minimize the amount
   // of copying.
-  std::vector<uint8_t>& packet_data = packet.raw();
+  std::vector<uint8_t>& packet_data = packet->raw();
 
   // Determine the offset to begin decrypting data at.
   uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -266,13 +266,13 @@ void Encrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
 }
 
 
-void Decrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
+void Decrypt(ByteBuffer* packet, uint32_t seed, uint32_t seedLength) {
   // Grab a reference to the internals of the packet. Generally
   // this should not be done but this is one of the special circumstances
   // the raw() was implemented for. This allows us to work on
   // the raw data with a non-standard library and minimize the amount
   // of copying.
-  std::vector<uint8_t>& packet_data = packet.raw();
+  std::vector<uint8_t>& packet_data = packet->raw();
 
   // Determine the offset to begin decrypting data at.
   uint16_t offset = (packet_data[0] == 0x00) ? 2 : 1;
@@ -299,7 +299,7 @@ void Decrypt(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
 }
 
 
-uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
+uint32_t GenerateCrc(ByteBuffer* packet, uint32_t seed, uint32_t seedLength) {
   uint32_t crc = crc32table[(~seed) & 0xFF];
   crc ^= 0x00FFFFFF;
 
@@ -320,7 +320,7 @@ uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
   // the raw() was implemented for. This allows us to work on
   // the raw data with a non-standard library and minimize the amount
   // of copying.
-  std::vector<uint8_t>& packet_data = packet.raw();
+  std::vector<uint8_t>& packet_data = packet->raw();
 
   uint16_t packet_crc_length = packet_data.size() - seedLength;
   for (uint16_t i = 0; i < packet_crc_length; i++) {
@@ -332,7 +332,7 @@ uint32_t GenerateCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
   return ~crc;
 }
 
-bool CrcTest(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
+bool CrcTest(ByteBuffer* packet, uint32_t seed, uint32_t seedLength) {
   if (seedLength > 0) {
     uint32_t packetCrc = GenerateCrc(packet, seed, seedLength);
     uint32_t testCrc   = 0;
@@ -344,7 +344,7 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet.raw();
+    std::vector<uint8_t>& packet_data = packet->raw();
 
     for (uint32_t i = 0; i < seedLength; ++i) {
       pullbyte = packet_data[(packet_data.size() - seedLength) + i];
@@ -366,17 +366,17 @@ bool CrcTest(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
 }
 
 
-void AppendCrc(ByteBuffer& packet, uint32_t seed, uint32_t seedLength) {
+void AppendCrc(ByteBuffer* packet, uint32_t seed, uint32_t seedLength) {
   if (seedLength > 0) {
     // Grab a reference to the internals of the packet. Generally
     // this should not be done but this is one of the special circumstances
     // the raw() was implemented for. This allows us to work on
     // the raw data with a non-standard library and minimize the amount
     // of copying.
-    std::vector<uint8_t>& packet_data = packet.raw();
+    std::vector<uint8_t>& packet_data = packet->raw();
 
     // Generate the CRC and append it to the packet.
-    unsigned int crc = GenerateCrc(packet, seed);
+    unsigned int crc = GenerateCrc(packet, seed, seedLength);
 
     for (uint32_t i = 0; i < seedLength; ++i) {
       packet_data[(packet_data.size() - 1) - i] = ((crc >> (8 * i)) & 0xFF);

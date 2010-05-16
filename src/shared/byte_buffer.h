@@ -16,13 +16,6 @@
 namespace sandbox {
 namespace shared {
 
-class ByteBuffer;
-
-template<typename T>
-ByteBuffer& operator<<(ByteBuffer& buffer, const T& value);
-
-std::ostream& operator<<(std::ostream& message, const ByteBuffer& buffer);
-
 class ByteBuffer {
  public:
   enum { SWAP_ENDIAN = 1 };

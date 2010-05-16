@@ -25,13 +25,13 @@ class GalaxyServer;
 
 class SoeMessageFactory {
  public:
-  static std::tr1::shared_ptr<ByteBuffer> buildSessionResponse(
+  static std::unique_ptr<ByteBuffer> buildSessionResponse(
     const GalaxyServer& server, std::tr1::shared_ptr<Session> session);
 
-  static std::tr1::shared_ptr<ByteBuffer> buildNetworkStatusResponse(
+  static std::unique_ptr<ByteBuffer> buildNetworkStatusResponse(
     std::tr1::shared_ptr<Session> session, uint16_t tick);
 
-  static std::tr1::shared_ptr<ByteBuffer> buildKeepAliveResponse();
+  static std::unique_ptr<ByteBuffer> buildKeepAliveResponse();
 
  private:
   SoeMessageFactory();

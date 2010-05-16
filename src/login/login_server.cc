@@ -10,12 +10,14 @@
 #include "shared/login_handler.h"
 #include "shared/session.h"
 
+using ::sandbox::shared::Logger;
+
 namespace sandbox {
 namespace login {
 
 LoginServer::LoginServer(uint16_t port)
 : shared::GalaxyServer(port) {
-  shared::Logger().log(shared::INFO) <<
+  Logger().log(Logger::INFO) <<
     "Login Server listening on port: [" << port << "]";
 }
 

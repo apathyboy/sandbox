@@ -37,7 +37,8 @@ class GalaxyServer {
   void run();
 
   void handleIncoming(const NetworkAddress& address, ByteBuffer& message);
-  void sendToRemote(const NetworkAddress& address, ByteBuffer& message) const;
+  void sendToRemote(const NetworkAddress& address,
+    std::unique_ptr<ByteBuffer> message) const;
 
   std::tr1::shared_ptr<Session> addSession(const NetworkAddress& address);
   std::tr1::shared_ptr<Session> findSession(const NetworkAddress& address);

@@ -23,8 +23,9 @@ TEST(LoadPacketFromTextFileTests, CanFindSingleHexString)
     outfile << "0x01";
     outfile.close();
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("CanFindSingleHexString.txt");
-    remove("CanFindSingleHexString.txt");
+    std::unique_ptr<ByteBuffer> packet(
+      LoadPacketFromTextFile("CanFindSingleHexString.txt"));
+    std::remove("CanFindSingleHexString.txt");
 
     EXPECT_EQ(1, packet->size());
     EXPECT_EQ(1, packet->read<uint8_t>());
@@ -36,8 +37,9 @@ TEST(LoadPacketFromTextFileTests, CanFindTwoHexStrings)
     outfile << "0x01 0x02";
     outfile.close();
 
-    std::tr1::shared_ptr<ByteBuffer> packet = LoadPacketFromTextFile("CanFindTwoHexStrings.txt");
-    remove("CanFindTwoHexStrings.txt");
+    std::unique_ptr<ByteBuffer> packet(
+      LoadPacketFromTextFile("CanFindTwoHexStrings.txt"));
+    std::remove("CanFindTwoHexStrings.txt");
 
     EXPECT_EQ(2, packet->size());
     EXPECT_EQ(1, packet->read<uint8_t>());

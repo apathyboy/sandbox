@@ -66,9 +66,9 @@ class Session {
   void queueIncomingMessage(ByteBuffer& message);
 
   void sendHardcodedPacket(const std::string& name, bool compressed);
-  void sendHardcodedPacket(ByteBuffer& packet, bool compressed);
+  void sendHardcodedPacket(std::unique_ptr<ByteBuffer> packet, bool compressed);
 
-  void sendToRemote(ByteBuffer& packet,
+  void sendToRemote(std::unique_ptr<ByteBuffer> packet,
     bool compress = false, bool encrypt = true) const;
 
   void sendHeartbeat() const;

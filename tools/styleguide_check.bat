@@ -31,6 +31,11 @@ rem ------------------------------
 rem -------- :CHECK_FILE ---------
 :CHECK_FILE
 
+if not exist "%PROJECT_ROOT%build-aux\%PROJECT_NAME%\%PROJECT_CONFIGURATION%\CL.write.1.tlog" (
+  %PROJECT_ROOT%tools\cpplint.py --verbose=0 --output=vs7 --filter=-runtime/references,-readability/streams %1
+  goto :eof
+)
+
 for /F %%i In ('xcopy /DHYL %1 "%PROJECT_ROOT%build-aux\%PROJECT_NAME%\%PROJECT_CONFIGURATION%\CL.write.1.tlog" ^|Findstr /I "File"') Do set /a _Newer=%%i
 
 if %_Newer% == 1 (

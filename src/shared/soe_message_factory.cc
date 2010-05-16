@@ -14,9 +14,9 @@
 namespace sandbox {
 namespace shared {
 
-std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildSessionResponse(
+std::unique_ptr<ByteBuffer> SoeMessageFactory::buildSessionResponse(
   const GalaxyServer& server, std::tr1::shared_ptr<Session> session) {
-  std::tr1::shared_ptr<ByteBuffer> session_response(new ByteBuffer());
+  std::unique_ptr<ByteBuffer> session_response(new ByteBuffer());
 
   *session_response << htons(0x0002);
   *session_response << session->connectionId();
@@ -29,9 +29,9 @@ std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildSessionResponse(
 }
 
 
-std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildNetworkStatusResponse(
+std::unique_ptr<ByteBuffer> SoeMessageFactory::buildNetworkStatusResponse(
   std::tr1::shared_ptr<Session> session, uint16_t tick) {
-  std::tr1::shared_ptr<ByteBuffer> network_status_response(new ByteBuffer());
+  std::unique_ptr<ByteBuffer> network_status_response(new ByteBuffer());
 
   *network_status_response << htons(0x0008);
   *network_status_response << tick;  // Client Tick Count
@@ -44,8 +44,8 @@ std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildNetworkStatusResponse(
 }
 
 
-std::tr1::shared_ptr<ByteBuffer> SoeMessageFactory::buildKeepAliveResponse() {
-  std::tr1::shared_ptr<ByteBuffer> keep_alive_response(new ByteBuffer());
+std::unique_ptr<ByteBuffer> SoeMessageFactory::buildKeepAliveResponse() {
+  std::unique_ptr<ByteBuffer> keep_alive_response(new ByteBuffer());
 
   *keep_alive_response << htons(0x0006);
   *keep_alive_response << 0x00 << 0x0000;  // Footer

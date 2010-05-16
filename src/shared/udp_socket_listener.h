@@ -40,7 +40,8 @@ class UdpSocketListener {
   void callback(Callback callback);
 
   void poll();
-  void sendToRemote(const NetworkAddress& address, ByteBuffer& message) const;
+  void sendToRemote(const NetworkAddress& address,
+                    std::unique_ptr<ByteBuffer> message) const;
 
  private:
   UdpSocketListener();
