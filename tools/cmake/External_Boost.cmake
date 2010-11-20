@@ -1,8 +1,18 @@
 # build the external boost library for the Sandbox project
 
 if(NOT Boost_BUILD_PROJECTS)
-    set(Boost_BUILD_PROJECTS "ALL")
+    set(_build_projects "ALL")
+else()
+    foreach(_project ${Boost_BUILD_PROJECTS})        
+        if(_build_projects)
+            set(_build_projects "${_build_projects}^^${_project}")
+        else()
+            set(_build_projects "${_project}")
+        endif()
+    endforeach()
 endif()
+
+message("Boost build projects ${_build_projects}")
 
 if(MSVC)
   set(_boost_lib_args
@@ -18,7 +28,7 @@ endif()
 
 ExternalProject_Add(Boost
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/vendor/boost
-    GIT_REPOSITORY git://github.com/boost-lib/boost.git
+    GIT_REPOSITORY git://github.com/boost-lib/boost.git    
     CMAKE_ARGS
         ${_boost_lib_args}
         -DCMAKE_INSTALL_PREFIX:STRING=${CMAKE_INSTALL_PREFIX}
@@ -28,14 +38,15 @@ ExternalProject_Add(Boost
         -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE:PATH=<BINARY_DIR>/lib
         -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=<BINARY_DIR>/lib
         -DBUILD_EXAMPLES:BOOL=OFF
-        -DBUILD_PROJECTS:STRING=${Boost_BUILD_PROJECTS}
+        -DBUILD_PROJECTS=${_build_projects}
         -DBUILD_SOVERSIONED:BOOL=OFF
         -DBUILD_TESTS:BOOL=OFF
         -DWITH_DOXYGEN:BOOL=OFF
         -DWITH_ICU:BOOL=OFF
         -DWITH_MPI:BOOL=OFF
         -DWITH_PYTHON:BOOL=OFF
-    BUILD_COMMAND make genheaders boost_date_time boost_regex boost_thread boost_system
+    LIST_SEPARATOR ^^
+    BUILD_COMMAND make genheaders all
     INSTALL_COMMAND ""
     )
 
