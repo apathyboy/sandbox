@@ -5,17 +5,18 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#ifndef SRC_SHARED_LOGGER_H_
+#define SRC_SHARED_LOGGER_H_
 
-#include <sstream> 
+#include <sstream>
 #include <string>
 
 namespace sandbox {
 namespace shared {
 
-enum LogLevel 
-{
+class Logger {
+ public:
+  enum LogLevel {
     ERR = 0,
     WARNING,
     INFO,
@@ -24,34 +25,32 @@ enum LogLevel
     DEBUG2,
     DEBUG3,
     DEBUG4
-};
+  };
 
-class Logger
-{
-public:
-    Logger();
-    virtual ~Logger();
-    
-    std::ostringstream& log(LogLevel level);
-    std::string getLevelString(LogLevel level);
+ public:
+  Logger();
+  ~Logger();
 
-public:
-    static void setReportingLevel(LogLevel level = INFO);
-    static LogLevel getReportingLevel();
+  std::ostringstream& log(LogLevel level);
+  std::string getLevelString(LogLevel level);
 
-private:
-    Logger(const Logger&);
-    Logger& operator=(const Logger&);
+ public:
+  static void setReportingLevel(LogLevel level = INFO);
+  static LogLevel getReportingLevel();
 
-    std::string timestamp();
+ private:
+  Logger(const Logger&);
+  Logger& operator=(const Logger&);
 
-    LogLevel instance_level_;
-    static LogLevel reporting_level_;
+  std::string timestamp();
 
-    std::ostringstream output_stream_;
+  LogLevel instance_level_;
+  static LogLevel reporting_level_;
+
+  std::ostringstream output_stream_;
 };
 
 }  // namespace sandbox
 }  // namespace shared
 
-#endif // LOGGER_H_
+#endif  // SRC_SHARED_LOGGER_H_

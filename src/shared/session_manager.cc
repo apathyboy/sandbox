@@ -5,7 +5,7 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
-#include "session_manager.h"
+#include "shared/session_manager.h"
 
 namespace sandbox {
 namespace shared {

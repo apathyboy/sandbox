@@ -5,8 +5,8 @@
  * @author      Eric Barr <apathy@swganh.org>
  */
 
-#ifndef SANDBOX_SHARED_SESSION_MANAGER_H_
-#define SANDBOX_SHARED_SESSION_MANAGER_H_
+#ifndef SRC_SHARED_SESSION_MANAGER_H_
+#define SRC_SHARED_SESSION_MANAGER_H_
 
 #include <cstdint>
 
@@ -29,4 +29,4 @@ class SessionManager {
 }  // namespace shared
 }  // namespace sandbox
 
-#endif  // SANDBOX_SHARED_SESSION_MANAGER_H_
+#endif  // SRC_SHARED_SESSION_MANAGER_H_

@@ -5,10 +5,10 @@
  * @author      Eric Barr <apathy@swganh.org>
 **/
 
- #ifndef NETWORKADDRESS_H_
- #define NETWORKADDRESS_H_
+#ifndef SRC_SHARED_NETWORK_ADDRESS_H_
+#define SRC_SHARED_NETWORK_ADDRESS_H_
 
- #include <boost/asio.hpp>
+#include <boost/asio.hpp> // NOLINT
 
 namespace sandbox {
 namespace shared {
@@ -18,4 +18,4 @@ typedef boost::asio::ip::udp::endpoint NetworkAddress;
 }  // namespace sandbox
 }  // namespace shared
 
- #endif // NETWORKADDRESS_H_
+#endif  // SRC_SHARED_NETWORK_ADDRESS_H_
