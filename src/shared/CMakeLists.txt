@@ -1,0 +1,3 @@
+include(AnhLibrary)
+
+AddAnhLibrary(shared)

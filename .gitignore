@@ -17,6 +17,8 @@ ipch/
 *.cache
 *.zip
 *.7z
+*.gz
+*.bz2
 *.tmp_*Win32.vcproj
 *.user
 *.ncb

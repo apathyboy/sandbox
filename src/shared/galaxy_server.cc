@@ -21,13 +21,13 @@ GalaxyServer::GalaxyServer(uint16_t port)
     , encryption_method_(0x0104)
     , max_udp_size_(496)
 {    
-    soe_protocol_.addHandler(htons(0x0001), std::tr1::bind(&GalaxyServer::handleSessionRequest, this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0003), std::tr1::bind(&GalaxyServer::handleMultiMessage,   this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0005), std::tr1::bind(&GalaxyServer::handleDisconnect,     this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0006), std::tr1::bind(&GalaxyServer::handleKeepAlive,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0007), std::tr1::bind(&GalaxyServer::handleNetStatus,      this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0009), std::tr1::bind(&GalaxyServer::handleDataChannel,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
-    soe_protocol_.addHandler(htons(0x0015), std::tr1::bind(&GalaxyServer::handleAcknowledge,    this, std::tr1::placeholders::_1, std::tr1::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0001), std::bind(&GalaxyServer::handleSessionRequest, this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0003), std::bind(&GalaxyServer::handleMultiMessage,   this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0005), std::bind(&GalaxyServer::handleDisconnect,     this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0006), std::bind(&GalaxyServer::handleKeepAlive,      this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0007), std::bind(&GalaxyServer::handleNetStatus,      this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0009), std::bind(&GalaxyServer::handleDataChannel,    this, std::placeholders::_1, std::placeholders::_2));
+    soe_protocol_.addHandler(htons(0x0015), std::bind(&GalaxyServer::handleAcknowledge,    this, std::placeholders::_1, std::placeholders::_2));
 }
 
 
