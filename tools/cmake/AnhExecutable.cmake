@@ -84,7 +84,7 @@ FUNCTION(AddAnhExecutable name)
     ENDIF()
     
     # Set some default include directories for executables
-    INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIR} ${MysqlConnectorCpp_INCLUDES})
+    INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIR} ${MysqlConnectorCpp_INCLUDES} ${ZLIB_INCLUDE_DIR})
     
     # Create the executable
     ADD_EXECUTABLE(${name} ${SOURCES} ${HEADERS})   
