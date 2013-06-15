@@ -93,6 +93,11 @@ std::unique_ptr<ByteBuffer> LoadPacketFromTextFile(const std::string& name) {
   smatch result;
 
   std::ifstream file_stream(name.c_str());
+
+  if (!file_stream.is_open()) {
+      throw std::invalid_argument("Invalid packet name given");
+  }
+
   while (std::getline(file_stream, line_buffer)) {
     // Remove any comments and/or whitespace from the beginning/end of the line.
     line_buffer = line_buffer.substr(0, line_buffer.find('#'));

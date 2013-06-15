@@ -10,16 +10,6 @@ set(SANDBOX_VERSION "${SANDBOX_VERSION_MAJOR}.${SANDBOX_VERSION_MINOR}.${SANDBOX
 # set the path to the custom cmake rules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake")
 
-# include commonly used cmake modules
-include(ExternalProject)
-
-# create options for determining whether to download and build
-# dependencies or to force the usage of system provided libraries
-option(Sandbox_USE_SYSTEM_BOOST
-    "If false, Sandbox will download and build its own copy of Boost" FALSE)
-option(Sandbox_USE_SYSTEM_GTEST
-    "If false, Sandbox will download and build its own copy of GTest" FALSE)
-
 # Some automated systems need an xml report which requires a second run of the
 # tests. To prevent these unnecessary runnings during normal builds the
 # following option is set with a default of false.
@@ -28,37 +18,13 @@ OPTION(ENABLE_TEST_REPORT
 
 # On gcc platforms the c++0x flag is needed to enable features used by this project.
 IF(CMAKE_COMPILER_IS_GNUCXX)
-    # First make sure the version of gnu is new enough
-    TRY_COMPILE(HAS_MININUM_GNUCXX_VERSION
-        ${CMAKE_CURRENT_BINARY_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake/require_gcc_46.cc
-        )
-
-    IF(NOT HAS_MININUM_GNUCXX_VERSION)
-        MESSAGE(FATAL_ERROR "GNU GCC 4.6 or higher is required to build this library")
-    ENDIF()
-
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-
-    # use, i.e. don't skip the full RPATH for the build tree
-    SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-
-    # when building our libraries are already where we want them to be
-    # so build with that path
-    SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-
-    # the RPATH to be used when installing
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_CURRENT_SOURCE_DIR}/deps/boost/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/glog/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/gtest/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql-connector-cpp/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/noise/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/spatialindex/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb/lib:${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib/lib:$ENV{LD_RUN_PATH}")
-
-    # add the automatically determined parts of the RPATH
-    # which point to directories outside the build tree to the install RPATH
-    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ELSE()
     # If not gcc and on WIN32 we're using visual studio, perform related checks here.
     IF(WIN32)
         # If using visual studio's compiler make sure we're using at least version 10
-        IF(MSVC_VERSION LESS 1600)
-            MESSAGE(FATAL_ERROR "MSVC 10 or higher is required to build this library")
+        IF(MSVC_VERSION LESS 1700)
+            MESSAGE(FATAL_ERROR "MSVC 11 or higher is required to build this library")
         ENDIF()
 
         SET(_WIN32_WINNT 0x0501 CACHE INTERNAL "Setting _WIN32_WINNT to 0x0501 for Windows XP minimum APIs")
@@ -69,43 +35,12 @@ ELSE()
 
         ADD_DEFINITIONS (/D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS)
         MESSAGE(STATUS "- MSVC: Disabled NON-SECURE warnings")
-
-        IF(MSVC AND NOT CMAKE_GENERATOR MATCHES "Visual Studio 7")
-          set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4244")
-          MESSAGE(STATUS "- MSVC: Disabled generic compiletime warnings")
-        ENDIF()
     ENDIF()
 ENDIF()
 
 # Use the static/multithreaded libraries.
 SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREADED ON)
-
-# ---------------------------------------------------------------------------
-# find -G arg for configuring external projects with the same generator
-#
-IF(CMAKE_EXTRA_GENERATOR)
-  SET(_generator "${CMAKE_EXTRA_GENERATOR} - ${CMAKE_GENERATOR}")
-ELSE()
-  SET(_generator "${CMAKE_GENERATOR}")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/boost")
-    IF(WIN32)
-        SET(BOOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/boost")
-    ELSE()
-        SET(BOOST_INCLUDEDIR "${CMAKE_CURRENT_SOURCE_DIR}/deps/boost/include")
-        SET(BOOST_LIBRARYDIR "${CMAKE_CURRENT_SOURCE_DIR}/deps/boost/lib")
-    ENDIF()
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/glm")
-    SET(GLM_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/glm")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib")
-    SET(ZLIB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib")
-ENDIF()
 
 FIND_PACKAGE(Boost 1.44.0 COMPONENTS date_time program_options regex thread system REQUIRED)
 FIND_PACKAGE(GLM REQUIRED)

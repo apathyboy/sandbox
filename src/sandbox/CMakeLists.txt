@@ -38,5 +38,5 @@ add_custom_command(TARGET sandbox POST_BUILD
         ${PROJECT_SOURCE_DIR}/data/packets
         $<TARGET_FILE_DIR:sandbox>/packets
     COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/data/openswg.conf.dist
-        $<TARGET_FILE_DIR:sandbox>/openswg.conf)
+        ${PROJECT_SOURCE_DIR}/data/sandbox.cfg.dist
+        $<TARGET_FILE_DIR:sandbox>/sandbox.cfg)

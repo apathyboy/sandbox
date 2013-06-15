@@ -41,7 +41,7 @@ class Protocol {
   }
 
   Handler find(Identifier id) {
-    Handler handler = NULL;
+    Handler handler;
 
     typename std::map<Identifier, Handler>::iterator i = handlers_.find(id);
     if (i != handlers_.end()) {
@@ -52,7 +52,7 @@ class Protocol {
   }
 
   Handler find(ByteBuffer& message) {
-    Handler handler = NULL;
+    Handler handler;
 
     typename std::map<Identifier, Handler>::iterator i =
       handlers_.find(message.peekAt<uint8_t>(1));

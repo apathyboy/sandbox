@@ -37,7 +37,7 @@ void HandleZoneInsertionRequest(shared::Session& session,
   session.sendHardcodedPacket(
     "packets/Zone/ParametersMessage.txt", false);
   session.sendHardcodedPacket(
-    "packets/Zone/CmdSceneStart.txt", true);
+    "packets/Zone/CmdStartScene.txt", true);
 
   // Begin loading the character.
   session.sendHardcodedPacket(
@@ -46,11 +46,11 @@ void HandleZoneInsertionRequest(shared::Session& session,
     "packets/Zone/SceneCreateObjectByCrc.txt", false);
 
   session.sendHardcodedPacket(
-    "packets/Zone/Baselines/Creo1.txt", true);
+    "packets/Zone/Creo1.txt", true);
   session.sendHardcodedPacket(
-    "packets/Zone/Baselines/Creo3.txt", true);
+    "packets/Zone/Creo3.txt", true);
   session.sendHardcodedPacket(
-    "packets/Zone/Baselines/Creo6.txt", true);
+    "packets/Zone/Creo6.txt", true);
 
   // @TODO Implement a better way to send hardcoded fragmented packets.
   session.sendHardcodedPacket("packets/Zone/Creo4.txt", true);
