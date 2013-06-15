@@ -29,8 +29,8 @@ OPTION(ENABLE_TEST_REPORT
 # On gcc platforms the c++0x flag is needed to enable features used by this project.
 IF(CMAKE_COMPILER_IS_GNUCXX)
     # First make sure the version of gnu is new enough
-    TRY_COMPILE(HAS_MININUM_GNUCXX_VERSION 
-        ${CMAKE_CURRENT_BINARY_DIR} 
+    TRY_COMPILE(HAS_MININUM_GNUCXX_VERSION
+        ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake/require_gcc_46.cc
         )
 
@@ -55,7 +55,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 ELSE()
     # If not gcc and on WIN32 we're using visual studio, perform related checks here.
-    IF(WIN32) 
+    IF(WIN32)
         # If using visual studio's compiler make sure we're using at least version 10
         IF(MSVC_VERSION LESS 1600)
             MESSAGE(FATAL_ERROR "MSVC 10 or higher is required to build this library")
@@ -63,10 +63,6 @@ ELSE()
 
         SET(_WIN32_WINNT 0x0501 CACHE INTERNAL "Setting _WIN32_WINNT to 0x0501 for Windows XP minimum APIs")
         SET(WINVER 0x0501 CACHE INTERNAL "Setting WINVER to 0x0501 for Windows XP minimum APIs")
-
-        # If there hasn't been a tbb platform set (probably not on a win32 platform)
-        # then set the TBB_ARCH_PLATFORM environment variable manually.
-        SET(ENV{TBB_ARCH_PLATFORM} "ia32/vc10")
 
         ADD_DEFINITIONS (/D _WIN32_WINNT=${_WIN32_WINNT})
         MESSAGE(STATUS "- MSVC: Set minimum Windows API version")
@@ -107,42 +103,17 @@ IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/glm")
     SET(GLM_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/glm")
 ENDIF()
 
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/glog")
-    SET(GLOG_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/glog")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/gtest")
-    SET(GTEST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/gtest")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql")
-    SET(ENV{MYSQL_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql-connector-cpp")
-    SET(MysqlConnectorCpp_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/mysql-connector-cpp")
-ENDIF()
-
-IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb")
-    SET(TBB_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/deps/tbb")
-ENDIF()
-
 IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib")
     SET(ZLIB_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/deps/zlib")
 ENDIF()
 
 FIND_PACKAGE(Boost 1.44.0 COMPONENTS date_time program_options regex thread system REQUIRED)
 FIND_PACKAGE(GLM REQUIRED)
-FIND_PACKAGE(GLog REQUIRED)
-FIND_PACKAGE(GTest REQUIRED)
-FIND_PACKAGE(MySQL REQUIRED)
-FIND_PACKAGE(MysqlConnectorCpp REQUIRED)
-FIND_PACKAGE(TBB REQUIRED)
-FIND_PACKAGE(ZLIB REQUIRED)
+FIND_PACKAGE(ZLib REQUIRED)
 
 # Add boost and tbb to the include and link directories as everything needs it.
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src/ ${Boost_INCLUDE_DIRS} ${GLOG_INCLUDE_DIR} ${GLM_INCLUDE_DIR}  ${TBB_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS} ${TBB_LIBRARY_DIRS})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS} ${GLM_INCLUDE_DIR})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 # Enable testing and add gtest to the include directories.
 ENABLE_TESTING()
